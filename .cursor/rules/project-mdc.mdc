@@ -1,0 +1,27 @@
+---
+alwaysApply: true
+---
+
+---
+description: Project rules for psy-vibe.ru
+alwaysApply: true
+---
+
+Project:
+- Website for psychologist Elizaveta Shikhaleva
+- Stack: Astro, Tailwind, Keystatic
+- Hosting: NetAngels
+- Content editor is a non-technical person
+
+Rules:
+- Do not rewrite the whole project unless explicitly asked
+- Before coding, always propose a short plan
+- Keep code simple and maintainable
+- Prefer Astro-native solutions
+- Avoid unnecessary dependencies
+- Use semantic HTML
+- Keep layout calm, premium, and minimal
+- Main page structure is fixed unless explicitly changed
+- CMS should edit pages, pricing, contacts, and blog posts
+- Blog is simple: no categories, no tags unless requested
+- Show changed files after each task

@@ -1,0 +1,137 @@
+---
+import Layout from '../components/layout/Layout.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import { reader } from '../lib/keystatic';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const contacts = await reader.singletons.contacts.read();
+
+/** URL формы (Formspree и т.п.). Задаётся через PUBLIC_FORM_ACTION. */
+const formAction = import.meta.env.PUBLIC_FORM_ACTION as string | undefined;
+const formEnabled = Boolean(formAction?.trim());
+const metaDesc = (contacts?.body ?? 'Контакты психолога').replace(/\s+/g, ' ').trim().slice(0, 155);
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title={contacts?.title ?? 'Контакты'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Section>
+    <Container>
+      <div class="mx-auto max-w-3xl">
+        <h1 class="text-h1 text-text">
+          {contacts?.title ?? 'Контакты'}
+        </h1>
+        {contacts?.body && (
+          <p class="mt-4 text-body text-text-muted">
+            {contacts.body}
+          </p>
+        )}
+
+        <div class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1fr,1fr] lg:gap-16">
+          <div>
+            <h2 class="text-h2 text-text">Контакты</h2>
+            <dl class="mt-4 space-y-3 text-body text-text-muted">
+              {contacts?.phone && (
+                <div>
+                  <dt class="font-medium text-text">Телефон</dt>
+                  <dd>
+                    <a href={`tel:${contacts.phone.replace(/\s/g, '')}`} class="hover:text-accent">
+                      {contacts.phone}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {contacts?.email && (
+                <div>
+                  <dt class="font-medium text-text">Email</dt>
+                  <dd>
+                    <a href={`mailto:${contacts.email}`} class="hover:text-accent">
+                      {contacts.email}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {contacts?.address && (
+                <div>
+                  <dt class="font-medium text-text">Адрес</dt>
+                  <dd>{contacts.address}</dd>
+                </div>
+              )}
+              {contacts?.workingHours && (
+                <div>
+                  <dt class="font-medium text-text">Часы работы</dt>
+                  <dd>{contacts.workingHours}</dd>
+                </div>
+              )}
+            </dl>
+          </div>
+
+          <div>
+            <h2 class="text-h2 text-text">Написать</h2>
+            {!formEnabled && (
+              <p class="mt-2 text-body text-text-muted">
+                Форма будет доступна после настройки (укажите PUBLIC_FORM_ACTION для Formspree или другого сервиса).
+              </p>
+            )}
+            <form
+              class="mt-4 flex flex-col gap-4"
+              action={formEnabled ? formAction : '#'}
+              method="post"
+              name="contact"
+            >
+              <label class="flex flex-col gap-1">
+                <span class="text-body font-medium text-text">Имя</span>
+                <input
+                  type="text"
+                  name="name"
+                  required={formEnabled}
+                  disabled={!formEnabled}
+                  class="rounded-soft border border-border bg-surface px-4 py-2.5 text-body text-text transition-colors placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder="Ваше имя"
+                />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-body font-medium text-text">Email</span>
+                <input
+                  type="email"
+                  name="email"
+                  required={formEnabled}
+                  disabled={!formEnabled}
+                  class="rounded-soft border border-border bg-surface px-4 py-2.5 text-body text-text transition-colors placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder="email@example.com"
+                />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-body font-medium text-text">Телефон</span>
+                <input
+                  type="tel"
+                  name="phone"
+                  disabled={!formEnabled}
+                  class="rounded-soft border border-border bg-surface px-4 py-2.5 text-body text-text transition-colors placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder="+7 (999) 000-00-00"
+                />
+              </label>
+              <label class="flex flex-col gap-1">
+                <span class="text-body font-medium text-text">Сообщение</span>
+                <textarea
+                  name="message"
+                  rows="4"
+                  required={formEnabled}
+                  disabled={!formEnabled}
+                  class="rounded-soft border border-border bg-surface px-4 py-2.5 text-body text-text transition-colors placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y min-h-[120px] disabled:opacity-60 disabled:cursor-not-allowed"
+                  placeholder="Текст сообщения"
+                />
+              </label>
+              <p class="mt-2">
+                <Button type="submit" disabled={!formEnabled}>
+                  Отправить
+                </Button>
+              </p>
+            </form>
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</Layout>

@@ -1,0 +1,15 @@
+---
+interface Props {
+  class?: string;
+  /** Без обводки, только отступы (для сеток на светлом фоне) */
+  bare?: boolean;
+}
+const { class: className = '', bare = false } = Astro.props;
+const base = bare
+  ? 'flex flex-col gap-block'
+  : 'flex flex-col gap-block rounded-soft border border-border bg-surface p-6';
+---
+
+<div class:list={[base, className]}>
+  <slot />
+</div>

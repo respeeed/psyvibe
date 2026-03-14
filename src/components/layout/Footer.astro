@@ -1,0 +1,66 @@
+---
+import Container from '../ui/Container.astro';
+
+interface Props {
+  siteSettings?: Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>> | null;
+}
+
+const { siteSettings } = Astro.props;
+const siteName = siteSettings?.siteName ?? 'Psy-vibe';
+const navLinks = siteSettings?.navLinks ?? [];
+const phone = siteSettings?.phone ?? '';
+const messengerUrl = siteSettings?.messengerUrl ?? null;
+const copyright = siteSettings?.copyright ?? '';
+
+const hasContacts = phone || messengerUrl;
+---
+
+<footer class="mt-auto border-t border-border bg-surface-muted">
+  <Container class="py-8 md:py-10">
+    <div class="flex flex-col gap-8 md:flex-row md:items-center md:justify-between md:gap-6">
+      <div class="flex flex-col gap-1">
+        <a href="/" class="font-medium text-text hover:text-accent text-body">
+          {siteName}
+        </a>
+        {copyright && (
+          <p class="text-small text-text-muted">{copyright}</p>
+        )}
+      </div>
+
+      {navLinks.length > 0 && (
+        <nav class="flex flex-wrap gap-x-6 gap-y-1 md:gap-6" aria-label="Навигация в подвале">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="text-small text-text-muted hover:text-accent transition-colors"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      {hasContacts && (
+        <div class="flex flex-wrap items-center gap-x-6 gap-y-1 md:gap-6">
+          {phone && (
+            <a
+              href={`tel:${phone.replace(/\s/g, '')}`}
+              class="text-small text-text-muted hover:text-accent transition-colors whitespace-nowrap"
+            >
+              {phone}
+            </a>
+          )}
+          {messengerUrl && (
+            <a
+              href={messengerUrl}
+              class="text-small text-text-muted hover:text-accent transition-colors"
+              aria-label="Написать в мессенджер"
+            >
+              Мессенджер ↗
+            </a>
+          )}
+        </div>
+      )}
+    </div>
+  </Container>
+</footer>

@@ -1,0 +1,59 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+
+interface FaqItem {
+  question?: string | null;
+  answer?: string | null;
+}
+
+interface FaqData {
+  title?: string | null;
+  items?: FaqItem[] | null;
+}
+
+interface Props {
+  data: FaqData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const items = data?.items?.filter(
+  (item) => item.question ?? item.answer
+) ?? [];
+
+const hasContent = title || items.length > 0;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col gap-8 items-center">
+      {title && (
+        <h2 class="text-h2 text-text text-center max-w-2xl">
+          {title}
+        </h2>
+      )}
+
+      {items.length > 0 && (
+        <div class="divide-y divide-border w-full max-w-2xl">
+          {items.map((item) => (
+            <details class="py-4 first:pt-0 last:pb-0">
+              <summary class="cursor-pointer list-none text-left font-medium text-text [&::-webkit-details-marker]:hidden">
+                <span class="text-body">{item.question ?? ''}</span>
+              </summary>
+              {item.answer && (
+                <div class="mt-3 text-body text-text-muted">
+                  {item.answer}
+                </div>
+              )}
+            </details>
+          ))}
+        </div>
+      )}
+    </div>
+  </Container>
+</Section>

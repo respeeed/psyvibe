@@ -1,0 +1,168 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+import { imagePath } from '../../lib/images';
+
+interface HeroData {
+  title?: string | null;
+  subtitle?: string | null;
+  primaryCtaLabel?: string | null;
+  primaryCtaUrl?: string | null;
+  secondaryCtaLabel?: string | null;
+  secondaryCtaUrl?: string | null;
+  workingHours?: string | null;
+  image?: string | null;
+  stats?: Array<{ value?: string | null; label?: string | null }> | null;
+}
+
+interface Props {
+  hero: HeroData | null | undefined;
+}
+
+const { hero } = Astro.props;
+
+const title = hero?.title ?? 'Главная';
+const subtitle = hero?.subtitle ?? null;
+const primaryCtaLabel = hero?.primaryCtaLabel ?? null;
+const primaryCtaUrl = hero?.primaryCtaUrl ?? null;
+const secondaryCtaLabel = hero?.secondaryCtaLabel ?? null;
+const secondaryCtaUrl = hero?.secondaryCtaUrl ?? null;
+const workingHours = hero?.workingHours ?? null;
+const stats = hero?.stats?.filter((s) => s.value ?? s.label) ?? [];
+
+const heroImageSrc = imagePath(hero?.image) ?? '/images/hero-girl.png';
+
+const hasPrimaryCta = primaryCtaLabel && primaryCtaUrl;
+const hasSecondaryCta = secondaryCtaLabel && secondaryCtaUrl;
+const hasCtas = hasPrimaryCta || hasSecondaryCta;
+
+// Плейсхолдер только для layout нижней карточки (schema не меняем)
+const heroCardName = 'Елизавета Шихалева';
+const heroCardRole = 'Корпоративный психолог';
+---
+
+<Section class="!pt-14 !pb-20 md:!pt-20 md:!pb-28">
+  <Container>
+    <div class="flex flex-col gap-14 md:gap-24">
+      <!-- Текстовая часть сверху -->
+      <div class="flex flex-col gap-3 max-w-3xl">
+        <h1 class="text-[clamp(2.25rem,5.5vw,3.5rem)] font-bold text-text leading-tight tracking-tight">
+          {title}
+        </h1>
+        {subtitle && (
+          <p class="text-body text-text-muted max-w-xl leading-relaxed font-normal">
+            {subtitle}
+          </p>
+        )}
+        {hasCtas && (
+          <div class="flex flex-wrap gap-2.5">
+            {hasPrimaryCta && (
+              <Button href={primaryCtaUrl} variant="primary">
+                {primaryCtaLabel}
+              </Button>
+            )}
+            {hasSecondaryCta && (
+              <Button href={secondaryCtaUrl} variant="secondary">
+                {secondaryCtaLabel}
+              </Button>
+            )}
+          </div>
+        )}
+        {workingHours && (
+          <p class="text-small text-text-muted pt-0.5">
+            {workingHours}
+          </p>
+        )}
+      </div>
+
+      <!-- Визуальный блок: крупное фото с overlay (макет wireframe) -->
+      <div class="w-full max-w-6xl mx-auto">
+        <div class="relative w-full rounded-xl overflow-hidden aspect-[4/3] md:aspect-[2/1] bg-surface-muted">
+          <img
+            src={heroImageSrc}
+            alt=""
+            width="1152"
+            height="576"
+            class="absolute inset-0 w-full h-full object-cover"
+            loading="eager"
+            decoding="async"
+          />
+
+          <!-- Desktop: статы — карточки слева -->
+          {stats.length > 0 && (
+            <ul
+              class="absolute left-6 bottom-28 z-10 hidden md:flex flex-col gap-3"
+              role="list"
+            >
+              {stats.slice(0, 3).map((item) => (
+                <li class="rounded-xl bg-surface-dark text-white px-5 py-4 min-w-[11rem] shadow-xl">
+                  {item.value && (
+                    <span class="block font-bold text-lg leading-tight">
+                      {item.value}
+                    </span>
+                  )}
+                  {item.label && (
+                    <span class="block text-sm text-white/90 mt-1 leading-snug">
+                      {item.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+
+          <!-- Нижняя карточка: компактная floating-card -->
+          <div class="absolute left-6 bottom-6 right-auto max-w-md z-10 hidden md:block bg-white rounded-xl px-6 py-5 shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-border/40">
+            <p class="text-xl font-bold text-text leading-tight">
+              {heroCardName}
+            </p>
+            <p class="text-sm text-text-muted mt-1.5">
+              {heroCardRole}
+            </p>
+            {workingHours && (
+              <p class="text-small text-text-muted mt-1.5">
+                {workingHours}
+              </p>
+            )}
+          </div>
+        </div>
+
+        <!-- Mobile: статы и карточка под изображением (без overlay) -->
+        <div class="flex flex-col gap-4 mt-5 md:hidden">
+          {stats.length > 0 && (
+            <ul class="grid grid-cols-3 gap-3" role="list">
+              {stats.slice(0, 3).map((item) => (
+                <li class="rounded-xl border border-border bg-surface px-4 py-4 text-center shadow-sm">
+                  {item.value && (
+                    <span class="block font-semibold text-text text-base leading-tight">
+                      {item.value}
+                    </span>
+                  )}
+                  {item.label && (
+                    <span class="block text-small text-text-muted mt-1">
+                      {item.label}
+                    </span>
+                  )}
+                </li>
+              ))}
+            </ul>
+          )}
+          <div class="rounded-xl border border-border bg-surface px-5 py-5 shadow-sm">
+            <p class="text-lg font-semibold text-text leading-tight">
+              {heroCardName}
+            </p>
+            <p class="text-small text-text-muted mt-1">
+              {heroCardRole}
+            </p>
+            {workingHours && (
+              <p class="text-small text-text-muted mt-1.5">
+                {workingHours}
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

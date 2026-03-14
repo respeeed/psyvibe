@@ -1,0 +1,19 @@
+---
+interface Props {
+  class?: string;
+  as?: 'section' | 'div';
+  /** Светлый, приглушённый или тёмный фон */
+  variant?: 'default' | 'muted' | 'dark';
+}
+const { class: className = '', as: Tag = 'section', variant = 'default' } = Astro.props;
+const bgClass =
+  variant === 'dark'
+    ? 'bg-surface-dark'
+    : variant === 'muted'
+      ? 'bg-surface-muted'
+      : 'bg-surface';
+---
+
+<Tag class:list={['py-section', bgClass, className]}>
+  <slot />
+</Tag>

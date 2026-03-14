@@ -1,0 +1,75 @@
+---
+import Layout from '../../components/layout/Layout.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import { reader } from '../../lib/keystatic';
+import { renderMarkdocToHtml } from '../../lib/markdoc';
+import { imagePath } from '../../lib/images';
+
+export async function getStaticPaths() {
+  const slugs = await reader.collections.blog.list();
+  return slugs.map((slug) => ({ params: { slug } }));
+}
+
+const { slug } = Astro.params;
+const siteSettings = await reader.singletons.siteSettings.read();
+const post = await reader.collections.blog.read(slug!, { resolveLinkedFiles: true });
+if (!post) {
+  return Astro.redirect('/404');
+}
+
+const imageSrc = imagePath(post.image);
+const bodyHtml = renderMarkdocToHtml(post.body ?? null);
+const metaDesc = (post.excerpt ?? post.title ?? 'Статья блога').replace(/\s+/g, ' ').trim().slice(0, 155);
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title={post.title} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl} ogImage={imageSrc ?? undefined}>
+  <Section>
+    <Container>
+      <article class="mx-auto max-w-3xl">
+        <header class="mb-8">
+          <h1 class="text-h1 text-text">
+            {post.title}
+          </h1>
+          {post.publishDate && (
+            <time
+              class="mt-2 block text-body text-text-muted"
+              datetime={post.publishDate}
+            >
+              {new Date(post.publishDate).toLocaleDateString('ru-RU', {
+                day: 'numeric',
+                month: 'long',
+                year: 'numeric',
+              })}
+            </time>
+          )}
+          {post.excerpt && (
+            <p class="mt-4 text-body text-text-muted">
+              {post.excerpt}
+            </p>
+          )}
+        </header>
+
+        {imageSrc && (
+          <figure class="mb-8 overflow-hidden rounded-soft">
+            <img
+              src={imageSrc}
+              alt=""
+              width="800"
+              height="450"
+              class="aspect-video w-full object-cover"
+            />
+          </figure>
+        )}
+
+        {bodyHtml ? (
+          <div
+            class="prose-content text-body text-text"
+            set:html={bodyHtml}
+          />
+        ) : null}
+      </article>
+    </Container>
+  </Section>
+</Layout>

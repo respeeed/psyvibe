@@ -1,0 +1,82 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
+
+interface DiagnosticData {
+  title?: string | null;
+  intro?: string | null;
+  resultCards?: Array<{ title?: string | null; description?: string | null }> | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+}
+
+interface Props {
+  data: DiagnosticData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const intro = data?.intro ?? null;
+const resultCards = data?.resultCards?.filter(
+  (c) => c.title ?? c.description
+) ?? [];
+const ctaLabel = data?.ctaLabel ?? null;
+const ctaUrl = data?.ctaUrl ?? null;
+const hasButton = ctaLabel && ctaUrl;
+
+const hasContent = title || intro || resultCards.length > 0 || hasButton;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section variant="muted">
+  <Container>
+    <div class="flex flex-col gap-8 md:gap-10 items-center">
+      <div class="max-w-2xl w-full text-center">
+        {title && (
+          <h2 class="text-h2 text-text">
+            {title}
+          </h2>
+        )}
+        {intro && (
+          <p class="mt-4 text-body text-text-muted">
+            {intro}
+          </p>
+        )}
+      </div>
+
+      {resultCards.length > 0 && (
+        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 w-full" role="list">
+          {resultCards.map((card) => (
+            <li>
+              <Card>
+                {card.title && (
+                  <h3 class="text-h3 text-text">
+                    {card.title}
+                  </h3>
+                )}
+                {card.description && (
+                  <p class="text-body text-text-muted">
+                    {card.description}
+                  </p>
+                )}
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )}
+
+      {hasButton && (
+        <div class="flex flex-wrap justify-center w-full">
+          <Button href={ctaUrl} variant="primary">
+            {ctaLabel}
+          </Button>
+        </div>
+      )}
+    </div>
+  </Container>
+</Section>

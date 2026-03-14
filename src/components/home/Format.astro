@@ -1,0 +1,105 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import { imagePath } from '../../lib/images';
+
+interface FormatData {
+  title?: string | null;
+  body?: string | null;
+  listItems?: string[] | null;
+  priceText?: string | null;
+  priceNote?: string | null;
+  image?: string | null;
+}
+
+interface Props {
+  data: FormatData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const body = data?.body ?? null;
+const listItems = data?.listItems ?? [];
+const priceText = data?.priceText ?? null;
+const priceNote = data?.priceNote ?? null;
+const imageSrc = imagePath(data?.image);
+
+const hasPrice = priceText ?? priceNote;
+const hasContent =
+  title || body || listItems.length > 0 || hasPrice || imageSrc;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section variant="dark">
+  <Container>
+    <!-- Обёртка: тёмный фон, внутренние отступы, читаемый текст -->
+    <div
+      class="bg-surface-dark text-text-inverse py-8 md:py-12"
+      style="background-color: var(--color-surface-dark);"
+    >
+      <div
+        class:list={[
+          'grid grid-cols-1 gap-8 md:gap-12',
+          imageSrc
+            ? 'md:grid-cols-[minmax(0,36rem),minmax(0,400px)] md:items-start'
+            : 'justify-items-center',
+        ]}
+      >
+        <!-- Текстовая колонка: ограничена по ширине (~576px), центрирована при отсутствии изображения -->
+        <div class:list={[
+          'min-w-0 max-w-[36rem] flex flex-col gap-4 w-full',
+          !imageSrc && 'mx-auto',
+        ]}>
+          {title && (
+            <h2 class="text-h2 text-text-inverse">
+              {title}
+            </h2>
+          )}
+          {body && (
+            <p class="text-body text-text-muted-inverse">
+              {body}
+            </p>
+          )}
+          {listItems.length > 0 && (
+            <ul class="list-disc list-inside space-y-1.5 text-body text-text-muted-inverse">
+              {listItems.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+          {(priceText || priceNote) && (
+            <div class="flex flex-col gap-1.5 pt-1">
+              {priceText && (
+                <p class="text-lg font-semibold text-text-inverse bg-white/10 rounded-soft px-4 py-3 w-fit">
+                  {priceText}
+                </p>
+              )}
+              {priceNote && (
+                <p class="text-body text-text-muted-inverse">
+                  {priceNote}
+                </p>
+              )}
+            </div>
+          )}
+        </div>
+
+        {imageSrc && (
+          <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
+            <img
+              src={imageSrc}
+              alt=""
+              width="400"
+              height="300"
+              class="w-full h-auto object-contain rounded-soft"
+              loading="lazy"
+              decoding="async"
+            />
+          </div>
+        )}
+      </div>
+    </div>
+  </Container>
+</Section>

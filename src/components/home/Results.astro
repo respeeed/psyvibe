@@ -1,0 +1,69 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Card from '../ui/Card.astro';
+
+interface ResultsColumn {
+  title?: string | null;
+  items?: string[] | null;
+}
+
+interface ResultsData {
+  title?: string | null;
+  columns?: ResultsColumn[] | null;
+}
+
+interface Props {
+  data: ResultsData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const columns = data?.columns?.filter(
+  (col) => col.title ?? (col.items?.length ?? 0) > 0
+) ?? [];
+
+const hasContent = title || columns.length > 0;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section variant="muted">
+  <Container>
+    <div class="flex flex-col gap-8 items-center">
+      {title && (
+        <h2 class="text-h2 text-text text-center max-w-2xl">
+          {title}
+        </h2>
+      )}
+
+      {columns.length > 0 && (
+        <ul
+          class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3 w-full"
+          role="list"
+        >
+          {columns.map((col) => (
+            <li>
+              <Card>
+                {col.title && (
+                  <h3 class="text-h3 text-text">
+                    {col.title}
+                  </h3>
+                )}
+                {col.items && col.items.length > 0 && (
+                  <ul class="list-disc list-inside space-y-2 text-body text-text-muted">
+                    {col.items.map((item) => (
+                      <li>{item}</li>
+                    ))}
+                  </ul>
+                )}
+              </Card>
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  </Container>
+</Section>

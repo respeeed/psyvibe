@@ -1,0 +1,66 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Card from '../ui/Card.astro';
+
+interface Step {
+  title?: string | null;
+  description?: string | null;
+}
+
+interface HowItWorksData {
+  title?: string | null;
+  steps?: Step[] | null;
+}
+
+interface Props {
+  data: HowItWorksData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const steps = data?.steps?.filter(
+  (s) => s.title ?? s.description
+) ?? [];
+
+const hasContent = title || steps.length > 0;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col gap-8 items-center">
+      {title && (
+        <h2 class="text-h2 text-text text-center max-w-2xl">
+          {title}
+        </h2>
+      )}
+
+      {steps.length > 0 && (
+        <div class="overflow-x-auto w-full">
+          <ul class="flex gap-6 flex-nowrap min-w-0 pb-1" role="list">
+            {steps.map((step) => (
+              <li class="min-w-[260px] w-[260px] flex-shrink-0">
+                <Card>
+                  {step.title && (
+                    <h3 class="text-h3 text-text">
+                      {step.title}
+                    </h3>
+                  )}
+                  {step.description && (
+                    <p class="text-body text-text-muted">
+                      {step.description}
+                    </p>
+                  )}
+                </Card>
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+    </div>
+  </Container>
+</Section>

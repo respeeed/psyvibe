@@ -1,0 +1,10 @@
+siteName: Елизавета Шихалева — Корпоративный психолог
+navLinks:
+  - label: Обо мне
+    href: /about
+  - label: Тарифы
+    href: /pricing
+  - label: Блог
+    href: /blog
+  - label: Контакты
+    href: /contacts

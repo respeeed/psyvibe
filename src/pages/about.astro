@@ -1,0 +1,54 @@
+---
+import Layout from '../components/layout/Layout.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import { reader } from '../lib/keystatic';
+import { renderMarkdocToHtml } from '../lib/markdoc';
+import { imagePath } from '../lib/images';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const about = await reader.singletons.about.read();
+
+const imageSrc = imagePath(about?.image);
+const bodyHtml = renderMarkdocToHtml(about?.body ?? null);
+const metaDesc = 'О психологе Елизавете Шихалевой';
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title={about?.title ?? 'Обо мне'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Section>
+    <Container>
+      <div class="mx-auto max-w-3xl">
+        <h1 class="text-h1 text-text">
+          {about?.title ?? 'Обо мне'}
+        </h1>
+
+        <div class="mt-8 flex flex-col gap-8 sm:flex-row sm:items-start sm:gap-12">
+          {imageSrc && (
+            <figure class="shrink-0 sm:w-64">
+              <img
+                src={imageSrc}
+                alt=""
+                width="256"
+                height="256"
+                class="aspect-square w-full rounded-soft object-cover"
+              />
+            </figure>
+          )}
+          <div class="min-w-0 flex-1">
+            {bodyHtml ? (
+              <div
+                class="prose-content text-body text-text"
+                set:html={bodyHtml}
+              />
+            ) : (
+              <p class="text-text-muted">
+                Заполните страницу в Keystatic: /keystatic
+              </p>
+            )}
+          </div>
+        </div>
+      </div>
+    </Container>
+  </Section>
+</Layout>

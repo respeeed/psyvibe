@@ -1,0 +1,75 @@
+---
+import Layout from '../components/layout/Layout.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import { reader } from '../lib/keystatic';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const pricing = await reader.singletons.pricing.read();
+const metaDesc = (pricing?.intro ?? 'Тарифы и форматы работы').replace(/\s+/g, ' ').trim().slice(0, 155);
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title={pricing?.title ?? 'Тарифы'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Section>
+    <Container>
+      <div class="mx-auto max-w-4xl">
+        <div class="max-w-2xl">
+          <h1 class="text-h1 text-text">
+            {pricing?.title ?? 'Тарифы'}
+          </h1>
+          {pricing?.intro && (
+            <p class="mt-4 text-body text-text-muted">
+              {pricing.intro}
+            </p>
+          )}
+        </div>
+
+        {pricing?.formats?.length ? (
+          <ul
+            class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            role="list"
+          >
+            {pricing.formats.map((format) => (
+              <li
+                class="flex flex-col rounded-soft border border-border bg-surface p-6 transition-colors hover:border-accent/30"
+              >
+                <h2 class="text-h2 text-text">
+                  {format.name}
+                </h2>
+                <p class="mt-2 text-body font-medium text-text">
+                  {format.price}
+                </p>
+                {format.description && (
+                  <p class="mt-3 text-body text-text-muted">
+                    {format.description}
+                  </p>
+                )}
+                {format.features?.length ? (
+                  <ul class="mt-4 flex-1 space-y-2 text-body text-text-muted" aria-label="Включено">
+                    {format.features.map((f) => (
+                      <li class="flex gap-2">
+                        <span class="text-accent" aria-hidden="true">—</span>
+                        <span>{f}</span>
+                      </li>
+                    ))}
+                  </ul>
+                ) : null}
+                <p class="mt-6">
+                  <Button href="/contacts" variant="secondary">
+                    Записаться
+                  </Button>
+                </p>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p class="mt-8 text-body text-text-muted">
+            Добавьте форматы работы в Keystatic.
+          </p>
+        )}
+      </div>
+    </Container>
+  </Section>
+</Layout>

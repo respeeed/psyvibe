@@ -1,0 +1,48 @@
+---
+import Layout from '../components/layout/Layout.astro';
+import Hero from '../components/home/Hero.astro';
+import WhyTrust from '../components/home/WhyTrust.astro';
+import Process from '../components/home/Process.astro';
+import Benefits from '../components/home/Benefits.astro';
+import CtaBlock from '../components/home/CtaBlock.astro';
+import Diagnostic from '../components/home/Diagnostic.astro';
+import Format from '../components/home/Format.astro';
+import HowItWorks from '../components/home/HowItWorks.astro';
+import Results from '../components/home/Results.astro';
+import Faq from '../components/home/Faq.astro';
+import BlogPreview from '../components/home/BlogPreview.astro';
+import { reader } from '../lib/keystatic';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const home = await reader.singletons.home.read();
+
+const blogSlugs = await reader.collections.blog.list();
+const blogPosts = await Promise.all(
+  blogSlugs.map(async (slug) => {
+    const entry = await reader.collections.blog.read(slug);
+    return { slug, ...entry };
+  })
+);
+blogPosts.sort((a, b) => {
+  const d1 = a?.publishDate ? new Date(a.publishDate).getTime() : 0;
+  const d2 = b?.publishDate ? new Date(b.publishDate).getTime() : 0;
+  return d2 - d1;
+});
+
+const metaDesc = (home?.hero?.subtitle ?? 'Сайт психолога Елизаветы Шихалевой').replace(/\s+/g, ' ').trim().slice(0, 155);
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title="Главная" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Hero hero={home?.hero ?? null} />
+  <WhyTrust data={home?.whyTrust ?? null} />
+  <Process data={home?.process ?? null} />
+  <Benefits data={home?.benefits ?? null} />
+  <CtaBlock data={home?.cta ?? null} />
+  <Diagnostic data={home?.diagnostic ?? null} />
+  <Format data={home?.format ?? null} />
+  <HowItWorks data={home?.howItWorks ?? null} />
+  <Results data={home?.results ?? null} />
+  <Faq data={home?.faq ?? null} />
+  <BlogPreview sectionData={home?.blogPreview ?? null} posts={blogPosts} />
+</Layout>

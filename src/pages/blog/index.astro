@@ -1,0 +1,100 @@
+---
+import Layout from '../../components/layout/Layout.astro';
+import Section from '../../components/ui/Section.astro';
+import Container from '../../components/ui/Container.astro';
+import { reader } from '../../lib/keystatic';
+import { imagePath } from '../../lib/images';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const slugs = await reader.collections.blog.list();
+const posts = await Promise.all(
+  slugs.map(async (slug) => {
+    const entry = await reader.collections.blog.read(slug);
+    return { slug, ...entry };
+  })
+);
+posts.sort((a, b) => {
+  const d1 = a?.publishDate ? new Date(a.publishDate).getTime() : 0;
+  const d2 = b?.publishDate ? new Date(b.publishDate).getTime() : 0;
+  return d2 - d1;
+});
+const metaDesc = 'Статьи о психологии и саморазвитии';
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title="Блог" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Section>
+    <Container>
+      <div class="mx-auto max-w-4xl">
+        <h1 class="text-h1 text-text">
+          Блог
+        </h1>
+        <p class="mt-2 text-body text-text-muted">
+          Статьи о психологии и саморазвитии
+        </p>
+
+        {posts.length ? (
+          <ul
+            class="mt-10 grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3"
+            role="list"
+          >
+            {posts.map((post) => {
+              const href = `/blog/${post.slug}`;
+              const imgSrc = imagePath(post.image);
+              return (
+                <li>
+                  <a
+                    href={href}
+                    class="flex flex-col gap-3 rounded-soft border border-border bg-surface p-0 transition-colors hover:border-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2 overflow-hidden"
+                  >
+                    {imgSrc && (
+                      <div class="aspect-video w-full overflow-hidden bg-surface-muted">
+                        <img
+                          src={imgSrc}
+                          alt=""
+                          width="400"
+                          height="225"
+                          class="h-full w-full object-cover"
+                          loading="lazy"
+                          decoding="async"
+                        />
+                      </div>
+                    )}
+                    <div class="flex min-w-0 flex-col gap-2 p-6">
+                      {post.title && (
+                        <h2 class="text-h3 text-text">
+                          {post.title}
+                        </h2>
+                      )}
+                      {post.publishDate && (
+                        <time
+                          class="text-body text-text-muted"
+                          datetime={post.publishDate}
+                        >
+                          {new Date(post.publishDate).toLocaleDateString('ru-RU', {
+                            day: 'numeric',
+                            month: 'long',
+                            year: 'numeric',
+                          })}
+                        </time>
+                      )}
+                      {post.excerpt && (
+                        <p class="text-body text-text-muted line-clamp-3">
+                          {post.excerpt}
+                        </p>
+                      )}
+                    </div>
+                  </a>
+                </li>
+              );
+            })}
+          </ul>
+        ) : (
+          <p class="mt-10 text-body text-text-muted">
+            Статей пока нет. Добавьте их в Keystatic.
+          </p>
+        )}
+      </div>
+    </Container>
+  </Section>
+</Layout>

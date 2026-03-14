@@ -1,0 +1,46 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+
+interface CtaBlockData {
+  title?: string | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+}
+
+interface Props {
+  data: CtaBlockData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const ctaLabel = data?.ctaLabel ?? null;
+const ctaUrl = data?.ctaUrl ?? null;
+const hasButton = ctaLabel && ctaUrl;
+
+const hasContent = title || hasButton;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col items-center justify-center">
+      <div class="w-full max-w-2xl mx-auto bg-surface-muted rounded-soft px-6 py-8 md:px-10 md:py-10 flex flex-col items-center gap-6 text-center">
+        {title && (
+          <h2 class="text-h2 text-text">
+            {title}
+          </h2>
+        )}
+        {hasButton && (
+          <Button href={ctaUrl} variant="primary">
+            {ctaLabel}
+          </Button>
+        )}
+      </div>
+    </div>
+  </Container>
+</Section>

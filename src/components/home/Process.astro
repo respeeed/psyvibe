@@ -1,0 +1,88 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Tag from '../ui/Tag.astro';
+import Card from '../ui/Card.astro';
+
+interface ProcessData {
+  title?: string | null;
+  subtitle?: string | null;
+  topicTags?: string[] | null;
+  body?: string | null;
+  cardTitle?: string | null;
+  cardBody?: string | null;
+}
+
+interface Props {
+  data: ProcessData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const subtitle = data?.subtitle ?? null;
+const topicTags = data?.topicTags ?? [];
+const body = data?.body ?? null;
+const cardTitle = data?.cardTitle ?? null;
+const cardBody = data?.cardBody ?? null;
+
+const hasCard = cardTitle || cardBody;
+const hasContent = title || subtitle || topicTags.length > 0 || body || hasCard;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class:list={[
+      'grid gap-8 md:gap-12',
+      hasCard ? 'grid-cols-1 md:grid-cols-[1fr,minmax(0,320px)] md:items-start' : 'grid-cols-1',
+    ]}>
+      <div class:list={[
+        'min-w-0 flex flex-col gap-6',
+        !hasCard && 'max-w-2xl mx-auto',
+      ]}>
+        {title && (
+          <h2 class="text-h2 text-text">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p class="text-body text-text-muted font-medium">
+            {subtitle}
+          </p>
+        )}
+        {topicTags.length > 0 && (
+          <div class="flex flex-wrap gap-2">
+            {topicTags.map((tag) => (
+              <Tag>{tag}</Tag>
+            ))}
+          </div>
+        )}
+        {body && (
+          <p class="text-body text-text-muted max-w-xl">
+            {body}
+          </p>
+        )}
+      </div>
+
+      {hasCard && (
+        <div class="min-w-0 shrink-0">
+          <Card>
+            {cardTitle && (
+              <h3 class="text-h3 text-text">
+                {cardTitle}
+              </h3>
+            )}
+            {cardBody && (
+              <p class="text-body text-text-muted">
+                {cardBody}
+              </p>
+            )}
+          </Card>
+        </div>
+      )}
+    </div>
+  </Container>
+</Section>

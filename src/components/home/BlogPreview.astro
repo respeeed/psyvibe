@@ -1,0 +1,107 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import { imagePath } from '../../lib/images';
+
+interface BlogPreviewSectionData {
+  title?: string | null;
+  subtitle?: string | null;
+}
+
+interface BlogPost {
+  slug: string;
+  title?: string | null;
+  publishDate?: string | null;
+  excerpt?: string | null;
+  image?: string | null;
+}
+
+interface Props {
+  sectionData: BlogPreviewSectionData | null | undefined;
+  posts: BlogPost[];
+}
+
+const { sectionData, posts } = Astro.props;
+
+const DEFAULT_POST_COUNT = 4;
+const title = sectionData?.title ?? null;
+const subtitle = sectionData?.subtitle ?? null;
+
+const displayedPosts = posts.slice(0, DEFAULT_POST_COUNT);
+
+if (displayedPosts.length === 0) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class="flex flex-col gap-8">
+      <div class="max-w-2xl">
+        {title && (
+          <h2 class="text-h2 text-text">
+            {title}
+          </h2>
+        )}
+        {subtitle && (
+          <p class="mt-2 text-body text-text-muted">
+            {subtitle}
+          </p>
+        )}
+      </div>
+
+      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+        {displayedPosts.map((post) => {
+          const href = `/blog/${post.slug}`;
+          const imgSrc = imagePath(post.image);
+          return (
+            <li>
+              <a
+                href={href}
+                class="flex flex-col gap-3 rounded-soft border border-border bg-surface p-6 transition-colors hover:border-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+              >
+                {imgSrc && (
+                  <div class="aspect-video w-full overflow-hidden rounded-soft bg-surface-muted">
+                    <img
+                      src={imgSrc}
+                      alt=""
+                      width="400"
+                      height="225"
+                      class="h-full w-full object-cover"
+                      loading="lazy"
+                      decoding="async"
+                    />
+                  </div>
+                )}
+                <div class="flex min-w-0 flex-col gap-2">
+                  {post.title && (
+                    <h3 class="text-h3 text-text">
+                      {post.title}
+                    </h3>
+                  )}
+                  {post.publishDate && (
+                    <time
+                      class="text-body text-text-muted"
+                      datetime={post.publishDate}
+                    >
+                      {new Date(post.publishDate).toLocaleDateString('ru-RU', {
+                        day: 'numeric',
+                        month: 'long',
+                        year: 'numeric',
+                      })}
+                    </time>
+                  )}
+                  {post.excerpt && (
+                    <p class="text-body text-text-muted">
+                      {post.excerpt}
+                    </p>
+                  )}
+                </div>
+              </a>
+            </li>
+          );
+        })}
+      </ul>
+    </div>
+  </Container>
+</Section>

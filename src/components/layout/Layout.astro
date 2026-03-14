@@ -1,0 +1,54 @@
+---
+import Header from './Header.astro';
+import Footer from './Footer.astro';
+import '../../styles/global.css';
+
+interface Props {
+  title: string;
+  description?: string | null;
+  canonicalUrl?: string | null;
+  /** URL или путь для og:image (например /images/og-default.png). Если путь — дополняется через site. */
+  ogImage?: string | null;
+  siteSettings?: Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>>;
+}
+
+const { title, description, canonicalUrl, ogImage, siteSettings } = Astro.props;
+
+const site = Astro.site?.toString() ?? '';
+const canonical = canonicalUrl?.trim() || null;
+const desc = description?.trim() || null;
+const ogImagePath = ogImage?.trim() || '/images/og-default.png';
+const ogImageUrl = ogImagePath.startsWith('http') ? ogImagePath : `${site}${ogImagePath.startsWith('/') ? '' : '/'}${ogImagePath}`;
+const ogUrl = canonical ?? (site ? `${site}${Astro.url.pathname}` : null);
+---
+
+<html lang="ru">
+  <head>
+    <meta charset="utf-8" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="generator" content={Astro.generator} />
+    {desc && <meta name="description" content={desc} />}
+    {canonical && <link rel="canonical" href={canonical} />}
+    <title>{title} | Psy-vibe</title>
+    {ogUrl && <meta property="og:url" content={ogUrl} />}
+    <meta property="og:title" content={`${title} | Psy-vibe`} />
+    {desc && <meta property="og:description" content={desc} />}
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content={ogImageUrl} />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  </head>
+  <body class="min-h-screen flex flex-col bg-surface text-text font-sans">
+    <header role="banner">
+      <Header siteSettings={siteSettings} />
+    </header>
+    <main class="flex-1">
+      <slot />
+    </main>
+    <footer role="contentinfo">
+      <Footer siteSettings={siteSettings} />
+    </footer>
+  </body>
+</html>

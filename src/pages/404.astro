@@ -1,0 +1,31 @@
+---
+import Layout from '../components/layout/Layout.astro';
+import Section from '../components/ui/Section.astro';
+import Container from '../components/ui/Container.astro';
+import Button from '../components/ui/Button.astro';
+import { reader } from '../lib/keystatic';
+
+const siteSettings = await reader.singletons.siteSettings.read();
+const metaDesc = 'Запрашиваемая страница не существует или была перемещена.';
+const canonicalUrl = Astro.canonicalURL?.href ?? null;
+---
+
+<Layout title="Страница не найдена" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+  <Section>
+    <Container>
+      <div class="mx-auto max-w-xl text-center">
+        <h1 class="text-h1 text-text">
+          Страница не найдена
+        </h1>
+        <p class="mt-4 text-body text-text-muted">
+          Запрашиваемая страница не существует или была перемещена.
+        </p>
+        <p class="mt-8">
+          <Button href="/" variant="secondary">
+            На главную
+          </Button>
+        </p>
+      </div>
+    </Container>
+  </Section>
+</Layout>
