@@ -5,7 +5,9 @@ import WhyTrust from '../components/home/WhyTrust.astro';
 import Process from '../components/home/Process.astro';
 import Benefits from '../components/home/Benefits.astro';
 import CtaBlock from '../components/home/CtaBlock.astro';
+import DiscussBlock from '../components/home/DiscussBlock.astro';
 import Diagnostic from '../components/home/Diagnostic.astro';
+import RelevantFor from '../components/home/RelevantFor.astro';
 import Format from '../components/home/Format.astro';
 import HowItWorks from '../components/home/HowItWorks.astro';
 import Results from '../components/home/Results.astro';
@@ -42,7 +44,9 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
   <Diagnostic data={home?.diagnostic ?? null} />
   <Format data={home?.format ?? null} />
   <HowItWorks data={home?.howItWorks ?? null} />
+  <DiscussBlock data={home?.discuss ?? null} siteSettings={siteSettings} />
   <Results data={home?.results ?? null} />
+  <RelevantFor data={home?.relevantFor ?? null} />
   <Faq data={home?.faq ?? null} />
   <BlogPreview sectionData={home?.blogPreview ?? null} posts={blogPosts} />
 </Layout>

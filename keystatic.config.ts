@@ -5,6 +5,14 @@ import {
   singleton,
 } from '@keystatic/core';
 
+/** Keystatic передаёт в itemLabel объект { value, onChange, schema, key }; отображать нужно value */
+function itemVal(item: unknown): unknown {
+  if (item != null && typeof item === 'object' && 'value' in item) {
+    return (item as { value: unknown }).value;
+  }
+  return item;
+}
+
 export default config({
   storage: { kind: 'local' },
   singletons: {
@@ -21,7 +29,7 @@ export default config({
             label: fields.text({ label: 'Текст ссылки' }),
             href: fields.text({ label: 'URL' }),
           }),
-          { label: 'Пункты меню' }
+          { label: 'Пункты меню', itemLabel: (item: unknown) => (itemVal(item) as { label?: string })?.label || 'Пункт меню' }
         ),
         phone: fields.text({ label: 'Телефон' }),
         messengerUrl: fields.text({
@@ -45,27 +53,45 @@ export default config({
             secondaryCtaUrl: fields.text({ label: 'URL второй кнопки' }),
             workingHours: fields.text({ label: 'Часы работы' }),
             image: fields.image({ label: 'Изображение', directory: 'public/images' }),
+            video: fields.text({
+              label: 'Видео (MP4)',
+              description: 'Путь к файлу от public, например: videos/иллюстрация.mp4. Загрузите MP4 в public/videos/',
+            }),
             stats: fields.array(
               fields.object({
                 value: fields.text({ label: 'Значение' }),
                 label: fields.text({ label: 'Подпись' }),
               }),
-              { label: 'Цифры', validation: { length: { min: 3, max: 3 } } }
+              {
+                label: 'Цифры',
+                validation: { length: { min: 3, max: 3 } },
+                itemLabel: (item: unknown) => {
+                  const v = itemVal(item) as { value?: string; label?: string };
+                  return [v?.value, v?.label].filter(Boolean).join(' — ') || 'Статистика';
+                },
+              }
             ),
           },
-          { label: 'Hero' }
+          { label: 'Hero (баннер главной)', description: 'Заголовок, подзаголовок, кнопки, фото/видео' }
         ),
         whyTrust: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
             body: fields.text({ label: 'Текст', multiline: true }),
-            tags: fields.array(fields.text({ label: 'Тег' }), { label: 'Теги' }),
+            tags: fields.array(fields.text({ label: 'Тег' }), {
+              label: 'Теги',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Тег',
+            }),
             image: fields.image({
               label: 'Изображение',
               directory: 'public/images',
             }),
+            video: fields.text({
+              label: 'Видео (MP4)',
+              description: 'Путь от public, например: videos/иллюстрация.mp4',
+            }),
           },
-          { label: 'Почему доверяют' }
+          { label: 'Почему доверяют', description: 'Блок «Почему компании доверяют мне»' }
         ),
         process: fields.object(
           {
@@ -73,12 +99,13 @@ export default config({
             subtitle: fields.text({ label: 'Подзаголовок' }),
             topicTags: fields.array(fields.text({ label: 'Тег' }), {
               label: 'Теги тем',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Тег',
             }),
             body: fields.text({ label: 'Текст', multiline: true }),
             cardTitle: fields.text({ label: 'Заголовок карточки' }),
             cardBody: fields.text({ label: 'Текст карточки', multiline: true }),
           },
-          { label: 'Внутренние процессы' }
+          { label: 'Внутренние процессы', description: 'Блок про процессы в команде и прибыль' }
         ),
         benefits: fields.object(
           {
@@ -86,13 +113,18 @@ export default config({
             body: fields.text({ label: 'Текст', multiline: true }),
             listItems: fields.array(fields.text({ label: 'Пункт' }), {
               label: 'Список',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Пункт',
             }),
             image: fields.image({
               label: 'Изображение',
               directory: 'public/images',
             }),
+            video: fields.text({
+              label: 'Видео (MP4)',
+              description: 'Путь от public, например: videos/иллюстрация.mp4',
+            }),
           },
-          { label: 'Почему выгоден психолог' }
+          { label: 'Почему выгоден психолог', description: 'Блок «Почему бизнесу выгоден корпоративный психолог»' }
         ),
         cta: fields.object(
           {
@@ -100,7 +132,7 @@ export default config({
             ctaLabel: fields.text({ label: 'Текст кнопки' }),
             ctaUrl: fields.text({ label: 'URL кнопки' }),
           },
-          { label: 'CTA-блок' }
+          { label: 'CTA-блок', description: 'Блок с текстом и кнопкой «Записаться на консультацию»' }
         ),
         diagnostic: fields.object(
           {
@@ -114,12 +146,16 @@ export default config({
                   multiline: true,
                 }),
               }),
-              { label: 'Карточки результата', validation: { length: { max: 4 } } }
+              {
+                label: 'Карточки результата',
+                validation: { length: { max: 4 } },
+                itemLabel: (item: unknown) => (itemVal(item) as { title?: string })?.title || 'Карточка',
+              }
             ),
             ctaLabel: fields.text({ label: 'Текст кнопки' }),
             ctaUrl: fields.text({ label: 'URL кнопки' }),
           },
-          { label: 'Бесплатная диагностика' }
+          { label: 'Бесплатная диагностика', description: 'Блок «Бесплатная диагностика выстроения команды»' }
         ),
         format: fields.object(
           {
@@ -127,6 +163,7 @@ export default config({
             body: fields.text({ label: 'Текст', multiline: true }),
             listItems: fields.array(fields.text({ label: 'Пункт' }), {
               label: 'Список',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Пункт',
             }),
             priceText: fields.text({ label: 'Текст цены' }),
             priceNote: fields.text({ label: 'Подпись к цене' }),
@@ -134,8 +171,12 @@ export default config({
               label: 'Изображение',
               directory: 'public/images',
             }),
+            video: fields.text({
+              label: 'Видео (MP4)',
+              description: 'Путь от public, например: videos/иллюстрация.mp4',
+            }),
           },
-          { label: 'Формат сотрудничества' }
+          { label: 'Формат сотрудничества', description: 'Блок «Формат сотрудничества»' }
         ),
         howItWorks: fields.object(
           {
@@ -148,61 +189,106 @@ export default config({
                   multiline: true,
                 }),
               }),
-              { label: 'Шаги', validation: { length: { max: 5 } } }
+              {
+                label: 'Шаги',
+                validation: { length: { max: 5 } },
+                itemLabel: (item: unknown) => (itemVal(item) as { title?: string })?.title || 'Шаг',
+              }
             ),
           },
-          { label: 'Как проходит сотрудничество' }
+          { label: 'Как проходит сотрудничество', description: 'Блок с шагами сотрудничества' }
         ),
         discuss: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
-            body: fields.text({ label: 'Текст', multiline: true }),
+            body: fields.text({ label: 'Вводная строка (например: На короткой встрече мы:)' }),
             listItems: fields.array(fields.text({ label: 'Пункт' }), {
               label: 'Список',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Пункт',
+            }),
+            ctaLabel: fields.text({ label: 'Текст кнопки (слева)' }),
+            ctaUrl: fields.text({ label: 'URL кнопки (слева)' }),
+            contactEmail: fields.text({
+              label: 'Email для кнопки «Написать на почту»',
+              description: 'Опционально',
             }),
           },
-          { label: 'Обсудим задачи' }
+          { label: 'Обсудим задачи', description: 'Блок «Обсудим задачи вашей команды» с кнопками связи' }
         ),
         results: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
             columns: fields.array(
               fields.object({
-                title: fields.text({ label: 'Заголовок колонки' }),
-                items: fields.array(fields.text({ label: 'Пункт' }), {
-                  label: 'Пункты',
+                title: fields.text({ label: 'Название (тип клиента)' }),
+                subtitle: fields.text({
+                  label: 'Подзаголовок',
+                  description: 'Например: 35 сотрудников',
+                }),
+                context: fields.text({
+                  label: 'Контекст',
+                  description: 'Например: После внедрения корпоративного психолога:',
+                }),
+                items: fields.array(fields.text({ label: 'Результат' }), {
+                  label: 'Результаты (список с галочками)',
+                  itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Пункт',
                 }),
               }),
-              { label: 'Колонки', validation: { length: { max: 3 } } }
+              {
+                label: 'Колонки',
+                validation: { length: { max: 3 } },
+                itemLabel: (item: unknown) => (itemVal(item) as { title?: string })?.title || 'Колонка',
+              }
             ),
           },
-          { label: 'Результаты работы' }
+          { label: 'Результаты работы', description: 'Блок «Результаты работы с командами»' }
         ),
         relevantFor: fields.object(
           {
-            title: fields.text({ label: 'Заголовок' }),
-            cards: fields.array(
+            title: fields.text({ label: 'Заголовок (основной)' }),
+            iconItems: fields.array(
               fields.object({
-                text: fields.text({
-                  label: 'Текст карточки',
-                  multiline: true,
+                icon: fields.image({
+                  label: 'Иконка',
+                  directory: 'public/images',
+                  description: 'Квадратная иконка, рекомендуется до 96×96',
                 }),
+                text: fields.text({ label: 'Текст под иконкой', multiline: true }),
               }),
-              { label: 'Карточки', validation: { length: { max: 5 } } }
+              {
+                label: 'Линия иконок с текстами',
+                validation: { length: { max: 6 } },
+                itemLabel: (item: unknown) => {
+                  const v = itemVal(item) as { text?: string };
+                  return (v?.text?.slice(0, 40) || 'Пункт') + (v?.text && v.text.length > 40 ? '…' : '');
+                },
+              }
             ),
+            secondaryTitle: fields.text({
+              label: 'Второй заголовок',
+              description: 'Например: Когда компании обращаются',
+            }),
+            tags: fields.array(fields.text({ label: 'Текст чипа' }), {
+              label: 'Теги-чипсы',
+              validation: { length: { max: 8 } },
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Тег',
+            }),
+            ctaLabel: fields.text({ label: 'Текст кнопки' }),
+            ctaUrl: fields.text({ label: 'URL кнопки' }),
           },
-          { label: 'Особенно актуально' }
+          { label: 'Особенно актуально', description: 'Блок «Особенно актуально, если команда» + теги и CTA' }
         ),
         clients: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
             clientNames: fields.array(fields.text({ label: 'Название' }), {
               label: 'Клиенты',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Клиент',
             }),
             ctaLabel: fields.text({ label: 'Текст кнопки' }),
             ctaUrl: fields.text({ label: 'URL кнопки' }),
           },
-          { label: 'Нас выбирают' }
+          { label: 'Нас выбирают', description: 'Блок «Нас выбирают» (клиенты)' }
         ),
         faq: fields.object(
           {
@@ -212,17 +298,24 @@ export default config({
                 question: fields.text({ label: 'Вопрос' }),
                 answer: fields.text({ label: 'Ответ', multiline: true }),
               }),
-              { label: 'Вопросы и ответы' }
+              {
+                label: 'Вопросы и ответы',
+                itemLabel: (item: unknown) => {
+                const v = itemVal(item) as { question?: string };
+                const q = v?.question ?? '';
+                return (q.slice(0, 50) || 'Вопрос') + (q.length > 50 ? '…' : '');
+              },
+              }
             ),
           },
-          { label: 'FAQ' }
+          { label: 'FAQ', description: 'Часто задаваемые вопросы' }
         ),
         blogPreview: fields.object(
           {
             title: fields.text({ label: 'Заголовок секции' }),
             subtitle: fields.text({ label: 'Подзаголовок' }),
           },
-          { label: 'Превью статей на главной' }
+          { label: 'Превью статей на главной', description: 'Заголовок и подзаголовок блока статей' }
         ),
       },
     }),
@@ -261,9 +354,10 @@ export default config({
             }),
             features: fields.array(fields.text({ label: 'Пункт' }), {
               label: 'Опции',
+              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Опция',
             }),
           }),
-          { label: 'Форматы работы' }
+          { label: 'Форматы работы', itemLabel: (item: unknown) => (itemVal(item) as { name?: string })?.name || 'Формат' }
         ),
       },
     }),

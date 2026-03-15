@@ -38,12 +38,10 @@ const ogUrl = canonical ?? (site ? `${site}${Astro.url.pathname}` : null);
     <meta property="og:image" content={ogImageUrl} />
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
   </head>
   <body class="min-h-screen flex flex-col bg-surface text-text font-sans">
-    <header role="banner">
-      <Header siteSettings={siteSettings} />
-    </header>
+    <Header siteSettings={siteSettings} />
     <main class="flex-1">
       <slot />
     </main>

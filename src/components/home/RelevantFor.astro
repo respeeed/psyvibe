@@ -1,0 +1,107 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+import { imagePath } from '../../lib/images';
+
+interface RelevantForData {
+  title?: string | null;
+  iconItems?: Array<{ icon?: string | null; text?: string | null }> | null;
+  secondaryTitle?: string | null;
+  tags?: string[] | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+}
+
+interface Props {
+  data: RelevantForData | null | undefined;
+}
+
+const { data } = Astro.props;
+
+const title = data?.title ?? null;
+const iconItems = data?.iconItems?.filter((i) => i.text) ?? [];
+const secondaryTitle = data?.secondaryTitle ?? null;
+const tags = data?.tags?.filter(Boolean) ?? [];
+const ctaLabel = data?.ctaLabel ?? null;
+const ctaUrl = data?.ctaUrl ?? null;
+const hasCta = ctaLabel && ctaUrl;
+
+const hasContent = title || iconItems.length > 0 || secondaryTitle || tags.length > 0 || hasCta;
+if (!hasContent) {
+  return null;
+}
+---
+
+<Section variant="muted">
+  <Container>
+    <div class="flex flex-col items-center gap-10 text-center">
+      {title && (
+        <h2 class="text-h2 text-text font-semibold leading-tight max-w-2xl">
+          {title}
+        </h2>
+      )}
+
+      <!-- Линия иконок с текстами -->
+      {iconItems.length > 0 && (
+        <ul class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-6 md:gap-8" role="list">
+          {iconItems.map((item) => {
+            const iconSrc = imagePath(item.icon);
+            return (
+              <li class="flex flex-col items-center gap-3">
+                <div class="w-16 h-16 md:w-20 md:h-20 rounded-xl border border-border bg-surface flex items-center justify-center shrink-0 overflow-hidden shadow-sm">
+                  {iconSrc ? (
+                    <img
+                      src={iconSrc}
+                      alt=""
+                      width="80"
+                      height="80"
+                      class="w-full h-full object-contain p-1"
+                      loading="lazy"
+                    />
+                  ) : (
+                    <!-- Плейсхолдер: иконка «цель/фокус» до загрузки в админке -->
+                    <svg class="w-8 h-8 md:w-10 md:h-10 text-text-muted" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                      <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25a2.25 2.25 0 0 0 2.25 2.25h14.5a2.25 2.25 0 0 0 2.25-2.25V3.75A2.25 2.25 0 0 0 20.25 1.5H5.25A2.25 2.25 0 0 0 3 3.75Zm6 9.75h.008v.008H9V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3-.375h.008v.008H12.375V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3-.375h.008v.008H15.75V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
+                    </svg>
+                  )}
+                </div>
+                <p class="text-body text-text-muted leading-snug max-w-[10rem]">
+                  {item.text}
+                </p>
+              </li>
+            );
+          })}
+        </ul>
+      )}
+
+      <!-- Второй заголовок + теги-чипсы -->
+      {(secondaryTitle || tags.length > 0) && (
+        <div class="flex flex-col items-center gap-5 w-full max-w-3xl">
+          {secondaryTitle && (
+            <h3 class="text-xl font-semibold text-text">
+              {secondaryTitle}
+            </h3>
+          )}
+          {tags.length > 0 && (
+            <ul class="flex flex-wrap justify-center gap-3" role="list">
+              {tags.map((tag) => (
+                <li>
+                  <span class="inline-flex rounded-full bg-surface border border-border px-4 py-2 text-body text-text-muted">
+                    {tag}
+                  </span>
+                </li>
+              ))}
+            </ul>
+          )}
+        </div>
+      )}
+
+      {hasCta && (
+        <Button href={ctaUrl} variant="primary">
+          {ctaLabel}
+        </Button>
+      )}
+    </div>
+  </Container>
+</Section>

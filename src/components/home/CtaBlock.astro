@@ -20,6 +20,11 @@ const ctaLabel = data?.ctaLabel ?? null;
 const ctaUrl = data?.ctaUrl ?? null;
 const hasButton = ctaLabel && ctaUrl;
 
+// Выделяем слова «состояния» и «команды» жирным (контент из CMS)
+const titleHtml = title
+  ? title.replace(/\b(состояния|команды)\b/gi, '<strong>$1</strong>')
+  : null;
+
 const hasContent = title || hasButton;
 if (!hasContent) {
   return null;
@@ -29,11 +34,9 @@ if (!hasContent) {
 <Section>
   <Container>
     <div class="flex flex-col items-center justify-center">
-      <div class="w-full max-w-2xl mx-auto bg-surface-muted rounded-soft px-6 py-8 md:px-10 md:py-10 flex flex-col items-center gap-6 text-center">
-        {title && (
-          <h2 class="text-h2 text-text">
-            {title}
-          </h2>
+      <div class="w-full max-w-2xl mx-auto bg-surface-muted rounded-card px-6 py-8 md:px-10 md:py-10 flex flex-col items-center gap-6 text-center shadow-[0_2px_8px_rgba(28,25,23,0.06)] border border-border/60">
+        {titleHtml && (
+          <p class="text-body text-text-muted leading-relaxed max-w-xl mx-auto" set:html={titleHtml} />
         )}
         {hasButton && (
           <Button href={ctaUrl} variant="primary">

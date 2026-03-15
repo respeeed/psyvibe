@@ -3,7 +3,7 @@ import Layout from '../../components/layout/Layout.astro';
 import Section from '../../components/ui/Section.astro';
 import Container from '../../components/ui/Container.astro';
 import { reader } from '../../lib/keystatic';
-import { imagePath } from '../../lib/images';
+import { blogImagePath } from '../../lib/images';
 
 const siteSettings = await reader.singletons.siteSettings.read();
 const slugs = await reader.collections.blog.list();
@@ -40,7 +40,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
           >
             {posts.map((post) => {
               const href = `/blog/${post.slug}`;
-              const imgSrc = imagePath(post.image);
+              const imgSrc = blogImagePath(post.slug, post.image);
               return (
                 <li>
                   <a

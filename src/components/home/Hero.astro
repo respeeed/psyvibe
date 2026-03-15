@@ -2,7 +2,7 @@
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
 import Button from '../ui/Button.astro';
-import { imagePath } from '../../lib/images';
+import { imagePath, videoPath } from '../../lib/images';
 
 interface HeroData {
   title?: string | null;
@@ -13,6 +13,7 @@ interface HeroData {
   secondaryCtaUrl?: string | null;
   workingHours?: string | null;
   image?: string | null;
+  video?: string | null;
   stats?: Array<{ value?: string | null; label?: string | null }> | null;
 }
 
@@ -31,7 +32,9 @@ const secondaryCtaUrl = hero?.secondaryCtaUrl ?? null;
 const workingHours = hero?.workingHours ?? null;
 const stats = hero?.stats?.filter((s) => s.value ?? s.label) ?? [];
 
+const heroVideoSrc = videoPath(hero?.video);
 const heroImageSrc = imagePath(hero?.image) ?? '/images/hero-girl.png';
+const hasVideo = heroVideoSrc != null;
 
 const hasPrimaryCta = primaryCtaLabel && primaryCtaUrl;
 const hasSecondaryCta = secondaryCtaLabel && secondaryCtaUrl;
@@ -39,130 +42,122 @@ const hasCtas = hasPrimaryCta || hasSecondaryCta;
 
 // Плейсхолдер только для layout нижней карточки (schema не меняем)
 const heroCardName = 'Елизавета Шихалева';
-const heroCardRole = 'Корпоративный психолог';
+const heroCardTags = ['Корпоративный психолог', 'КПТ', 'Стресс и выгорание'];
+const heroCardQuote = 'Какая-то глубокая и умная цитата от Елизаветы Михайловны';
 ---
 
-<Section class="!pt-14 !pb-20 md:!pt-20 md:!pb-28">
-  <Container>
-    <div class="flex flex-col gap-14 md:gap-24">
-      <!-- Текстовая часть сверху -->
-      <div class="flex flex-col gap-3 max-w-3xl">
-        <h1 class="text-[clamp(2.25rem,5.5vw,3.5rem)] font-bold text-text leading-tight tracking-tight">
-          {title}
-        </h1>
-        {subtitle && (
-          <p class="text-body text-text-muted max-w-xl leading-relaxed font-normal">
-            {subtitle}
-          </p>
-        )}
-        {hasCtas && (
-          <div class="flex flex-wrap gap-2.5">
-            {hasPrimaryCta && (
-              <Button href={primaryCtaUrl} variant="primary">
-                {primaryCtaLabel}
-              </Button>
-            )}
-            {hasSecondaryCta && (
-              <Button href={secondaryCtaUrl} variant="secondary">
-                {secondaryCtaLabel}
-              </Button>
+<Section class="hero-section !pt-14 !pb-0 md:!pt-20 md:!pb-0">
+  <Container class="!mb-10 md:!mb-16">
+    <!-- Текстовая часть — по центру над иллюстрацией -->
+    <div class="flex flex-col gap-2.5 max-w-3xl mx-auto text-center items-center">
+      <h1 class="text-[clamp(2.5rem,6vw,3.75rem)] font-bold text-text leading-tight tracking-tight">
+        {title}
+      </h1>
+      {subtitle && (
+        <p class="text-body text-text-muted max-w-xl leading-relaxed font-normal">
+          {subtitle}
+        </p>
+      )}
+      {hasCtas && (
+        <div class="flex flex-wrap gap-2.5 justify-center">
+          {hasPrimaryCta && (
+            <Button href={primaryCtaUrl} variant="primary">
+              {primaryCtaLabel}
+            </Button>
+          )}
+          {hasSecondaryCta && (
+            <Button href={secondaryCtaUrl} variant="secondary">
+              {secondaryCtaLabel}
+            </Button>
+          )}
+        </div>
+      )}
+      {workingHours && (
+        <p class="text-small text-text-muted pt-0.5">
+          {workingHours}
+        </p>
+      )}
+    </div>
+  </Container>
+
+  <!-- Иллюстрация на всю ширину (вне контейнера) -->
+  <div class="w-full">
+    <div class="relative w-full aspect-[4/3] md:aspect-[2/1] bg-surface-muted">
+      {hasVideo ? (
+        <video
+          src={heroVideoSrc!}
+          autoplay
+          muted
+          loop
+          playsinline
+          class="absolute inset-0 w-full h-full object-cover"
+        />
+      ) : (
+        <img
+          src={heroImageSrc}
+          alt=""
+          width="1920"
+          height="960"
+          class="absolute inset-0 w-full h-full object-cover"
+          loading="eager"
+          decoding="async"
+        />
+      )}
+
+      <!-- Нижняя карточка: висящая над иллюстрацией (desktop) -->
+      <div class="absolute left-0 right-0 bottom-6 z-10 hidden md:block px-[var(--container-padding)]">
+        <div class="max-w-6xl mx-auto bg-[var(--color-surface)] rounded-2xl px-6 md:px-8 py-5 md:py-6 shadow-[0_8px_32px_rgba(28,25,23,0.1),0_2px_8px_rgba(28,25,23,0.06)] border border-border/50">
+          <div class="grid grid-cols-1 md:grid-cols-[1fr,1.2fr] gap-6 md:gap-10 items-center">
+          <div class="min-w-0">
+            <p class="text-xl md:text-2xl font-bold text-text leading-tight tracking-tight">
+              {heroCardName}
+            </p>
+            <div class="flex flex-wrap gap-2 mt-2.5">
+              {heroCardTags.map((tag) => (
+                <span class="inline-flex items-center rounded-full bg-surface-muted px-3 py-1 text-small text-text-muted font-medium">
+                  {tag}
+                </span>
+              ))}
+            </div>
+            {workingHours && (
+              <p class="text-small text-text-muted mt-2">
+                {workingHours}
+              </p>
             )}
           </div>
-        )}
+          <div class="min-w-0 flex items-start gap-3">
+            <span class="text-4xl md:text-5xl font-serif text-[var(--color-cta)]/20 leading-none select-none" aria-hidden="true">"</span>
+            <p class="text-body text-text-muted leading-relaxed pt-1">
+              {heroCardQuote}
+            </p>
+          </div>
+        </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Mobile: карточка под иллюстрацией -->
+    <div class="md:hidden px-[var(--container-padding)] -mt-2 pb-6">
+      <div class="rounded-xl border border-border bg-surface px-5 py-5 shadow-sm">
+        <p class="text-lg font-semibold text-text leading-tight">
+          {heroCardName}
+        </p>
+        <div class="flex flex-wrap gap-2 mt-2">
+          {heroCardTags.map((tag) => (
+            <span class="inline-flex rounded-full bg-surface-muted px-3 py-1 text-small text-text-muted font-medium">
+              {tag}
+            </span>
+          ))}
+        </div>
+        <p class="text-small text-text-muted mt-3 italic">
+          {heroCardQuote}
+        </p>
         {workingHours && (
-          <p class="text-small text-text-muted pt-0.5">
+          <p class="text-small text-text-muted mt-2">
             {workingHours}
           </p>
         )}
       </div>
-
-      <!-- Визуальный блок: крупное фото с overlay (макет wireframe) -->
-      <div class="w-full max-w-6xl mx-auto">
-        <div class="relative w-full rounded-xl overflow-hidden aspect-[4/3] md:aspect-[2/1] bg-surface-muted">
-          <img
-            src={heroImageSrc}
-            alt=""
-            width="1152"
-            height="576"
-            class="absolute inset-0 w-full h-full object-cover"
-            loading="eager"
-            decoding="async"
-          />
-
-          <!-- Desktop: статы — карточки слева -->
-          {stats.length > 0 && (
-            <ul
-              class="absolute left-6 bottom-28 z-10 hidden md:flex flex-col gap-3"
-              role="list"
-            >
-              {stats.slice(0, 3).map((item) => (
-                <li class="rounded-xl bg-surface-dark text-white px-5 py-4 min-w-[11rem] shadow-xl">
-                  {item.value && (
-                    <span class="block font-bold text-lg leading-tight">
-                      {item.value}
-                    </span>
-                  )}
-                  {item.label && (
-                    <span class="block text-sm text-white/90 mt-1 leading-snug">
-                      {item.label}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-
-          <!-- Нижняя карточка: компактная floating-card -->
-          <div class="absolute left-6 bottom-6 right-auto max-w-md z-10 hidden md:block bg-white rounded-xl px-6 py-5 shadow-[0_4px_24px_rgba(0,0,0,0.08)] border border-border/40">
-            <p class="text-xl font-bold text-text leading-tight">
-              {heroCardName}
-            </p>
-            <p class="text-sm text-text-muted mt-1.5">
-              {heroCardRole}
-            </p>
-            {workingHours && (
-              <p class="text-small text-text-muted mt-1.5">
-                {workingHours}
-              </p>
-            )}
-          </div>
-        </div>
-
-        <!-- Mobile: статы и карточка под изображением (без overlay) -->
-        <div class="flex flex-col gap-4 mt-5 md:hidden">
-          {stats.length > 0 && (
-            <ul class="grid grid-cols-3 gap-3" role="list">
-              {stats.slice(0, 3).map((item) => (
-                <li class="rounded-xl border border-border bg-surface px-4 py-4 text-center shadow-sm">
-                  {item.value && (
-                    <span class="block font-semibold text-text text-base leading-tight">
-                      {item.value}
-                    </span>
-                  )}
-                  {item.label && (
-                    <span class="block text-small text-text-muted mt-1">
-                      {item.label}
-                    </span>
-                  )}
-                </li>
-              ))}
-            </ul>
-          )}
-          <div class="rounded-xl border border-border bg-surface px-5 py-5 shadow-sm">
-            <p class="text-lg font-semibold text-text leading-tight">
-              {heroCardName}
-            </p>
-            <p class="text-small text-text-muted mt-1">
-              {heroCardRole}
-            </p>
-            {workingHours && (
-              <p class="text-small text-text-muted mt-1.5">
-                {workingHours}
-              </p>
-            )}
-          </div>
-        </div>
-      </div>
     </div>
-  </Container>
+  </div>
 </Section>

@@ -1,7 +1,7 @@
 ---
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
-import { imagePath } from '../../lib/images';
+import { blogImagePath } from '../../lib/images';
 
 interface BlogPreviewSectionData {
   title?: string | null;
@@ -28,32 +28,29 @@ const title = sectionData?.title ?? null;
 const subtitle = sectionData?.subtitle ?? null;
 
 const displayedPosts = posts.slice(0, DEFAULT_POST_COUNT);
-
-if (displayedPosts.length === 0) {
-  return null;
-}
+const sectionTitle = title ?? 'Блог';
+const sectionSubtitle = subtitle ?? null;
 ---
 
 <Section>
   <Container>
     <div class="flex flex-col gap-8">
       <div class="max-w-2xl">
-        {title && (
-          <h2 class="text-h2 text-text">
-            {title}
-          </h2>
-        )}
-        {subtitle && (
+        <h2 class="text-h2 text-text">
+          {sectionTitle}
+        </h2>
+        {sectionSubtitle && (
           <p class="mt-2 text-body text-text-muted">
-            {subtitle}
+            {sectionSubtitle}
           </p>
         )}
       </div>
 
+      {displayedPosts.length > 0 ? (
       <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
         {displayedPosts.map((post) => {
           const href = `/blog/${post.slug}`;
-          const imgSrc = imagePath(post.image);
+          const imgSrc = blogImagePath(post.slug, post.image);
           return (
             <li>
               <a
@@ -102,6 +99,14 @@ if (displayedPosts.length === 0) {
           );
         })}
       </ul>
+      ) : (
+        <p class="text-body text-text-muted">
+          Скоро здесь появятся статьи.
+        </p>
+        <a href="/blog" class="text-body font-medium text-[var(--color-cta)] hover:underline">
+          Перейти в блог →
+        </a>
+      )}
     </div>
   </Container>
 </Section>

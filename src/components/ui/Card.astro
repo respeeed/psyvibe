@@ -7,7 +7,7 @@ interface Props {
 const { class: className = '', bare = false } = Astro.props;
 const base = bare
   ? 'flex flex-col gap-block'
-  : 'flex flex-col gap-block rounded-soft border border-border bg-surface p-6';
+  : 'flex flex-col gap-block rounded-card border border-border bg-surface p-6 md:p-7 shadow-[0_2px_8px_rgba(28,25,23,0.06)]';
 ---
 
 <div class:list={[base, className]}>

@@ -1,7 +1,7 @@
 ---
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
-import { imagePath } from '../../lib/images';
+import { imagePath, videoPath } from '../../lib/images';
 
 interface FormatData {
   title?: string | null;
@@ -10,6 +10,7 @@ interface FormatData {
   priceText?: string | null;
   priceNote?: string | null;
   image?: string | null;
+  video?: string | null;
 }
 
 interface Props {
@@ -24,10 +25,12 @@ const listItems = data?.listItems ?? [];
 const priceText = data?.priceText ?? null;
 const priceNote = data?.priceNote ?? null;
 const imageSrc = imagePath(data?.image);
+const videoSrc = videoPath(data?.video);
+const hasMedia = imageSrc ?? videoSrc;
 
 const hasPrice = priceText ?? priceNote;
 const hasContent =
-  title || body || listItems.length > 0 || hasPrice || imageSrc;
+  title || body || listItems.length > 0 || hasPrice || hasMedia;
 if (!hasContent) {
   return null;
 }
@@ -43,7 +46,7 @@ if (!hasContent) {
       <div
         class:list={[
           'grid grid-cols-1 gap-8 md:gap-12',
-          imageSrc
+          hasMedia
             ? 'md:grid-cols-[minmax(0,36rem),minmax(0,400px)] md:items-start'
             : 'justify-items-center',
         ]}
@@ -51,7 +54,7 @@ if (!hasContent) {
         <!-- Текстовая колонка: ограничена по ширине (~576px), центрирована при отсутствии изображения -->
         <div class:list={[
           'min-w-0 max-w-[36rem] flex flex-col gap-4 w-full',
-          !imageSrc && 'mx-auto',
+          !hasMedia && 'mx-auto',
         ]}>
           {title && (
             <h2 class="text-h2 text-text-inverse">
@@ -86,17 +89,28 @@ if (!hasContent) {
           )}
         </div>
 
-        {imageSrc && (
+        {hasMedia && (
           <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
-            <img
-              src={imageSrc}
-              alt=""
-              width="400"
-              height="300"
-              class="w-full h-auto object-contain rounded-soft"
-              loading="lazy"
-              decoding="async"
-            />
+            {videoSrc ? (
+              <video
+                src={videoSrc}
+                autoplay
+                muted
+                loop
+                playsinline
+                class="w-full h-auto rounded-soft object-contain"
+              />
+            ) : (
+              <img
+                src={imageSrc!}
+                alt=""
+                width="400"
+                height="300"
+                class="w-full h-auto object-contain rounded-soft"
+                loading="lazy"
+                decoding="async"
+              />
+            )}
           </div>
         )}
       </div>

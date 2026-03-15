@@ -6,6 +6,7 @@ export default {
       colors: {
         surface: 'var(--color-surface)',
         'surface-muted': 'var(--color-surface-muted)',
+        'surface-subtle': 'var(--color-surface-subtle)',
         'surface-dark': 'var(--color-surface-dark)',
         text: 'var(--color-text)',
         'text-muted': 'var(--color-text-muted)',
@@ -13,6 +14,8 @@ export default {
         'text-muted-inverse': 'var(--color-text-muted-inverse)',
         accent: 'var(--color-accent)',
         'accent-hover': 'var(--color-accent-hover)',
+        'accent-brand': 'var(--color-accent-brand)',
+        'accent-brand-hover': 'var(--color-accent-brand-hover)',
         border: 'var(--color-border)',
       },
       fontFamily: {
@@ -20,8 +23,8 @@ export default {
       },
       fontSize: {
         display: ['clamp(2rem, 5vw, 2.5rem)', { lineHeight: '1.2' }],
-        h1: ['1.875rem', { lineHeight: '1.3' }],
-        h2: ['1.5rem', { lineHeight: '1.35' }],
+        h1: ['2.25rem', { lineHeight: '1.2' }],
+        h2: ['1.75rem', { lineHeight: '1.28' }],
         h3: ['1.25rem', { lineHeight: '1.4' }],
         body: ['1rem', { lineHeight: '1.6' }],
         small: ['0.875rem', { lineHeight: '1.5' }],
@@ -35,6 +38,7 @@ export default {
       },
       borderRadius: {
         'soft': 'var(--radius-soft)',
+        'card': 'var(--radius-card)',
       },
     },
   },

@@ -1,0 +1,104 @@
+---
+import Container from '../ui/Container.astro';
+import Section from '../ui/Section.astro';
+import Button from '../ui/Button.astro';
+
+interface DiscussBlockData {
+  title?: string | null;
+  body?: string | null;
+  listItems?: string[] | null;
+  ctaLabel?: string | null;
+  ctaUrl?: string | null;
+  contactEmail?: string | null;
+}
+
+type SiteSettings = Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>> | null | undefined;
+
+interface Props {
+  data: DiscussBlockData | null | undefined;
+  siteSettings?: SiteSettings;
+}
+
+const { data, siteSettings } = Astro.props;
+
+const title = data?.title ?? null;
+const body = data?.body ?? null;
+const listItems = data?.listItems ?? [];
+const ctaLabel = data?.ctaLabel ?? null;
+const ctaUrl = data?.ctaUrl ?? null;
+const contactEmail = data?.contactEmail ?? null;
+const messengerUrl = siteSettings?.messengerUrl ?? null;
+
+const hasLeftContent = title || body || listItems.length > 0;
+const hasPrimaryCta = ctaLabel && ctaUrl;
+const hasRightButtons = hasPrimaryCta || messengerUrl || contactEmail;
+
+if (!hasLeftContent && !hasRightButtons) {
+  return null;
+}
+---
+
+<Section>
+  <Container>
+    <div class="w-full max-w-4xl mx-auto rounded-card bg-surface-muted border border-border/60 shadow-[0_2px_8px_rgba(28,25,23,0.06)] overflow-hidden">
+      <div class="grid grid-cols-1 md:grid-cols-[1fr,auto] gap-8 md:gap-10 p-6 md:p-8 lg:p-10">
+        <!-- Левая колонка: заголовок, вводная строка, список, основная кнопка -->
+        <div class="flex flex-col gap-4 text-left min-w-0">
+          {title && (
+            <h2 class="text-h2 text-text font-semibold leading-tight">
+              {title}
+            </h2>
+          )}
+          {body && (
+            <p class="text-body text-text-muted">
+              {body}
+            </p>
+          )}
+          {listItems.length > 0 && (
+            <ul class="list-disc list-outside pl-5 text-body text-text-muted space-y-2 marker:text-text-muted">
+              {listItems.map((item) => (
+                <li>{item}</li>
+              ))}
+            </ul>
+          )}
+          {hasPrimaryCta && (
+            <div class="pt-1">
+              <Button href={ctaUrl} variant="primary">
+                {ctaLabel}
+              </Button>
+            </div>
+          )}
+        </div>
+
+        <!-- Правая колонка: кнопки связи и disclaimer -->
+        <div class="flex flex-col items-stretch md:items-center gap-3 min-w-0 md:min-w-[200px]">
+          <a
+            href="#diagnostic"
+            class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] transition-colors shadow-sm hover:shadow-md text-center"
+          >
+            Оставить заявку
+          </a>
+          {messengerUrl && (
+            <a
+              href={messengerUrl}
+              class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-surface)] border border-border text-text hover:bg-surface-muted transition-colors text-center"
+            >
+              Написать в Telegram
+            </a>
+          )}
+          {contactEmail && (
+            <a
+              href={`mailto:${contactEmail}`}
+              class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-surface)] border border-border text-text hover:bg-surface-muted transition-colors text-center"
+            >
+              Написать на почту
+            </a>
+          )}
+          <p class="text-small text-text-muted text-center md:text-left mt-1">
+            Ответ обычно в течение 1 рабочего дня.
+          </p>
+        </div>
+      </div>
+    </div>
+  </Container>
+</Section>

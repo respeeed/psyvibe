@@ -4,7 +4,7 @@ import Section from '../../components/ui/Section.astro';
 import Container from '../../components/ui/Container.astro';
 import { reader } from '../../lib/keystatic';
 import { renderMarkdocToHtml } from '../../lib/markdoc';
-import { imagePath } from '../../lib/images';
+import { blogImagePath } from '../../lib/images';
 
 export async function getStaticPaths() {
   const slugs = await reader.collections.blog.list();
@@ -18,7 +18,7 @@ if (!post) {
   return Astro.redirect('/404');
 }
 
-const imageSrc = imagePath(post.image);
+const imageSrc = blogImagePath(slug ?? null, post.image);
 const bodyHtml = renderMarkdocToHtml(post.body ?? null);
 const metaDesc = (post.excerpt ?? post.title ?? 'Статья блога').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;

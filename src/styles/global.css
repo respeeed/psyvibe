@@ -4,41 +4,50 @@
 
 @layer base {
   :root {
-    /* Surfaces */
-    --color-surface: #ffffff;
-    --color-surface-muted: #f5f5f4;
-    --color-surface-dark: #1c1917;
+    /* Surfaces — Calm Expert: тёплые нейтрали */
+    --color-surface: #fdfcfb;
+    --color-surface-muted: #f5f3f0;
+    --color-surface-subtle: #fafaf9;
+    --color-surface-dark: #252220;
     /* Text */
     --color-text: #1c1917;
     --color-text-muted: #57534e;
     --color-text-inverse: #ffffff;
     --color-text-muted-inverse: #a8a29e;
-    /* Accent (buttons, links) */
+    /* Accent: тёплый серый (ссылки, вторичные акценты) */
     --color-accent: #292524;
     --color-accent-hover: #44403c;
-    /* Border */
-    --color-border: #e7e5e4;
+    /* Accent brand: мягкий teal/sage для ссылок и тегов */
+    --color-accent-brand: #0d7368;
+    --color-accent-brand-hover: #0a5c52;
+    /* CTA primary: тёмный charcoal, премиальный спокойный */
+    --color-cta: #292524;
+    --color-cta-hover: #3f3d3b;
+    --color-cta-active: #1c1917;
+    /* Border — тёплый */
+    --color-border: #e8e6e3;
     /* Typography */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    /* Layout */
+    /* Layout: больше воздуха */
     --container-max: 72rem;
     --container-padding: 1rem;
-    --section-gap: 4rem;
+    --section-gap: 5rem;
     --block-gap: 1rem;
     --radius-soft: 0.5rem;
+    --radius-card: 0.75rem;
   }
 
   @media (min-width: 768px) {
     :root {
       --container-padding: 1.5rem;
-      --section-gap: 5rem;
+      --section-gap: 6rem;
       --block-gap: 1.5rem;
     }
   }
 
   @media (min-width: 1024px) {
     :root {
-      --section-gap: 6rem;
+      --section-gap: 7rem;
     }
   }
 
@@ -54,23 +63,25 @@
   }
 
   h1 {
-    font-size: 1.875rem;
-    line-height: 1.3;
-    font-weight: 600;
+    font-size: 2.25rem;
+    line-height: 1.2;
+    font-weight: 700;
+    letter-spacing: -0.02em;
     color: var(--color-text);
   }
 
   h2 {
-    font-size: 1.5rem;
-    line-height: 1.35;
+    font-size: 1.75rem;
+    line-height: 1.28;
     font-weight: 600;
+    letter-spacing: -0.01em;
     color: var(--color-text);
   }
 
   h3 {
     font-size: 1.25rem;
     line-height: 1.4;
-    font-weight: 500;
+    font-weight: 600;
     color: var(--color-text);
   }
 
@@ -120,14 +131,30 @@
   margin-top: 0.25rem;
 }
 .prose-content a {
-  color: var(--color-accent);
+  color: var(--color-accent-brand);
   text-decoration: underline;
 }
 .prose-content a:hover {
-  color: var(--color-accent-hover);
+  color: var(--color-accent-brand-hover);
 }
 .prose-content img {
   border-radius: var(--radius-soft);
   max-width: 100%;
   height: auto;
+}
+
+/* ========== Header: тень при скролле (мягкая, тёплая) ========== */
+#site-header[data-scrolled] {
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 4px 20px rgba(28, 25, 23, 0.06);
+}
+
+/* ========== Hero: Calm Expert — один тёплый градиент ========== */
+.hero-section {
+  background-color: var(--color-surface);
+  background-image: linear-gradient(
+    180deg,
+    #fdfcfb 0%,
+    #faf8f6 35%,
+    var(--color-surface-muted) 100%
+  );
 }

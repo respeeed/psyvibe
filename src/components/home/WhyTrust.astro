@@ -2,13 +2,14 @@
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
 import Tag from '../ui/Tag.astro';
-import { imagePath } from '../../lib/images';
+import { imagePath, videoPath } from '../../lib/images';
 
 interface WhyTrustData {
   title?: string | null;
   body?: string | null;
   tags?: string[] | null;
   image?: string | null;
+  video?: string | null;
 }
 
 interface Props {
@@ -21,8 +22,10 @@ const title = data?.title ?? null;
 const body = data?.body ?? null;
 const tags = data?.tags ?? [];
 const imageSrc = imagePath(data?.image);
+const videoSrc = videoPath(data?.video);
+const hasMedia = imageSrc ?? videoSrc;
 
-const hasContent = title || body || tags.length > 0 || imageSrc;
+const hasContent = title || body || tags.length > 0 || hasMedia;
 if (!hasContent) {
   return null;
 }
@@ -51,17 +54,28 @@ if (!hasContent) {
         )}
       </div>
 
-      {imageSrc && (
+      {hasMedia && (
         <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
-          <img
-            src={imageSrc}
-            alt=""
-            width="400"
-            height="300"
-            class="w-full h-auto object-contain rounded-soft"
-            loading="lazy"
-            decoding="async"
-          />
+          {videoSrc ? (
+            <video
+              src={videoSrc}
+              autoplay
+              muted
+              loop
+              playsinline
+              class="w-full h-auto rounded-card object-contain"
+            />
+          ) : (
+            <img
+              src={imageSrc!}
+              alt=""
+              width="400"
+              height="300"
+              class="w-full h-auto object-contain rounded-card"
+              loading="lazy"
+              decoding="async"
+            />
+          )}
         </div>
       )}
     </div>

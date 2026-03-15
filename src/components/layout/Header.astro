@@ -12,22 +12,32 @@ const phone = siteSettings?.phone ?? '';
 const messengerUrl = siteSettings?.messengerUrl ?? null;
 
 const hasContacts = phone || messengerUrl;
+const siteTagline = 'Корпоративный психолог';
 ---
 
-<header class="border-b border-border/40">
-  <Container class="py-3 md:py-4">
-    <div class="flex flex-row items-center justify-between gap-6 min-h-[2.75rem]">
-      <a href="/" class="font-medium text-text hover:text-accent text-body shrink-0 tracking-tight">
-        {siteName}
+<header id="site-header" class="header sticky top-0 z-50 bg-[var(--color-surface)]/98 backdrop-blur-sm transition-shadow duration-200 shadow-[0_1px_0_rgba(28,25,23,0.06)]" role="banner">
+  <Container class="py-4 md:py-5">
+    <div class="flex flex-wrap items-center justify-between gap-4 min-h-[2.75rem]">
+      <a href="/" class="flex items-center gap-3 min-w-0 shrink-0 group">
+        <img src="/logo.svg" alt="" width="40" height="40" class="w-10 h-10 shrink-0 object-contain" />
+        <span class="flex flex-col min-w-0">
+          <span class="font-semibold text-text text-body tracking-tight group-hover:text-[var(--color-cta)] transition-colors leading-tight truncate">
+            {siteName}
+          </span>
+          <span class="text-small text-text-muted font-normal mt-0.5 leading-tight truncate">
+            {siteTagline}
+          </span>
+        </span>
       </a>
 
-      <div class="flex flex-wrap items-center justify-end gap-x-5 gap-y-2 md:gap-x-8">
+      <!-- Desktop: навигация + контакты + CTA -->
+      <div class="hidden md:flex flex-wrap items-center justify-end gap-x-6 lg:gap-x-8 gap-y-2 shrink-0">
         {navLinks.length > 0 && (
           <nav class="contents" aria-label="Основная навигация">
             {navLinks.map((link) => (
               <a
                 href={link.href}
-                class="text-small text-text-muted hover:text-accent transition-colors"
+                class="text-body text-text-muted hover:text-[var(--color-cta)] transition-colors"
               >
                 {link.label}
               </a>
@@ -37,7 +47,7 @@ const hasContacts = phone || messengerUrl;
         {phone && (
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
-            class="text-small text-text-muted hover:text-accent transition-colors whitespace-nowrap hidden sm:inline"
+            class="text-body text-text-muted hover:text-[var(--color-cta)] transition-colors whitespace-nowrap"
           >
             {phone}
           </a>
@@ -45,7 +55,7 @@ const hasContacts = phone || messengerUrl;
         {messengerUrl && (
           <a
             href={messengerUrl}
-            class="text-small text-text-muted hover:text-accent transition-colors hidden sm:inline"
+            class="text-body text-text-muted hover:text-[var(--color-cta)] transition-colors"
             aria-label="Написать в мессенджер"
           >
             Мессенджер ↗
@@ -53,11 +63,111 @@ const hasContacts = phone || messengerUrl;
         )}
         <a
           href="#diagnostic"
-          class="shrink-0 inline-flex items-center justify-center rounded-soft px-4 py-2 text-small font-medium border border-border text-text hover:border-accent hover:text-accent transition-colors"
+          class="shrink-0 inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] hover:text-white active:bg-[var(--color-cta-active)] active:text-white transition-all duration-200 shadow-sm hover:shadow-md active:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2"
         >
           Записаться на диагностику
         </a>
       </div>
+
+      <!-- Mobile: кнопка меню -->
+      <div class="flex items-center gap-2 sm:gap-3 md:hidden shrink-0">
+        <a
+          href="#diagnostic"
+          class="shrink-0 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-small font-medium bg-[var(--color-cta)] text-white hover:text-white active:text-white transition-all duration-200"
+        >
+          Записаться
+        </a>
+        <button
+          type="button"
+          id="header-menu-toggle"
+          class="header-menu-toggle p-2 rounded-lg text-text-muted hover:text-text hover:bg-[var(--color-surface-muted)] transition-colors aria-expanded="false"
+          aria-controls="header-nav-mobile"
+          aria-label="Открыть меню"
+        >
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 6.75h16.5M3.75 12h16.5m-16.5 5.25h16.5" />
+          </svg>
+        </button>
+      </div>
+    </div>
+
+    <!-- Mobile: выдвижная панель -->
+    <div
+      id="header-nav-mobile"
+      class="header-nav-mobile hidden flex-col gap-4 pt-4 pb-2 border-t border-border/60 mt-4 md:!hidden"
+      aria-hidden="true"
+    >
+      {navLinks.length > 0 && (
+        <nav class="flex flex-col gap-1" aria-label="Основная навигация">
+          {navLinks.map((link) => (
+            <a href={link.href} class="py-2.5 text-body text-text-muted hover:text-[var(--color-cta)] transition-colors">
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )}
+      {phone && (
+        <a href={`tel:${phone.replace(/\s/g, '')}`} class="py-2.5 text-body text-text-muted hover:text-[var(--color-cta)]">
+          {phone}
+        </a>
+      )}
+      {messengerUrl && (
+        <a href={messengerUrl} class="py-2.5 text-body text-text-muted hover:text-[var(--color-cta)]" aria-label="Написать в мессенджер">
+          Мессенджер ↗
+        </a>
+      )}
+      <a
+        href="#diagnostic"
+        class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-cta)] text-white hover:text-white mt-2 w-full max-w-[200px]"
+      >
+        Записаться на диагностику
+      </a>
     </div>
   </Container>
 </header>
+
+<script>
+  (function () {
+    const header = document.getElementById('site-header');
+    const toggle = document.getElementById('header-menu-toggle');
+    const navMobile = document.getElementById('header-nav-mobile');
+    if (!header || !toggle || !navMobile) return;
+
+    // Скролл: тень при прокрутке
+    function updateScroll() {
+      if (window.scrollY > 8) header.setAttribute('data-scrolled', '');
+      else header.removeAttribute('data-scrolled');
+    }
+    window.addEventListener('scroll', updateScroll, { passive: true });
+    updateScroll();
+
+    // Мобильное меню: display через style, чтобы надёжно перебить hidden
+    function openMenu() {
+      navMobile.style.display = 'flex';
+      navMobile.setAttribute('aria-hidden', 'false');
+      toggle.setAttribute('aria-expanded', 'true');
+      toggle.setAttribute('aria-label', 'Закрыть меню');
+    }
+    function closeMenu() {
+      navMobile.style.display = '';
+      navMobile.setAttribute('aria-hidden', 'true');
+      toggle.setAttribute('aria-expanded', 'false');
+      toggle.setAttribute('aria-label', 'Открыть меню');
+    }
+    toggle.addEventListener('click', () => {
+      const open = toggle.getAttribute('aria-expanded') === 'true';
+      if (open) closeMenu();
+      else openMenu();
+    });
+    navMobile.querySelectorAll('a').forEach((a) => {
+      a.addEventListener('click', closeMenu);
+    });
+    document.addEventListener('click', (e) => {
+      if (toggle.getAttribute('aria-expanded') !== 'true') return;
+      if (!header.contains(e.target)) closeMenu();
+    });
+    window.addEventListener('resize', () => {
+      if (window.matchMedia('(min-width: 768px)').matches && toggle.getAttribute('aria-expanded') === 'true') closeMenu();
+    });
+  })();
+</script>
