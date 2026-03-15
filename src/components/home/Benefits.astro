@@ -32,29 +32,33 @@ if (!hasContent) {
 
 <Section variant="muted">
   <Container>
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-[1fr,minmax(0,400px)] md:items-start md:gap-12">
-      <div class="min-w-0 flex flex-col gap-6">
+    <div class="grid grid-cols-1 gap-column md:grid-cols-[1fr,minmax(0,var(--media-col-max))] md:items-start md:gap-column">
+      <div class="min-w-0 max-w-content flex flex-col">
         {title && (
-          <h2 class="text-h2 text-text">
+          <h2 class="section-title">
             {title}
           </h2>
         )}
-        {body && (
-          <p class="text-body text-text-muted max-w-xl">
-            {body}
-          </p>
-        )}
-        {listItems.length > 0 && (
-          <ul class="list-disc list-inside space-y-2 text-body text-text-muted max-w-xl">
-            {listItems.map((item) => (
-              <li>{item}</li>
-            ))}
-          </ul>
+        {(body || listItems.length > 0) && (
+          <div class="mt-title-content flex flex-col gap-block">
+            {body && (
+              <p class="text-body text-text-muted max-w-content">
+                {body}
+              </p>
+            )}
+            {listItems.length > 0 && (
+              <ul class="list-disc list-inside space-y-2 text-body text-text-muted max-w-content">
+                {listItems.map((item) => (
+                  <li>{item}</li>
+                ))}
+              </ul>
+            )}
+          </div>
         )}
       </div>
 
       {hasMedia && (
-        <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
+        <div class="min-w-0 w-full max-w-media-col md:max-w-full">
           {videoSrc ? (
             <video
               src={videoSrc}

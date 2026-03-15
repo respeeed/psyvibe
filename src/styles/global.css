@@ -28,26 +28,53 @@
     --color-border: #e8e6e3;
     /* Typography */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
-    /* Layout: больше воздуха */
+    /* Spacing scale: 8, 16, 24, 32, 48, 64, 96, 120px */
+    --space-1: 0.5rem;   /* 8px */
+    --space-2: 1rem;     /* 16px */
+    --space-3: 1.5rem;   /* 24px */
+    --space-4: 2rem;     /* 32px */
+    --space-6: 3rem;     /* 48px */
+    --space-8: 4rem;     /* 64px */
+    --space-12: 6rem;    /* 96px */
+    --space-15: 7.5rem;  /* 120px */
+    /* Дополнительные значения из scale */
+    --space-2_5: 1.25rem;  /* 20px */
+    --space-9: 4.5rem;     /* 72px */
+    --space-10: 5rem;      /* 80px */
+    --space-11: 5.5rem;    /* 88px */
+    /* Семантика */
     --container-max: 72rem;
-    --container-padding: 1rem;
-    --section-gap: 5rem;
-    --block-gap: 1rem;
+    --content-max: 42rem;
+    --media-col-max: 25rem; /* ширина колонки с иллюстрацией/видео в двухколоночных блоках */
+    --container-padding: var(--space-2);
+    --section-padding-y: var(--space-12);
+    --hero-padding-top: var(--space-12);
+    --hero-padding-bottom: var(--space-10);
+    --hero-inner-gap: var(--space-4);
+    --cta-block-padding-y: var(--space-9);
+    --cta-inner-gap: var(--space-4);
+    --card-padding: var(--space-3);
+    --card-gap: var(--space-2_5);
+    --column-gap: var(--space-6);
+    --title-to-content: var(--space-4);
+    --block-gap: var(--space-2);
+    --faq-item-gap: var(--space-3);
     --radius-soft: 0.5rem;
     --radius-card: 0.75rem;
+    --card-shadow: 0 2px 8px rgba(28, 25, 23, 0.06);
+    --card-shadow-hover: 0 4px 16px rgba(28, 25, 23, 0.08);
   }
 
   @media (min-width: 768px) {
     :root {
-      --container-padding: 1.5rem;
-      --section-gap: 6rem;
-      --block-gap: 1.5rem;
-    }
-  }
-
-  @media (min-width: 1024px) {
-    :root {
-      --section-gap: 7rem;
+      --container-padding: var(--space-3);
+      --hero-padding-top: var(--space-15);
+      --hero-padding-bottom: var(--space-12);
+      --hero-inner-gap: var(--space-4);
+      --cta-block-padding-y: var(--space-11);
+      --cta-inner-gap: var(--space-4);
+      --card-padding: var(--space-3);
+      --column-gap: var(--space-9);
     }
   }
 
@@ -143,9 +170,10 @@
   height: auto;
 }
 
-/* ========== Header: тень при скролле (мягкая, тёплая) ========== */
+/* ========== Header: при скролле — непрозрачный фон, тень ========== */
 #site-header[data-scrolled] {
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.04), 0 4px 20px rgba(28, 25, 23, 0.06);
+  background-color: var(--color-surface) !important;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 24px rgba(28, 25, 23, 0.08);
 }
 
 /* ========== Hero: Calm Expert — один тёплый градиент ========== */
@@ -158,3 +186,77 @@
     var(--color-surface-muted) 100%
   );
 }
+
+/* ========== Вертикальный ритм: заголовок секции ========== */
+.section-title {
+  font-size: 1.75rem;
+  line-height: 1.28;
+  font-weight: 600;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+}
+/* В обратно-контрастных (тёмных) секциях — светлый заголовок */
+.bg-surface-dark .section-title {
+  color: var(--color-text-inverse);
+}
+
+/* ========== Якорь: не перекрывать sticky-шапкой ========== */
+[id="diagnostic"] {
+  scroll-margin-top: 5.5rem;
+}
+
+/* ========== Карточки: единая тень и переход ========== */
+.card-hover {
+  transition: box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.card-hover:hover {
+  box-shadow: var(--card-shadow-hover);
+}
+
+/* ========== Hero: анимация карточки при скролле ========== */
+.hero-card-scroll-anim {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.65s cubic-bezier(0.22, 1, 0.36, 1), transform 0.65s cubic-bezier(0.22, 1, 0.36, 1);
+}
+.hero-card-scroll-anim.hero-card-visible {
+  opacity: 1;
+  transform: translateY(0);
+}
+
+#hero-media-wrapper {
+  transition: transform 0.15s ease-out;
+}
+
+/* ========== Spacing: явные классы (гарантируют применение переменных) ========== */
+/* Секции */
+.py-section {
+  padding-top: var(--section-padding-y);
+  padding-bottom: var(--section-padding-y);
+}
+/* Hero */
+.pt-hero-top { padding-top: var(--hero-padding-top); }
+.pb-hero-bottom { padding-bottom: var(--hero-padding-bottom); }
+@media (min-width: 768px) {
+  .hero-section.pt-hero-top { padding-top: calc(var(--hero-padding-top) - 48px); }
+}
+.gap-hero-gap { gap: var(--hero-inner-gap); }
+/* CTA-блоки */
+.py-cta-block {
+  padding-top: var(--cta-block-padding-y);
+  padding-bottom: var(--cta-block-padding-y);
+}
+.px-card { padding-left: var(--card-padding); padding-right: var(--card-padding); }
+.p-card { padding: var(--card-padding); }
+.pt-cta-gap { padding-top: var(--cta-inner-gap); }
+.gap-cta-gap { gap: var(--cta-inner-gap); }
+/* Колонки и контент */
+.gap-column { gap: var(--column-gap); }
+.gap-title-content { gap: var(--title-to-content); }
+.mt-title-content { margin-top: var(--title-to-content); }
+.gap-block { gap: var(--block-gap); }
+.mt-block { margin-top: var(--block-gap); }
+.pt-block { padding-top: var(--block-gap); }
+/* Карточки и FAQ */
+.gap-card-gap { gap: var(--card-gap); }
+.gap-faq { gap: var(--faq-item-gap); }

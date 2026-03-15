@@ -31,25 +31,25 @@ if (!hasContent) {
 
 <Section>
   <Container>
-    <div class="flex flex-col gap-8 items-center">
+    <div class="flex flex-col gap-title-content items-center">
       {title && (
-        <h2 class="text-h2 text-text font-semibold text-center max-w-2xl">
+        <h2 class="section-title text-center max-w-content">
           {title}
         </h2>
       )}
 
       {items.length > 0 && (
-        <div class="w-full max-w-2xl flex flex-col gap-3">
+        <div class="w-full max-w-content flex flex-col gap-faq">
           {items.map((item) => (
             <details class="faq-details group rounded-card border border-border bg-surface-muted shadow-sm overflow-hidden">
-              <summary class="faq-summary cursor-pointer list-none flex items-center justify-between gap-4 py-4 px-5 min-h-[3.25rem] text-left font-medium text-text hover:bg-[rgba(0,0,0,0.02)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-cta)]">
+              <summary class="faq-summary cursor-pointer list-none flex items-center justify-between gap-s4 p-card min-h-[3.25rem] text-left font-medium text-text hover:bg-[rgba(0,0,0,0.02)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-cta)]" aria-expanded="false">
                 <span class="text-body pr-2">{item.question ?? ''}</span>
                 <span class="faq-icon shrink-0 w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center text-text-muted text-lg leading-none select-none" aria-hidden="true">
                   <span class="faq-icon-plus">+</span>
                   <span class="faq-icon-minus hidden">−</span>
                 </span>
               </summary>
-              <div class="faq-answer border-t border-border px-5 py-4 text-body text-text-muted leading-relaxed">
+              <div class="faq-answer border-t border-border p-card pt-0 text-body text-text-muted leading-relaxed">
                 {item.answer ? (
                   <p class="whitespace-pre-line">{item.answer}</p>
                 ) : (
@@ -75,3 +75,15 @@ if (!hasContent) {
     display: inline !important;
   }
 </style>
+
+<script>
+  document.querySelectorAll('.faq-details').forEach((details) => {
+    const summary = details.querySelector('.faq-summary');
+    if (!summary) return;
+    const observer = new MutationObserver(() => {
+      summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+    });
+    observer.observe(details, { attributes: true, attributeFilter: ['open'] });
+    summary.setAttribute('aria-expanded', details.open ? 'true' : 'false');
+  });
+</script>

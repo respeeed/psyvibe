@@ -4,8 +4,10 @@ interface Props {
   as?: 'section' | 'div';
   /** Светлый, приглушённый или тёмный фон */
   variant?: 'default' | 'muted' | 'dark';
+  /** id для якорных ссылок (например #diagnostic) */
+  id?: string;
 }
-const { class: className = '', as: Tag = 'section', variant = 'default' } = Astro.props;
+const { class: className = '', as: Tag = 'section', variant = 'default', id } = Astro.props;
 const bgClass =
   variant === 'dark'
     ? 'bg-surface-dark'
@@ -14,6 +16,6 @@ const bgClass =
       : 'bg-surface';
 ---
 
-<Tag class:list={['py-section', bgClass, className]}>
+<Tag id={id} class:list={['py-section', bgClass, className]}>
   <slot />
 </Tag>

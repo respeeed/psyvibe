@@ -32,22 +32,22 @@ const sectionTitle = title ?? 'Блог';
 const sectionSubtitle = subtitle ?? null;
 ---
 
-<Section>
+<Section variant="muted">
   <Container>
-    <div class="flex flex-col gap-8">
-      <div class="max-w-2xl">
-        <h2 class="text-h2 text-text">
+    <div class="flex flex-col gap-title-content">
+      <div class="max-w-content flex flex-col gap-block">
+        <h2 class="section-title">
           {sectionTitle}
         </h2>
         {sectionSubtitle && (
-          <p class="mt-2 text-body text-text-muted">
+          <p class="text-body text-text-muted">
             {sectionSubtitle}
           </p>
         )}
       </div>
 
       {displayedPosts.length > 0 ? (
-      <ul class="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-3" role="list">
+      <ul class="grid grid-cols-1 gap-card-gap sm:grid-cols-2 lg:grid-cols-3" role="list">
         {displayedPosts.map((post) => {
           const href = `/blog/${post.slug}`;
           const imgSrc = blogImagePath(post.slug, post.image);
@@ -55,7 +55,7 @@ const sectionSubtitle = subtitle ?? null;
             <li>
               <a
                 href={href}
-                class="flex flex-col gap-3 rounded-soft border border-border bg-surface p-6 transition-colors hover:border-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
+                class="flex flex-col gap-block rounded-soft border border-border bg-surface p-card card-hover hover:border-accent/50 focus:outline-none focus-visible:ring-2 focus-visible:ring-accent focus-visible:ring-offset-2"
               >
                 {imgSrc && (
                   <div class="aspect-video w-full overflow-hidden rounded-soft bg-surface-muted">
@@ -70,7 +70,7 @@ const sectionSubtitle = subtitle ?? null;
                     />
                   </div>
                 )}
-                <div class="flex min-w-0 flex-col gap-2">
+                <div class="flex min-w-0 flex-col gap-block">
                   {post.title && (
                     <h3 class="text-h3 text-text">
                       {post.title}

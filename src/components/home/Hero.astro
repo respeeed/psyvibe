@@ -43,13 +43,12 @@ const hasCtas = hasPrimaryCta || hasSecondaryCta;
 // Плейсхолдер только для layout нижней карточки (schema не меняем)
 const heroCardName = 'Елизавета Шихалева';
 const heroCardTags = ['Корпоративный психолог', 'КПТ', 'Стресс и выгорание'];
-const heroCardQuote = 'Какая-то глубокая и умная цитата от Елизаветы Михайловны';
+const heroCardQuote = 'Когда команда в ресурсе — бизнес растёт. Помогаю создавать условия, в которых людям хорошо работать.';
 ---
 
-<Section class="hero-section !pt-14 !pb-0 md:!pt-20 md:!pb-0">
-  <Container class="!mb-10 md:!mb-16">
-    <!-- Текстовая часть — по центру над иллюстрацией -->
-    <div class="flex flex-col gap-2.5 max-w-3xl mx-auto text-center items-center">
+<Section class="hero-section pt-hero-top pb-hero-bottom">
+  <Container class="mb-16 md:mb-20">
+    <div class="flex flex-col gap-hero-gap max-w-content mx-auto text-center items-center w-full">
       <h1 class="text-[clamp(2.5rem,6vw,3.75rem)] font-bold text-text leading-tight tracking-tight">
         {title}
       </h1>
@@ -59,7 +58,7 @@ const heroCardQuote = 'Какая-то глубокая и умная цитат
         </p>
       )}
       {hasCtas && (
-        <div class="flex flex-wrap gap-2.5 justify-center">
+        <div class="flex flex-wrap gap-3 justify-center">
           {hasPrimaryCta && (
             <Button href={primaryCtaUrl} variant="primary">
               {primaryCtaLabel}
@@ -73,16 +72,16 @@ const heroCardQuote = 'Какая-то глубокая и умная цитат
         </div>
       )}
       {workingHours && (
-        <p class="text-small text-text-muted pt-0.5">
+        <p class="text-small text-text-muted mt-s2">
           {workingHours}
         </p>
       )}
     </div>
   </Container>
 
-  <!-- Иллюстрация на всю ширину (вне контейнера) -->
-  <div class="w-full">
-    <div class="relative w-full aspect-[4/3] md:aspect-[2/1] bg-surface-muted">
+  <!-- Иллюстрация: рамка, градиент, карточка (премиальный блок) + параллакс на десктопе -->
+  <div class="w-full px-[var(--container-padding)]">
+    <div id="hero-media-wrapper" class="max-w-6xl mx-auto relative w-full aspect-[4/3] md:aspect-[2/1] bg-surface-muted rounded-2xl md:rounded-3xl overflow-hidden shadow-[0_4px_24px_rgba(28,25,23,0.08),0_1px_3px_rgba(28,25,23,0.04)] will-change-transform">
       {hasVideo ? (
         <video
           src={heroVideoSrc!}
@@ -91,6 +90,7 @@ const heroCardQuote = 'Какая-то глубокая и умная цитат
           loop
           playsinline
           class="absolute inset-0 w-full h-full object-cover"
+          aria-label="Видео о формате работы"
         />
       ) : (
         <img
@@ -103,57 +103,68 @@ const heroCardQuote = 'Какая-то глубокая и умная цитат
           decoding="async"
         />
       )}
+      <!-- Мягкий градиент снизу: карточка лучше читается на фоне -->
+      <div class="absolute inset-0 pointer-events-none" aria-hidden="true" style="background: linear-gradient(to top, rgba(28,25,23,0.32) 0%, transparent 40%);" />
 
-      <!-- Нижняя карточка: висящая над иллюстрацией (desktop) -->
-      <div class="absolute left-0 right-0 bottom-6 z-10 hidden md:block px-[var(--container-padding)]">
-        <div class="max-w-6xl mx-auto bg-[var(--color-surface)] rounded-2xl px-6 md:px-8 py-5 md:py-6 shadow-[0_8px_32px_rgba(28,25,23,0.1),0_2px_8px_rgba(28,25,23,0.06)] border border-border/50">
-          <div class="grid grid-cols-1 md:grid-cols-[1fr,1.2fr] gap-6 md:gap-10 items-center">
-          <div class="min-w-0">
-            <p class="text-xl md:text-2xl font-bold text-text leading-tight tracking-tight">
-              {heroCardName}
-            </p>
-            <div class="flex flex-wrap gap-2 mt-2.5">
-              {heroCardTags.map((tag) => (
-                <span class="inline-flex items-center rounded-full bg-surface-muted px-3 py-1 text-small text-text-muted font-medium">
-                  {tag}
-                </span>
-              ))}
-            </div>
-            {workingHours && (
-              <p class="text-small text-text-muted mt-2">
-                {workingHours}
+      <!-- Нижняя карточка: висящая над иллюстрацией (desktop), премиальный стиль + анимация при скролле -->
+      <div id="hero-floating-card" class="hero-card-scroll-anim absolute left-0 right-0 bottom-5 md:bottom-6 z-10 hidden md:block px-4 md:px-6">
+        <div class="max-w-container mx-auto rounded-2xl overflow-hidden backdrop-blur-xl border border-white/60 shadow-[0_1px_0_rgba(255,255,255,0.5)_inset,0_16px_48px_rgba(28,25,23,0.14),0_4px_12px_rgba(28,25,23,0.06)]" style="background-color: rgba(255, 252, 251, 0.78);">
+          <div class="grid grid-cols-1 md:grid-cols-[1fr,1.15fr] gap-8 md:gap-0 items-stretch p-6 md:p-8">
+            <div class="min-w-0 flex flex-col justify-center gap-4">
+              <p class="text-xl md:text-2xl font-semibold text-text leading-tight tracking-tight">
+                {heroCardName}
               </p>
-            )}
+              <div class="flex flex-wrap gap-2">
+                {heroCardTags.map((tag) => (
+                  <span class="inline-flex items-center rounded-full border border-white/50 bg-white/45 px-3 py-1.5 text-small font-medium text-text">
+                    {tag}
+                  </span>
+                ))}
+              </div>
+              {workingHours && (
+                <p class="text-small text-text-muted pt-0.5 border-t border-border/50 mt-1">
+                  {workingHours}
+                </p>
+              )}
+            </div>
+            <div class="min-w-0 flex items-center gap-5 md:pl-8 md:border-l border-border/60">
+              <span class="shrink-0 text-[var(--color-text-muted)]/35" aria-hidden="true">
+                <svg class="w-8 h-8 md:w-9 md:h-9" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+                  <path d="M43.7502 16.6667H10.4168C9.26475 16.6667 8.3335 17.598 8.3335 18.7501V58.3334C8.3335 61.7792 11.1377 64.5834 14.5835 64.5834H26.7335C24.3168 77.2792 16.5856 79.1334 16.2585 79.2084C15.2856 79.4022 14.5835 80.2563 14.5835 81.2501V85.4167C14.5835 85.8272 14.7064 86.2313 14.9335 86.573L19.1002 92.823C19.496 93.4188 20.1564 93.7501 20.8335 93.7501C21.1252 93.7501 21.4168 93.6897 21.696 93.5626C21.9356 93.4522 45.8335 82.2438 45.8335 52.0834V18.7501C45.8335 17.598 44.9022 16.6667 43.7502 16.6667Z" fill="currentColor"/>
+                  <path d="M89.5832 16.6667H56.2498C55.0978 16.6667 54.1665 17.598 54.1665 18.7501V58.3334C54.1665 61.7792 56.9707 64.5834 60.4165 64.5834H72.5665C70.1498 77.2792 62.4186 79.1334 62.0915 79.2084C61.1186 79.4022 60.4165 80.2563 60.4165 81.2501V85.4167C60.4165 85.8272 60.5394 86.2313 60.7665 86.573L64.9332 92.823C65.329 93.4188 65.9894 93.7501 66.6665 93.7501C66.9582 93.7501 67.2498 93.6897 67.529 93.5626C67.7686 93.4522 91.6665 82.2438 91.6665 52.0834V18.7501C91.6665 17.598 90.7353 16.6667 89.5832 16.6667Z" fill="currentColor"/>
+                  <path d="M43.7498 14.5833H10.4165V54.1666C10.4165 56.4687 12.2811 58.3333 14.5832 58.3333H29.1665C27.0832 74.9999 16.6665 81.2499 16.6665 81.2499L20.8332 87.4999C20.8332 87.4999 43.7498 77.0832 43.7498 47.9166V14.5833Z" fill="transparent"/>
+                  <path d="M20.8335 89.5833C20.1564 89.5833 19.496 89.2521 19.1002 88.6562L14.9335 82.4062C14.6189 81.9312 14.5106 81.35 14.6335 80.7937C14.7585 80.2375 15.1064 79.7583 15.5939 79.4646C15.9585 79.2438 24.2356 74.0292 26.7397 60.4167H14.5835C11.1377 60.4167 8.3335 57.6125 8.3335 54.1667V14.5833C8.3335 13.4313 9.26475 12.5 10.4168 12.5H43.7502C44.9022 12.5 45.8335 13.4313 45.8335 14.5833V47.9167C45.8335 78.0771 21.9356 89.2854 21.696 89.3958C21.4168 89.5229 21.1252 89.5833 20.8335 89.5833ZM19.5022 81.7479L21.5252 84.7833C26.5335 81.9083 41.6668 71.2875 41.6668 47.9167V16.6667H12.5002V54.1667C12.5002 55.3167 13.4335 56.25 14.5835 56.25H29.1668C29.7647 56.25 30.3335 56.5062 30.7293 56.9542C31.1231 57.4042 31.3085 58 31.2335 58.5917C29.5585 72.0042 22.7752 79.0667 19.5022 81.7479Z" fill="currentColor"/>
+                  <path d="M89.5833 14.5833H56.25V54.1666C56.25 56.4687 58.1146 58.3333 60.4167 58.3333H75C72.9167 74.9999 62.5 81.2499 62.5 81.2499L66.6667 87.4999C66.6667 87.4999 89.5833 77.0832 89.5833 47.9166V14.5833Z" fill="transparent"/>
+                  <path d="M66.6665 89.5833C65.9894 89.5833 65.329 89.2521 64.9332 88.6562L60.7665 82.4062C60.4519 81.9312 60.3436 81.35 60.4665 80.7937C60.5915 80.2375 60.9394 79.7583 61.4269 79.4646C61.7915 79.2438 70.0686 74.0292 72.5728 60.4167H60.4165C56.9707 60.4167 54.1665 57.6125 54.1665 54.1667V14.5833C54.1665 13.4313 55.0978 12.5 56.2498 12.5H89.5832C90.7353 12.5 91.6665 13.4313 91.6665 14.5833V47.9167C91.6665 78.0771 67.7686 89.2854 67.529 89.3958C67.2498 89.5229 66.9582 89.5833 66.6665 89.5833ZM65.3353 81.7479L67.3582 84.7833C72.3665 81.9083 87.4998 71.2875 87.4998 47.9167V16.6667H58.3332V54.1667C58.3332 55.3167 59.2665 56.25 60.4165 56.25H74.9998C75.5978 56.25 76.1665 56.5062 76.5623 56.9542C76.9561 57.4042 77.1415 58 77.0665 58.5917C75.3915 72.0042 68.6082 79.0667 65.3353 81.7479Z" fill="currentColor"/>
+                </svg>
+              </span>
+              <p class="text-[1.0625rem] text-text-muted leading-relaxed font-light">
+                {heroCardQuote}
+              </p>
+            </div>
           </div>
-          <div class="min-w-0 flex items-start gap-3">
-            <span class="text-4xl md:text-5xl font-serif text-[var(--color-cta)]/20 leading-none select-none" aria-hidden="true">"</span>
-            <p class="text-body text-text-muted leading-relaxed pt-1">
-              {heroCardQuote}
-            </p>
-          </div>
-        </div>
         </div>
       </div>
     </div>
 
-    <!-- Mobile: карточка под иллюстрацией -->
-    <div class="md:hidden px-[var(--container-padding)] -mt-2 pb-6">
-      <div class="rounded-xl border border-border bg-surface px-5 py-5 shadow-sm">
+    <!-- Mobile: карточка под иллюстрацией (лёгкий нахлёст на рамку) -->
+    <div class="md:hidden -mt-6 pb-s3">
+      <div class="rounded-2xl border border-border bg-surface p-card shadow-[0_4px_24px_rgba(28,25,23,0.08)] flex flex-col gap-3">
         <p class="text-lg font-semibold text-text leading-tight">
           {heroCardName}
         </p>
-        <div class="flex flex-wrap gap-2 mt-2">
+        <div class="flex flex-wrap gap-2">
           {heroCardTags.map((tag) => (
-            <span class="inline-flex rounded-full bg-surface-muted px-3 py-1 text-small text-text-muted font-medium">
+            <span class="inline-flex items-center rounded-full border border-white/50 bg-white/45 px-3 py-1.5 text-small font-medium text-text">
               {tag}
             </span>
           ))}
         </div>
-        <p class="text-small text-text-muted mt-3 italic">
+        <p class="text-[1.0625rem] text-text-muted font-light leading-relaxed italic">
           {heroCardQuote}
         </p>
         {workingHours && (
-          <p class="text-small text-text-muted mt-2">
+          <p class="text-small text-text-muted mt-s2">
             {workingHours}
           </p>
         )}
@@ -161,3 +172,54 @@ const heroCardQuote = 'Какая-то глубокая и умная цитат
     </div>
   </div>
 </Section>
+
+<script>
+  (function () {
+    const card = document.getElementById('hero-floating-card');
+    const wrapper = document.getElementById('hero-media-wrapper');
+    const heroMedia = card?.closest('.max-w-6xl');
+    if (!card || !heroMedia) return;
+
+    // Анимация появления карточки
+    const observer = new IntersectionObserver(
+      (entries) => {
+        const entry = entries[0];
+        if (!entry?.isIntersecting) return;
+        requestAnimationFrame(() => {
+          requestAnimationFrame(() => card.classList.add('hero-card-visible'));
+        });
+        observer.disconnect();
+      },
+      { rootMargin: '0px 0px -10% 0px', threshold: 0 }
+    );
+    observer.observe(heroMedia);
+
+    // Плавное движение всего блока при скролле (только десктоп)
+    if (!wrapper) return;
+    const desktop = window.matchMedia('(min-width: 768px)');
+    let ticking = false;
+
+    function updateParallax() {
+      if (!desktop.matches) {
+        wrapper.style.transform = '';
+        ticking = false;
+        return;
+      }
+      const rect = wrapper.getBoundingClientRect();
+      const move = Math.max(-18, Math.min(18, -rect.top * 0.06));
+      wrapper.style.transform = `translateY(${move}px)`;
+      ticking = false;
+    }
+
+    function onScroll() {
+      if (!ticking) {
+        requestAnimationFrame(updateParallax);
+        ticking = true;
+      }
+    }
+
+    window.addEventListener('scroll', onScroll, { passive: true });
+    desktop.addEventListener('change', () => { if (!desktop.matches) wrapper.style.transform = ''; });
+    updateParallax();
+  })();
+</script>

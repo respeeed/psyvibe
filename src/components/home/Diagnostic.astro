@@ -33,48 +33,51 @@ if (!hasContent) {
 }
 ---
 
-<Section variant="muted">
+<Section variant="muted" id="diagnostic">
   <Container>
-    <div class="flex flex-col gap-8 md:gap-10 items-center">
-      <div class="max-w-2xl w-full text-center">
+    <div class="flex flex-col gap-title-content items-center">
+      <div class="max-w-content w-full text-center">
         {title && (
-          <h2 class="text-h2 text-text">
+          <h2 class="section-title text-center">
             {title}
           </h2>
         )}
         {intro && (
-          <p class="mt-4 text-body text-text-muted">
+          <p class="mt-title-content text-body text-text-muted">
             {intro}
           </p>
         )}
       </div>
 
-      {resultCards.length > 0 && (
-        <ul class="grid grid-cols-1 gap-4 sm:grid-cols-2 w-full" role="list">
-          {resultCards.map((card) => (
-            <li>
-              <Card>
-                {card.title && (
-                  <h3 class="text-h3 text-text">
-                    {card.title}
-                  </h3>
-                )}
-                {card.description && (
-                  <p class="text-body text-text-muted">
-                    {card.description}
-                  </p>
-                )}
-              </Card>
-            </li>
-          ))}
-        </ul>
-      )}
-
-      {hasButton && (
-        <div class="flex flex-wrap justify-center w-full">
-          <Button href={ctaUrl} variant="primary">
-            {ctaLabel}
-          </Button>
+      {(resultCards.length > 0 || hasButton) && (
+        <div class="flex flex-col gap-cta-gap w-full items-center">
+          {resultCards.length > 0 && (
+            <ul class="grid grid-cols-1 gap-card-gap sm:grid-cols-2 w-full" role="list">
+              {resultCards.map((card) => (
+                <li>
+                  <Card>
+                    {card.title && (
+                      <h3 class="text-h3 text-text">
+                        {card.title}
+                      </h3>
+                    )}
+                    {card.description && (
+                      <p class="text-body text-text-muted">
+                        {card.description}
+                      </p>
+                    )}
+                  </Card>
+                </li>
+              ))}
+            </ul>
+          )}
+          {hasButton && (
+            <div class="flex flex-wrap justify-center w-full">
+              <Button href={ctaUrl} variant="primary">
+                {ctaLabel}
+              </Button>
+            </div>
+          )}
         </div>
       )}
     </div>

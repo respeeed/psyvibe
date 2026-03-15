@@ -33,17 +33,15 @@ if (!hasContent) {
 
 <Section>
   <Container>
-    <div class="flex flex-col items-center justify-center">
-      <div class="w-full max-w-2xl mx-auto bg-surface-muted rounded-card px-6 py-8 md:px-10 md:py-10 flex flex-col items-center gap-6 text-center shadow-[0_2px_8px_rgba(28,25,23,0.06)] border border-border/60">
-        {titleHtml && (
-          <p class="text-body text-text-muted leading-relaxed max-w-xl mx-auto" set:html={titleHtml} />
-        )}
-        {hasButton && (
-          <Button href={ctaUrl} variant="primary">
-            {ctaLabel}
-          </Button>
-        )}
-      </div>
+    <div class="w-full rounded-card bg-surface-muted py-cta-block px-card flex flex-col items-center gap-cta-gap text-center shadow-[var(--card-shadow)] border border-border/60">
+      {titleHtml && (
+        <p class="text-body text-text-muted leading-relaxed max-w-content mx-auto" set:html={titleHtml} />
+      )}
+      {hasButton && (
+        <Button href={ctaUrl} variant="primary">
+          {ctaLabel}
+        </Button>
+      )}
     </div>
   </Container>
 </Section>

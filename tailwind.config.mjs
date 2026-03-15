@@ -1,6 +1,14 @@
 /** @type {import('tailwindcss').Config} */
 export default {
   content: ['./src/**/*.{astro,html,js,jsx,md,mdx,svelte,ts,tsx,vue}'],
+  safelist: [
+    'py-section', 'pt-hero-top', 'pb-hero-bottom', 'gap-hero-gap',
+    'py-cta-block', 'px-card', 'p-card', 'pt-cta-gap', 'gap-cta-gap',
+    'gap-column', 'gap-title-content', 'mt-title-content', 'gap-block', 'mt-block', 'pt-block',
+    'gap-card-gap', 'gap-faq',
+    'py-s2', 'py-s2_5', 'py-s6', 'gap-s1', 'gap-s2', 'gap-s3', 'gap-s4', 'mt-s1', 'mt-s2', 'mt-s3', 'mb-s10', 'pt-s3', 'pb-s2', 'pb-s3', '-mt-s1',
+    'px-s2', 'scroll-pl-s2', 'scroll-pr-s2',
+  ],
   theme: {
     extend: {
       colors: {
@@ -31,10 +39,36 @@ export default {
       },
       maxWidth: {
         container: 'var(--container-max)',
+        content: 'var(--content-max)',
+        'media-col': 'var(--media-col-max)',
       },
       spacing: {
-        'section': 'var(--section-gap)',
+        's1': 'var(--space-1)',
+        's2': 'var(--space-2)',
+        's3': 'var(--space-3)',
+        's4': 'var(--space-4)',
+        's6': 'var(--space-6)',
+        's8': 'var(--space-8)',
+        's12': 'var(--space-12)',
+        's15': 'var(--space-15)',
+        's2_5': 'var(--space-2_5)',
+        's9': 'var(--space-9)',
+        's10': 'var(--space-10)',
+        's11': 'var(--space-11)',
+        'section': 'var(--section-padding-y)',
+        'hero-top': 'var(--hero-padding-top)',
+        'hero-bottom': 'var(--hero-padding-bottom)',
+        'hero-gap': 'var(--hero-inner-gap)',
+        'cta-block': 'var(--cta-block-padding-y)',
+        'cta-gap': 'var(--cta-inner-gap)',
+        'column': 'var(--column-gap)',
+        'title-content': 'var(--title-to-content)',
         'block': 'var(--block-gap)',
+        'faq': 'var(--faq-item-gap)',
+        'card': 'var(--card-padding)',
+        'card-gap': 'var(--card-gap)',
+        'content': 'var(--title-to-content)',
+        'cta': 'var(--cta-inner-gap)',
       },
       borderRadius: {
         'soft': 'var(--radius-soft)',

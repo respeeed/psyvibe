@@ -30,36 +30,43 @@ if (!hasContent) {
 }
 ---
 
-<Section>
+<Section variant="muted">
   <Container>
-    <div class="flex flex-col gap-8 items-center">
+    <div class="flex flex-col gap-10 md:gap-12">
       {title && (
-        <h2 class="text-h2 text-text text-center max-w-2xl">
+        <h2 class="section-title text-center text-text">
           {title}
         </h2>
       )}
 
       {steps.length > 0 && (
-        <div class="overflow-x-auto w-full">
-          <ul class="flex gap-6 flex-nowrap min-w-0 pb-1" role="list">
-            {steps.map((step) => (
-              <li class="min-w-[260px] w-[260px] flex-shrink-0">
-                <Card>
-                  {step.title && (
-                    <h3 class="text-h3 text-text">
-                      {step.title}
-                    </h3>
-                  )}
-                  {step.description && (
-                    <p class="text-body text-text-muted">
-                      {step.description}
-                    </p>
-                  )}
-                </Card>
-              </li>
-            ))}
-          </ul>
-        </div>
+        <ol
+          class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-5 gap-x-2 gap-y-4 md:gap-x-3 md:gap-y-6 list-none m-0 p-0"
+          role="list"
+        >
+          {steps.map((step, i) => (
+            <li class="flex flex-col">
+              <Card class="h-full flex flex-col gap-block">
+                <span
+                  class="text-small font-medium text-text-muted tabular-nums"
+                  aria-hidden="true"
+                >
+                  {String(i + 1).padStart(2, '0')}
+                </span>
+                {step.title && (
+                  <h3 class="text-h3 text-text mt-0">
+                    {step.title}
+                  </h3>
+                )}
+                {step.description && (
+                  <p class="text-body text-text-muted mt-0 flex-1">
+                    {step.description}
+                  </p>
+                )}
+              </Card>
+            </li>
+          ))}
+        </ol>
       )}
     </div>
   </Container>

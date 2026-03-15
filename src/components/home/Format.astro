@@ -38,26 +38,24 @@ if (!hasContent) {
 
 <Section variant="dark">
   <Container>
-    <!-- Обёртка: тёмный фон, внутренние отступы, читаемый текст -->
     <div
-      class="bg-surface-dark text-text-inverse py-8 md:py-12"
+      class="bg-surface-dark text-text-inverse py-cta-block"
       style="background-color: var(--color-surface-dark);"
     >
       <div
         class:list={[
-          'grid grid-cols-1 gap-8 md:gap-12',
+          'grid grid-cols-1 gap-column md:gap-column',
           hasMedia
-            ? 'md:grid-cols-[minmax(0,36rem),minmax(0,400px)] md:items-start'
+            ? 'md:grid-cols-[1fr,minmax(0,var(--media-col-max))] md:items-start'
             : 'justify-items-center',
         ]}
       >
-        <!-- Текстовая колонка: ограничена по ширине (~576px), центрирована при отсутствии изображения -->
         <div class:list={[
-          'min-w-0 max-w-[36rem] flex flex-col gap-4 w-full',
+          'min-w-0 max-w-content flex flex-col gap-block w-full',
           !hasMedia && 'mx-auto',
         ]}>
           {title && (
-            <h2 class="text-h2 text-text-inverse">
+            <h2 class="section-title text-text-inverse">
               {title}
             </h2>
           )}
@@ -67,14 +65,14 @@ if (!hasContent) {
             </p>
           )}
           {listItems.length > 0 && (
-            <ul class="list-disc list-inside space-y-1.5 text-body text-text-muted-inverse">
+            <ul class="list-disc list-inside space-y-2 text-body text-text-muted-inverse">
               {listItems.map((item) => (
                 <li>{item}</li>
               ))}
             </ul>
           )}
           {(priceText || priceNote) && (
-            <div class="flex flex-col gap-1.5 pt-1">
+            <div class="flex flex-col gap-block mt-block">
               {priceText && (
                 <p class="text-lg font-semibold text-text-inverse bg-white/10 rounded-soft px-4 py-3 w-fit">
                   {priceText}
@@ -90,7 +88,7 @@ if (!hasContent) {
         </div>
 
         {hasMedia && (
-          <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
+          <div class="min-w-0 w-full max-w-media-col md:max-w-full">
             {videoSrc ? (
               <video
                 src={videoSrc}

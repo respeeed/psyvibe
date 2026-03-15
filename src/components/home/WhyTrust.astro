@@ -33,29 +33,33 @@ if (!hasContent) {
 
 <Section variant="muted">
   <Container>
-    <div class="grid grid-cols-1 gap-8 md:grid-cols-[1fr,minmax(0,400px)] md:items-start md:gap-12">
-      <div class="min-w-0 flex flex-col gap-6">
+    <div class="grid grid-cols-1 gap-column md:grid-cols-[1fr,minmax(0,var(--media-col-max))] md:items-start md:gap-column">
+      <div class="min-w-0 max-w-content flex flex-col">
         {title && (
-          <h2 class="text-h2 text-text">
+          <h2 class="section-title">
             {title}
           </h2>
         )}
-        {body && (
-          <p class="text-body text-text-muted max-w-xl">
-            {body}
-          </p>
-        )}
-        {tags.length > 0 && (
-          <div class="flex flex-wrap gap-2">
-            {tags.map((tag) => (
-              <Tag>{tag}</Tag>
-            ))}
+        {(body || tags.length > 0) && (
+          <div class="mt-title-content flex flex-col gap-block">
+            {body && (
+              <p class="text-body text-text-muted max-w-content">
+                {body}
+              </p>
+            )}
+            {tags.length > 0 && (
+              <div class="flex flex-wrap gap-s1">
+                {tags.map((tag) => (
+                  <Tag>{tag}</Tag>
+                ))}
+              </div>
+            )}
           </div>
         )}
       </div>
 
       {hasMedia && (
-        <div class="min-w-0 w-full max-w-[400px] md:max-w-full">
+        <div class="min-w-0 w-full max-w-media-col md:max-w-full">
           {videoSrc ? (
             <video
               src={videoSrc}
