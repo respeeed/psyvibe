@@ -16,16 +16,16 @@ const copyright = siteSettings?.copyright ?? '';
 const hasContacts = phone || messengerUrl;
 ---
 
-<footer class="mt-auto border-t border-border bg-surface-muted">
+<footer class="mt-auto border-t border-white/10 bg-surface-dark">
   <Container class="py-10">
     <div class="flex flex-col gap-6 md:flex-row md:items-center md:justify-between md:gap-12">
       <div class="flex flex-wrap items-center gap-6">
         <div class="flex flex-col gap-2">
-          <a href="/" class="font-medium text-text hover:text-accent text-body focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm">
+          <a href="/" class="font-medium text-text-inverse hover:text-white text-body focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark rounded-sm">
             {siteName}
           </a>
           {copyright && (
-            <p class="text-small text-text-muted">{copyright}</p>
+            <p class="text-small text-white/70">{copyright}</p>
           )}
         </div>
         {navLinks.length > 0 && (
@@ -33,7 +33,7 @@ const hasContacts = phone || messengerUrl;
             {navLinks.map((link) => (
               <a
                 href={link.href}
-                class="text-small text-text-muted hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm"
+                class="text-small text-white/70 hover:text-text-inverse transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark rounded-sm"
               >
                 {link.label}
               </a>
@@ -45,7 +45,7 @@ const hasContacts = phone || messengerUrl;
             {phone && (
               <a
                 href={`tel:${phone.replace(/\s/g, '')}`}
-                class="text-small text-text-muted hover:text-accent transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm"
+                class="text-small text-white/70 hover:text-text-inverse transition-colors whitespace-nowrap focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark rounded-sm"
               >
                 {phone}
               </a>
@@ -53,7 +53,7 @@ const hasContacts = phone || messengerUrl;
             {messengerUrl && (
               <a
                 href={messengerUrl}
-                class="text-small text-text-muted hover:text-accent transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm"
+                class="text-small text-white/70 hover:text-text-inverse transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-surface-dark rounded-sm"
                 aria-label="Написать в мессенджер"
               >
                 Мессенджер ↗

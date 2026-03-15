@@ -1,5 +1,6 @@
 ---
 import Container from '../ui/Container.astro';
+import Button from '../ui/Button.astro';
 
 interface Props {
   siteSettings?: Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>> | null;
@@ -10,16 +11,25 @@ const siteName = siteSettings?.siteName ?? 'Psy-vibe';
 const navLinks = siteSettings?.navLinks ?? [];
 const phone = siteSettings?.phone ?? '';
 const messengerUrl = siteSettings?.messengerUrl ?? null;
+const logoBg = siteSettings?.logoBg ?? 'muted';
+
+const logoBgClasses: Record<string, string> = {
+  muted: 'bg-surface-muted',
+  subtle: 'bg-surface-subtle',
+  primary: 'bg-primary-100',
+  white: 'bg-white',
+};
+const logoBgClass = logoBgClasses[logoBg] ?? logoBgClasses.muted;
 
 const hasContacts = phone || messengerUrl;
 const siteTagline = 'Корпоративный психолог';
 ---
 
-<header id="site-header" class="header sticky top-0 z-50 bg-[var(--color-surface)] backdrop-blur-sm transition-[box-shadow,background-color] duration-200 shadow-[0_1px_0_rgba(28,25,23,0.06)]" role="banner">
+<header id="site-header" class="header sticky top-0 z-50 bg-[var(--color-surface)] backdrop-blur-sm transition-[box-shadow,background-color] duration-200 shadow-[var(--header-shadow)]" role="banner">
   <Container class="py-4 md:py-5">
     <div class="flex flex-wrap items-center justify-between gap-4 min-h-[2.75rem]">
       <a href="/" class="flex items-center gap-3 min-w-0 shrink-0 group outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-lg -m-1 p-1 transition-colors duration-200">
-        <span class="flex shrink-0 w-11 h-11 rounded-xl bg-[var(--color-surface-muted)] border border-border/60 flex items-center justify-center transition-transform duration-200 group-hover:scale-[1.02] group-hover:border-border group-active:scale-[0.98]">
+        <span class:list={['flex shrink-0 w-11 h-11 rounded-xl border border-border/60 flex items-center justify-center transition-transform duration-200 group-hover:scale-[1.02] group-hover:border-border group-active:scale-[0.98]', logoBgClass]}>
           <img src="/logo.svg" alt="" width="28" height="28" class="w-7 h-7 object-contain pointer-events-none" />
         </span>
         <span class="flex flex-col min-w-0">
@@ -63,22 +73,16 @@ const siteTagline = 'Корпоративный психолог';
             Мессенджер ↗
           </a>
         )}
-        <a
-          href="#diagnostic"
-          class="shrink-0 inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] hover:text-white active:bg-[var(--color-cta-active)] active:text-white transition-all duration-200 shadow-sm hover:shadow-md active:shadow-sm focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2"
-        >
+        <Button href="#diagnostic" variant="tertiary" class="shrink-0 px-3 py-2 text-small">
           Записаться на диагностику
-        </a>
+        </Button>
       </div>
 
       <!-- Mobile: кнопка меню -->
       <div class="flex items-center gap-2 sm:gap-3 md:hidden shrink-0">
-        <a
-          href="#diagnostic"
-          class="shrink-0 inline-flex items-center justify-center rounded-lg px-4 py-2.5 text-small font-medium bg-[var(--color-cta)] text-white hover:text-white active:text-white transition-all duration-200"
-        >
+        <Button href="#diagnostic" variant="tertiary" class="shrink-0 px-3 py-2 text-small">
           Записаться
-        </a>
+        </Button>
         <button
           type="button"
           id="header-menu-toggle"
@@ -118,12 +122,9 @@ const siteTagline = 'Корпоративный психолог';
           Мессенджер ↗
         </a>
       )}
-      <a
-        href="#diagnostic"
-        class="inline-flex items-center justify-center rounded-lg px-5 py-3 text-body font-medium bg-[var(--color-cta)] text-white hover:text-white mt-2 w-full max-w-[200px]"
-      >
+      <Button href="#diagnostic" variant="tertiary" class="mt-2 w-full max-w-[200px] px-3 py-2 text-small">
         Записаться на диагностику
-      </a>
+      </Button>
     </div>
   </Container>
 </header>

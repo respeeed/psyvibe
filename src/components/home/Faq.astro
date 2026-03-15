@@ -41,8 +41,8 @@ if (!hasContent) {
       {items.length > 0 && (
         <div class="w-full max-w-content flex flex-col gap-faq">
           {items.map((item) => (
-            <details class="faq-details group rounded-card border border-border bg-surface-muted shadow-sm overflow-hidden">
-              <summary class="faq-summary cursor-pointer list-none flex items-center justify-between gap-s4 p-card min-h-[3.25rem] text-left font-medium text-text hover:bg-[rgba(0,0,0,0.02)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-cta)]" aria-expanded="false">
+            <details class="faq-details group rounded-card border border-border bg-white shadow-sm overflow-hidden">
+              <summary class="faq-summary cursor-pointer list-none flex items-center justify-between gap-s4 p-card min-h-[3.25rem] text-left font-medium text-text hover:bg-[var(--color-hover-overlay)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-inset focus-visible:ring-[var(--color-cta)]" aria-expanded="false">
                 <span class="text-body pr-2">{item.question ?? ''}</span>
                 <span class="faq-icon shrink-0 w-8 h-8 rounded-full bg-surface border border-border flex items-center justify-center text-text-muted text-lg leading-none select-none" aria-hidden="true">
                   <span class="faq-icon-plus">+</span>

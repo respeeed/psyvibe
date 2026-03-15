@@ -4,28 +4,41 @@
 
 @layer base {
   :root {
-    /* Surfaces — Calm Expert: тёплые нейтрали */
-    --color-surface: #fdfcfb;
-    --color-surface-muted: #f5f3f0;
-    --color-surface-subtle: #fafaf9;
-    --color-surface-dark: #252220;
+    /* ========== Color system: Soft modern + Blue accent ========== */
+    /* Surfaces: лёгкий синий подтон под палитру #3D82F6 */
+    --color-surface: #fafbff;
+    --color-surface-subtle: #f0f4ff;
+    --color-surface-muted: #e8eeff;
+    --color-surface-dark: #0c1222;
+    --color-surface-active: #dce5fe;
     /* Text */
     --color-text: #1c1917;
     --color-text-muted: #57534e;
     --color-text-inverse: #ffffff;
-    --color-text-muted-inverse: #a8a29e;
-    /* Accent: тёплый серый (ссылки, вторичные акценты) */
+    --color-text-muted-inverse: #ffffff;
+    /* Accent: нейтральный (вторичные ссылки, карточки) */
     --color-accent: #292524;
     --color-accent-hover: #44403c;
-    /* Accent brand: мягкий teal/sage для ссылок и тегов */
-    --color-accent-brand: #0d7368;
-    --color-accent-brand-hover: #0a5c52;
-    /* CTA primary: тёмный charcoal, премиальный спокойный */
-    --color-cta: #292524;
-    --color-cta-hover: #3f3d3b;
-    --color-cta-active: #1c1917;
-    /* Border — тёплый */
-    --color-border: #e8e6e3;
+    /* Primary blue: палитра от #3D82F6 (accent brand & CTA) */
+    --color-primary-50: #eff6ff;
+    --color-primary-100: #dbeafe;
+    --color-primary-200: #bfdbfe;
+    --color-primary-500: #3d82f6;
+    --color-primary-600: #2563eb;
+    --color-primary-700: #1d4ed8;
+    --color-accent-brand: #3d82f6;
+    --color-accent-brand-hover: #2563eb;
+    --color-cta: #3d82f6;
+    --color-cta-hover: #2563eb;
+    --color-cta-active: #1d4ed8;
+    /* Border: холодный синевато-серый в тон палитре поверхностей */
+    --color-border: #e0e4f0;
+    --color-border-subtle: #eaeef6;
+    --color-border-strong: #d0d6e6;
+    /* Для теней и стеклянных эффектов (rgb без скобок для rgba(var(...), alpha)) */
+    --color-shadow-rgb: 28, 25, 23;
+    --color-surface-rgb: 250, 251, 255;
+    --color-hover-overlay: rgba(0, 0, 0, 0.02);
     /* Typography */
     --font-sans: 'Inter', system-ui, -apple-system, sans-serif;
     /* Spacing scale: 8, 16, 24, 32, 48, 64, 96, 120px */
@@ -59,10 +72,26 @@
     --title-to-content: var(--space-4);
     --block-gap: var(--space-2);
     --faq-item-gap: var(--space-3);
-    --radius-soft: 0.5rem;
-    --radius-card: 0.75rem;
-    --card-shadow: 0 2px 8px rgba(28, 25, 23, 0.06);
-    --card-shadow-hover: 0 4px 16px rgba(28, 25, 23, 0.08);
+    --radius-soft: 16px;
+    --radius-card: 24px;
+    --card-shadow: 0 2px 8px rgba(var(--color-shadow-rgb), 0.06);
+    --card-shadow-hover: 0 4px 16px rgba(var(--color-shadow-rgb), 0.08);
+    --card-shadow-elevated: 0 10px 40px -10px rgba(var(--color-shadow-rgb), 0.12), 0 4px 20px -4px rgba(var(--color-shadow-rgb), 0.08);
+    --card-shadow-elevated-soft: 0 12px 40px -8px rgba(var(--color-shadow-rgb), 0.18), 0 8px 24px -4px rgba(var(--color-shadow-rgb), 0.12), 0 2px 8px rgba(var(--color-shadow-rgb), 0.06);
+    /* Широкая мягкая тень под белой карточкой (блок «Как проходит сотрудничество») */
+    --card-shadow-wide: 0 24px 64px -12px rgba(var(--color-shadow-rgb), 0.28), 0 12px 32px -8px rgba(var(--color-shadow-rgb), 0.22);
+    --hero-media-shadow: 0 4px 24px rgba(var(--color-shadow-rgb), 0.08), 0 1px 3px rgba(var(--color-shadow-rgb), 0.04);
+    --hero-card-shadow: 0 1px 0 rgba(255, 255, 255, 0.5) inset, 0 16px 48px rgba(var(--color-shadow-rgb), 0.14), 0 4px 12px rgba(var(--color-shadow-rgb), 0.06);
+    --hero-card-mobile-shadow: 0 4px 24px rgba(var(--color-shadow-rgb), 0.08);
+    --header-shadow: 0 1px 0 rgba(var(--color-shadow-rgb), 0.06);
+    --header-shadow-scrolled: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 24px rgba(var(--color-shadow-rgb), 0.08);
+    /* Hero mesh gradient: тона иллюстрации (стекло, иридесценция) + палитра #3D82F6 */
+    --hero-mesh-blue: 219, 234, 254;   /* primary-100 */
+    --hero-mesh-violet: 199, 210, 254; /* мягкий фиолет */
+    --hero-mesh-pink: 243, 232, 255;   /* очень светлый фиолет/розовый */
+    /* Тёмные секции: mesh-градиент (лёгкие синие/фиолетовые пятна) */
+    --dark-mesh-blue: 59, 130, 246;    /* primary-500, очень низкая opacity */
+    --dark-mesh-violet: 99, 102, 241;
   }
 
   @media (min-width: 768px) {
@@ -173,26 +202,67 @@
 /* ========== Header: при скролле — непрозрачный фон, тень ========== */
 #site-header[data-scrolled] {
   background-color: var(--color-surface) !important;
-  box-shadow: 0 1px 0 rgba(0, 0, 0, 0.06), 0 4px 24px rgba(28, 25, 23, 0.08);
+  box-shadow: var(--header-shadow-scrolled);
 }
 
-/* ========== Hero: Calm Expert — один тёплый градиент ========== */
+/* ========== Hero: mesh-градиент (синий, фиолет, розовый — в духе стеклянной иллюстрации) ========== */
 .hero-section {
   background-color: var(--color-surface);
-  background-image: linear-gradient(
-    180deg,
-    #fdfcfb 0%,
-    #faf8f6 35%,
-    var(--color-surface-muted) 100%
-  );
+  background-image:
+    radial-gradient(
+      ellipse 100% 80% at 75% 10%,
+      rgba(var(--hero-mesh-blue), 0.7) 0%,
+      transparent 55%
+    ),
+    radial-gradient(
+      ellipse 85% 60% at 15% 85%,
+      rgba(var(--hero-mesh-violet), 0.5) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 70% 70% at 85% 70%,
+      rgba(var(--hero-mesh-pink), 0.35) 0%,
+      transparent 50%
+    ),
+    linear-gradient(
+      180deg,
+      var(--color-surface) 0%,
+      var(--color-surface-subtle) 35%,
+      var(--color-primary-50) 100%
+    );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
 }
 
-/* ========== Вертикальный ритм: заголовок секции ========== */
+/* ========== Тёмные секции: тёмно-синий фон + лёгкий mesh в тему ========== */
+section.bg-surface-dark {
+  background-color: var(--color-surface-dark);
+  background-image:
+    radial-gradient(
+      ellipse 90% 70% at 80% 20%,
+      rgba(var(--dark-mesh-blue), 0.12) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 70% 80% at 20% 80%,
+      rgba(var(--dark-mesh-violet), 0.08) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      ellipse 60% 60% at 50% 50%,
+      rgba(var(--dark-mesh-blue), 0.05) 0%,
+      transparent 45%
+    );
+  background-size: 100% 100%;
+  background-repeat: no-repeat;
+}
+
+/* ========== Вертикальный ритм: заголовок секции (массивный, премиальный) ========== */
 .section-title {
-  font-size: 1.75rem;
-  line-height: 1.28;
-  font-weight: 600;
-  letter-spacing: -0.01em;
+  font-size: clamp(1.875rem, 4.5vw, 2.5rem);
+  line-height: 1.18;
+  font-weight: 700;
+  letter-spacing: -0.03em;
   color: var(--color-text);
 }
 /* В обратно-контрастных (тёмных) секциях — светлый заголовок */
@@ -211,6 +281,11 @@
 }
 .card-hover:hover {
   box-shadow: var(--card-shadow-hover);
+}
+
+/* Лёгкая тень с синим оттенком — эффект парения (карточка «Как проходит сотрудничество») */
+.card-shadow-wide {
+  box-shadow: 0 24px 56px -12px rgba(59, 130, 246, 0.12), 0 12px 28px -8px rgba(59, 130, 246, 0.08);
 }
 
 /* ========== Hero: анимация карточки при скролле ========== */

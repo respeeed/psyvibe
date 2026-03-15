@@ -31,7 +31,7 @@ if (!hasContent) {
 }
 ---
 
-<Section variant="muted">
+<Section>
   <Container>
     <div class="grid grid-cols-1 gap-column md:grid-cols-[1fr,minmax(0,var(--media-col-max))] md:items-start md:gap-column">
       <div class="min-w-0 max-w-content flex flex-col">
@@ -43,7 +43,7 @@ if (!hasContent) {
         {(body || tags.length > 0) && (
           <div class="mt-title-content flex flex-col gap-block">
             {body && (
-              <p class="text-body text-text-muted max-w-content">
+              <p class="text-body text-text max-w-content">
                 {body}
               </p>
             )}

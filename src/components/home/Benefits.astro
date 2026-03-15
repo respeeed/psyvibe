@@ -42,12 +42,12 @@ if (!hasContent) {
         {(body || listItems.length > 0) && (
           <div class="mt-title-content flex flex-col gap-block">
             {body && (
-              <p class="text-body text-text-muted max-w-content">
+              <p class="text-body text-text max-w-content">
                 {body}
               </p>
             )}
             {listItems.length > 0 && (
-              <ul class="list-disc list-inside space-y-2 text-body text-text-muted max-w-content">
+              <ul class="list-disc list-inside space-y-2 text-body text-text max-w-content">
                 {listItems.map((item) => (
                   <li>{item}</li>
                 ))}

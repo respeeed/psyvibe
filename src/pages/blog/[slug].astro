@@ -19,7 +19,11 @@ if (!post) {
 }
 
 const imageSrc = blogImagePath(slug ?? null, post.image);
-const bodyHtml = renderMarkdocToHtml(post.body ?? null);
+let bodyContent: string | null | undefined | Record<string, unknown> =
+  typeof post.body === 'function'
+    ? await (post.body as () => Promise<unknown>)()
+    : post.body;
+const bodyHtml = renderMarkdocToHtml(bodyContent ?? null);
 const metaDesc = (post.excerpt ?? post.title ?? 'Статья блога').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
 ---

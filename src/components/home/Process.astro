@@ -2,12 +2,11 @@
 import Container from '../ui/Container.astro';
 import Section from '../ui/Section.astro';
 import Card from '../ui/Card.astro';
+import Button from '../ui/Button.astro';
+import { imagePath } from '../../lib/images';
 
-const topicTagStyles = [
-  'bg-[var(--color-accent-brand)]/10 text-[var(--color-accent-brand)] border-[var(--color-accent-brand)]/20',
-  'bg-surface-muted text-text border-border',
-  'bg-surface text-text-muted border-border',
-];
+const topicTagClass =
+  'border border-border bg-white shadow-sm text-text';
 
 interface ProcessData {
   title?: string | null;
@@ -16,6 +15,10 @@ interface ProcessData {
   body?: string | null;
   cardTitle?: string | null;
   cardBody?: string | null;
+  cardImage?: string | null;
+  cardIconBg?: 'muted' | 'primary' | 'white' | 'subtle' | null;
+  cardCtaLabel?: string | null;
+  cardCtaUrl?: string | null;
 }
 
 interface Props {
@@ -30,19 +33,32 @@ const topicTags = data?.topicTags ?? [];
 const body = data?.body ?? null;
 const cardTitle = data?.cardTitle ?? null;
 const cardBody = data?.cardBody ?? null;
+const cardIconSrc = imagePath(data?.cardImage ?? null);
+const cardIconBg = data?.cardIconBg ?? 'muted';
+const cardCtaLabel = data?.cardCtaLabel?.trim() || 'Попробовать бесплатно';
+const cardCtaUrl = data?.cardCtaUrl?.trim() || '#diagnostic';
+const hasCardCta = cardCtaLabel && cardCtaUrl;
 
-const hasCard = cardTitle || cardBody;
+const iconBgClasses: Record<string, string> = {
+  muted: 'bg-surface-muted border border-border/60',
+  primary: 'bg-primary-100 border border-primary-200/60',
+  white: 'bg-white border border-border/60',
+  subtle: 'bg-surface-subtle border border-border/60',
+};
+const cardIconBgClass = iconBgClasses[cardIconBg] ?? iconBgClasses.muted;
+
+const hasCard = cardTitle || cardBody || cardIconSrc;
 const hasContent = title || subtitle || topicTags.length > 0 || body || hasCard;
 if (!hasContent) {
   return null;
 }
 ---
 
-<Section>
+<Section variant="subtle">
   <Container>
     <div class:list={[
       'grid gap-column md:gap-column',
-      hasCard ? 'grid-cols-1 md:grid-cols-[1fr,minmax(0,320px)] md:items-start' : 'grid-cols-1',
+      hasCard ? 'grid-cols-1 md:grid-cols-[6fr,4fr] md:items-start' : 'grid-cols-1',
     ]}>
       <div class:list={[
         'min-w-0 max-w-content flex flex-col',
@@ -58,17 +74,17 @@ if (!hasContent) {
           (subtitle || topicTags.length > 0 || body) && 'mt-title-content',
         ]}>
           {subtitle && (
-            <p class="text-body text-text-muted font-medium">
+            <p class="text-body text-text font-medium">
               {subtitle}
             </p>
           )}
           {topicTags.length > 0 && (
             <div class="flex flex-wrap gap-2">
-              {topicTags.map((tag, i) => (
+              {topicTags.map((tag) => (
                 <span
                   class:list={[
                     'inline-flex items-center rounded-full border px-3.5 py-2 text-small font-medium transition-colors',
-                    topicTagStyles[i % topicTagStyles.length],
+                    topicTagClass,
                   ]}
                 >
                   {tag}
@@ -77,7 +93,7 @@ if (!hasContent) {
             </div>
           )}
           {body && (
-            <p class="text-body text-text-muted max-w-content">
+            <p class="text-body text-text max-w-content">
               {body}
             </p>
           )}
@@ -86,16 +102,36 @@ if (!hasContent) {
 
       {hasCard && (
         <div class="min-w-0 shrink-0">
-          <Card>
-            {cardTitle && (
-              <h3 class="text-h3 text-text">
-                {cardTitle}
-              </h3>
+          <Card elevated class="card-shadow-wide">
+            {cardIconSrc && (
+              <span class:list={['flex shrink-0 w-20 h-20 rounded-xl border flex items-center justify-center overflow-hidden', cardIconBgClass]} aria-hidden="true">
+                <img
+                  src={cardIconSrc}
+                  alt=""
+                  class="w-12 h-12 object-contain"
+                  loading="lazy"
+                  decoding="async"
+                />
+              </span>
             )}
-            {cardBody && (
-              <p class="text-body text-text-muted">
-                {cardBody}
-              </p>
+            {(cardTitle || cardBody || hasCardCta) && (
+              <div class="flex flex-col gap-block">
+                {cardTitle && (
+                  <h3 class="text-h3 text-text">
+                    {cardTitle}
+                  </h3>
+                )}
+                {cardBody && (
+                  <p class="text-body text-text-muted">
+                    {cardBody}
+                  </p>
+                )}
+                {hasCardCta && (
+                  <Button href={cardCtaUrl} variant="primary" class="mt-1 w-full sm:w-auto">
+                    {cardCtaLabel}
+                  </Button>
+                )}
+              </div>
             )}
           </Card>
         </div>

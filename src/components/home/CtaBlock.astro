@@ -20,9 +20,13 @@ const ctaLabel = data?.ctaLabel ?? null;
 const ctaUrl = data?.ctaUrl ?? null;
 const hasButton = ctaLabel && ctaUrl;
 
-// Выделяем слова «состояния» и «команды» жирным (контент из CMS)
+// Выделяем фразу «улучшение состояния команды» цветом и жирным (призыв)
+const highlightPhrase = 'улучшение состояния команды';
 const titleHtml = title
-  ? title.replace(/\b(состояния|команды)\b/gi, '<strong>$1</strong>')
+  ? title.replace(
+      new RegExp(highlightPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
+      `<span class="text-[var(--color-accent-brand)] font-semibold">$&</span>`
+    )
   : null;
 
 const hasContent = title || hasButton;
@@ -33,9 +37,9 @@ if (!hasContent) {
 
 <Section>
   <Container>
-    <div class="w-full rounded-card bg-surface-muted py-cta-block px-card flex flex-col items-center gap-cta-gap text-center shadow-[var(--card-shadow)] border border-border/60">
+    <div class="w-full flex flex-col items-center gap-title-content text-center">
       {titleHtml && (
-        <p class="text-body text-text-muted leading-relaxed max-w-content mx-auto" set:html={titleHtml} />
+        <p class="text-display font-light text-text leading-tight max-w-content mx-auto" set:html={titleHtml} />
       )}
       {hasButton && (
         <Button href={ctaUrl} variant="primary">

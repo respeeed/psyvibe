@@ -8,6 +8,8 @@ export default {
     'gap-card-gap', 'gap-faq',
     'py-s2', 'py-s2_5', 'py-s6', 'gap-s1', 'gap-s2', 'gap-s3', 'gap-s4', 'mt-s1', 'mt-s2', 'mt-s3', 'mb-s10', 'pt-s3', 'pb-s2', 'pb-s3', '-mt-s1',
     'px-s2', 'scroll-pl-s2', 'scroll-pr-s2',
+    'max-w-container', 'max-w-content', 'max-w-media-col',
+    'shadow-[var(--card-shadow-wide)]',
   ],
   theme: {
     extend: {
@@ -25,6 +27,16 @@ export default {
         'accent-brand': 'var(--color-accent-brand)',
         'accent-brand-hover': 'var(--color-accent-brand-hover)',
         border: 'var(--color-border)',
+        'border-subtle': 'var(--color-border-subtle)',
+        'border-strong': 'var(--color-border-strong)',
+        primary: {
+          50: 'var(--color-primary-50)',
+          100: 'var(--color-primary-100)',
+          200: 'var(--color-primary-200)',
+          500: 'var(--color-primary-500)',
+          600: 'var(--color-primary-600)',
+          700: 'var(--color-primary-700)',
+        },
       },
       fontFamily: {
         sans: ['var(--font-sans)', 'system-ui', 'sans-serif'],

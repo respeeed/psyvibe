@@ -3,11 +3,15 @@ interface Props {
   class?: string;
   /** Без обводки, только отступы (для сеток на светлом фоне) */
   bare?: boolean;
+  /** Без обводки, с акцентной тенью (для карточки «Внутренние процессы») */
+  elevated?: boolean;
 }
-const { class: className = '', bare = false } = Astro.props;
+const { class: className = '', bare = false, elevated = false } = Astro.props;
 const base = bare
   ? 'flex flex-col gap-block'
-  : 'flex flex-col gap-block rounded-card border border-border bg-surface p-card card-hover shadow-[var(--card-shadow)]';
+  : elevated
+    ? 'flex flex-col gap-block rounded-card bg-surface p-card overflow-hidden'
+    : 'flex flex-col gap-block rounded-card border border-border bg-surface p-card card-hover shadow-[var(--card-shadow)]';
 ---
 
 <div class:list={[base, className]}>

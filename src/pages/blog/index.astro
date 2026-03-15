@@ -1,18 +1,62 @@
 ---
+import fs from 'node:fs';
+import path from 'node:path';
+import { fileURLToPath } from 'node:url';
 import Layout from '../../components/layout/Layout.astro';
 import Section from '../../components/ui/Section.astro';
 import Container from '../../components/ui/Container.astro';
 import { reader } from '../../lib/keystatic';
 import { blogImagePath } from '../../lib/images';
 
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+const BLOG_DIR = path.join(__dirname, '../../content/blog');
+
+/** Fallback: список постов из .mdoc файлов, когда Reader возвращает пустой список (например при другой cwd). */
+function getBlogPostsFromFilesystem(): { slug: string; title?: string; excerpt?: string; publishDate?: string; image?: string }[] {
+  if (!fs.existsSync(BLOG_DIR)) return [];
+  const files = fs.readdirSync(BLOG_DIR).filter((f) => f.endsWith('.mdoc'));
+  const posts: { slug: string; title?: string; excerpt?: string; publishDate?: string; image?: string }[] = [];
+  for (const file of files) {
+    const slug = file.replace(/\.mdoc$/, '');
+    const raw = fs.readFileSync(path.join(BLOG_DIR, file), 'utf-8');
+    const parts = raw.split(/\n---\n/);
+    const front = parts[1];
+    if (!front) continue;
+    const meta: Record<string, string> = {};
+    for (const line of front.split('\n')) {
+      const m = line.match(/^(\w+):\s*(.*)$/);
+      if (m) meta[m[1]] = m[2].trim();
+    }
+    posts.push({
+      slug,
+      title: meta.title,
+      excerpt: meta.excerpt,
+      publishDate: meta.publishDate,
+      image: meta.image,
+    });
+  }
+  return posts;
+}
+
+/** Отображаемый заголовок: строка или post.title.name для slug-поля Keystatic. */
+function postTitle(p: { title?: unknown; slug?: string }): string {
+  if (typeof p.title === 'string') return p.title;
+  if (p.title && typeof p.title === 'object' && 'name' in p.title) return (p.title as { name?: string }).name ?? p.slug ?? '';
+  return p.slug ?? '';
+}
+
 const siteSettings = await reader.singletons.siteSettings.read();
-const slugs = await reader.collections.blog.list();
-const posts = await Promise.all(
+let slugs = await reader.collections.blog.list();
+let rawPosts = await Promise.all(
   slugs.map(async (slug) => {
     const entry = await reader.collections.blog.read(slug);
-    return { slug, ...entry };
+    return entry ? { slug, ...entry } : null;
   })
 );
+let posts = rawPosts.filter((p): p is NonNullable<typeof p> => p != null);
+if (posts.length === 0) {
+  posts = getBlogPostsFromFilesystem();
+}
 posts.sort((a, b) => {
   const d1 = a?.publishDate ? new Date(a.publishDate).getTime() : 0;
   const d2 = b?.publishDate ? new Date(b.publishDate).getTime() : 0;
@@ -61,9 +105,9 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
                       </div>
                     )}
                     <div class="flex min-w-0 flex-col gap-2 p-6">
-                      {post.title && (
+                      {postTitle(post) && (
                         <h2 class="text-h3 text-text">
-                          {post.title}
+                          {postTitle(post)}
                         </h2>
                       )}
                       {post.publishDate && (

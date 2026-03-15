@@ -30,9 +30,15 @@ const subtitle = sectionData?.subtitle ?? null;
 const displayedPosts = posts.slice(0, DEFAULT_POST_COUNT);
 const sectionTitle = title ?? 'Блог';
 const sectionSubtitle = subtitle ?? null;
+
+function postTitle(p: BlogPost): string {
+  if (typeof p.title === 'string') return p.title;
+  if (p.title && typeof p.title === 'object' && 'name' in p.title) return (p.title as { name?: string }).name ?? p.slug ?? '';
+  return p.slug ?? '';
+}
 ---
 
-<Section variant="muted">
+<Section variant="subtle">
   <Container>
     <div class="flex flex-col gap-title-content">
       <div class="max-w-content flex flex-col gap-block">
@@ -71,9 +77,9 @@ const sectionSubtitle = subtitle ?? null;
                   </div>
                 )}
                 <div class="flex min-w-0 flex-col gap-block">
-                  {post.title && (
+                  {postTitle(post) && (
                     <h3 class="text-h3 text-text">
-                      {post.title}
+                      {postTitle(post)}
                     </h3>
                   )}
                   {post.publishDate && (

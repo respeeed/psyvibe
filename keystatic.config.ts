@@ -37,6 +37,16 @@ export default config({
           description: 'Опционально',
         }),
         copyright: fields.text({ label: 'Копирайт в подвале' }),
+        logoBg: fields.select({
+          label: 'Фон лого в шапке',
+          options: [
+            { label: 'Приглушённый', value: 'muted' },
+            { label: 'Светлый', value: 'subtle' },
+            { label: 'Сирений (акцент)', value: 'primary' },
+            { label: 'Белый', value: 'white' },
+          ],
+          defaultValue: 'muted',
+        }),
       },
     }),
     home: singleton({
@@ -104,6 +114,28 @@ export default config({
             body: fields.text({ label: 'Текст', multiline: true }),
             cardTitle: fields.text({ label: 'Заголовок карточки' }),
             cardBody: fields.text({ label: 'Текст карточки', multiline: true }),
+            cardImage: fields.image({
+              label: 'Иконка карточки',
+              directory: 'public/images',
+            }),
+            cardIconBg: fields.select({
+              label: 'Фон иконки',
+              options: [
+                { label: 'Приглушённый', value: 'muted' },
+                { label: 'Сирений (акцент)', value: 'primary' },
+                { label: 'Белый', value: 'white' },
+                { label: 'Светлый', value: 'subtle' },
+              ],
+              defaultValue: 'muted',
+            }),
+            cardCtaLabel: fields.text({
+              label: 'Текст кнопки в карточке',
+              description: 'Например: Попробовать бесплатно. Оставьте пустым, чтобы не показывать кнопку.',
+            }),
+            cardCtaUrl: fields.text({
+              label: 'URL кнопки в карточке',
+              description: 'Например: #diagnostic',
+            }),
           },
           { label: 'Внутренние процессы', description: 'Блок про процессы в команде и прибыль' }
         ),
@@ -140,6 +172,20 @@ export default config({
             intro: fields.text({ label: 'Вводный текст', multiline: true }),
             resultCards: fields.array(
               fields.object({
+                icon: fields.image({
+                  label: 'Иконка',
+                  directory: 'public/images',
+                  description: 'Квадратная иконка до 96×96. Стиль — в общем ключе сайта.',
+                }),
+                iconBackground: fields.select({
+                  label: 'Фон иконки',
+                  options: [
+                    { label: 'Светлый', value: 'surface' },
+                    { label: 'Приглушённый', value: 'surface-muted' },
+                    { label: 'Акцентный (синий)', value: 'accent' },
+                  ],
+                  defaultValue: 'surface',
+                }),
                 title: fields.text({ label: 'Заголовок карточки' }),
                 description: fields.text({
                   label: 'Описание',
@@ -155,7 +201,7 @@ export default config({
             ctaLabel: fields.text({ label: 'Текст кнопки' }),
             ctaUrl: fields.text({ label: 'URL кнопки' }),
           },
-          { label: 'Бесплатная диагностика', description: 'Блок «Бесплатная диагностика выстроения команды»' }
+          { label: 'Бесплатная диагностика', description: 'Блок «Бесплатная диагностика выгорания команды»' }
         ),
         format: fields.object(
           {
@@ -202,10 +248,30 @@ export default config({
           {
             title: fields.text({ label: 'Заголовок' }),
             body: fields.text({ label: 'Вводная строка (например: На короткой встрече мы:)' }),
-            listItems: fields.array(fields.text({ label: 'Пункт' }), {
-              label: 'Список',
-              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Пункт',
-            }),
+            items: fields.array(
+              fields.object({
+                text: fields.text({ label: 'Пункт' }),
+                icon: fields.image({
+                  label: 'Иконка',
+                  directory: 'public/images',
+                  description: 'Квадратная иконка, рекомендуется до 96×96. Если не задана — используется иконка по умолчанию.',
+                }),
+                iconBackground: fields.select({
+                  label: 'Фон иконки',
+                  options: [
+                    { label: 'Светлый', value: 'surface' },
+                    { label: 'Приглушённый', value: 'surface-muted' },
+                    { label: 'Акцентный (синий)', value: 'accent' },
+                  ],
+                  defaultValue: 'surface',
+                }),
+              }),
+              {
+                label: 'Пункты с иконками',
+                validation: { length: { max: 6 } },
+                itemLabel: (item: unknown) => (itemVal(item) as { text?: string })?.text?.slice(0, 40) || 'Пункт',
+              }
+            ),
             ctaLabel: fields.text({ label: 'Текст кнопки (слева)' }),
             ctaUrl: fields.text({ label: 'URL кнопки (слева)' }),
             contactEmail: fields.text({
@@ -252,6 +318,15 @@ export default config({
                   label: 'Иконка',
                   directory: 'public/images',
                   description: 'Квадратная иконка, рекомендуется до 96×96',
+                }),
+                iconBackground: fields.select({
+                  label: 'Фон иконки',
+                  options: [
+                    { label: 'Светлый', value: 'surface' },
+                    { label: 'Приглушённый', value: 'surface-muted' },
+                    { label: 'Акцентный (синий)', value: 'accent' },
+                  ],
+                  defaultValue: 'surface-muted',
                 }),
                 text: fields.text({ label: 'Текст под иконкой', multiline: true }),
               }),
