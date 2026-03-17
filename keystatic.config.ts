@@ -14,7 +14,12 @@ function itemVal(item: unknown): unknown {
 }
 
 export default config({
-  storage: { kind: 'local' },
+  storage: {
+    kind: 'github',
+    // Repo owner/name for GitHub mode (нужно для GitHub-only входа в /keystatic).
+    // Важно: этот файл импортируется и в браузере, поэтому нельзя использовать process.env здесь.
+    repo: { owner: 'respeeed', name: 'psyvibe' },
+  },
   singletons: {
     siteSettings: singleton({
       label: 'Настройки сайта',
