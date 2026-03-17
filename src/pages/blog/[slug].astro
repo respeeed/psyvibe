@@ -3,7 +3,7 @@ import Layout from '../../components/layout/Layout.astro';
 import Section from '../../components/ui/Section.astro';
 import Container from '../../components/ui/Container.astro';
 import { reader } from '../../lib/keystatic';
-import { renderMarkdocToHtml } from '../../lib/markdoc';
+import { resolveContentBody, renderMarkdocToHtml } from '../../lib/markdoc';
 import { blogImagePath } from '../../lib/images';
 
 export async function getStaticPaths() {
@@ -19,21 +19,26 @@ if (!post) {
 }
 
 const imageSrc = blogImagePath(slug ?? null, post.image);
-let bodyContent: string | null | undefined | Record<string, unknown> =
-  typeof post.body === 'function'
-    ? await (post.body as () => Promise<unknown>)()
-    : post.body;
+const bodyContent = await resolveContentBody(post.body);
 const bodyHtml = renderMarkdocToHtml(bodyContent ?? null);
 const metaDesc = (post.excerpt ?? post.title ?? 'Статья блога').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
+const postTitleStr = typeof post.title === 'string' ? post.title : (post.title && typeof post.title === 'object' && 'name' in post.title ? (post.title as { name?: string }).name : null) ?? slug ?? 'Статья';
+const pageTitle = (post as { seoTitle?: string | null })?.seoTitle?.trim() || postTitleStr;
 ---
 
-<Layout title={post.title} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl} ogImage={imageSrc ?? undefined}>
+<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl} ogImage={imageSrc ?? undefined}>
   <Section>
     <Container>
+      <nav class="mx-auto max-w-3xl mb-6" aria-label="Навигация">
+        <a href="/blog" class="inline-flex items-center gap-1.5 text-body text-text-muted hover:text-[var(--color-accent-brand)] transition-colors">
+          <span aria-hidden="true">←</span>
+          Вернуться назад
+        </a>
+      </nav>
       <article class="mx-auto max-w-3xl">
         <header class="mb-8">
-          <h1 class="text-h1 text-text">
+          <h1 class="text-h1 text-heading">
             {post.title}
           </h1>
           {post.publishDate && (

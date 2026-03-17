@@ -18,7 +18,7 @@ const {
 } = Astro.props;
 
 const base =
-  'inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-body font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none';
+  'inline-flex items-center justify-center gap-2 rounded-lg min-h-[3rem] py-3 px-6 text-base font-medium transition-all duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 disabled:opacity-50 disabled:pointer-events-none md:min-h-0 md:py-2.5 md:px-5 md:text-body';
 const variants = {
   primary:
     'bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] hover:text-white active:bg-[var(--color-cta-active)] active:text-white shadow-sm hover:shadow-md active:shadow-sm',

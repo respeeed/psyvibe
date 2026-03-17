@@ -57,23 +57,23 @@ const titleHtml = titleSafe.replace(
 ---
 
 <Section class="hero-section pt-hero-top pb-hero-bottom">
-  <Container class="mb-16 md:mb-20">
-    <div class="flex flex-col gap-hero-gap max-w-content mx-auto text-center items-center w-full">
-      <h1 class="text-[clamp(2.5rem,6vw,3.75rem)] font-bold text-text leading-[1.15] tracking-tight" set:html={titleHtml} />
+  <Container class="mb-14 md:mb-20">
+    <div class="flex flex-col gap-6 md:gap-hero-gap max-w-content mx-auto text-center items-center w-full">
+      <h1 class="text-4xl md:text-[clamp(2.5rem,6vw,3.75rem)] font-bold text-heading leading-[1.15] tracking-tight" set:html={titleHtml} />
       {subtitle && (
-        <p class="text-body text-text max-w-xl leading-relaxed font-normal">
+        <p class="text-base text-text max-w-xl leading-relaxed font-normal">
           {subtitle}
         </p>
       )}
       {hasCtas && (
-        <div class="flex flex-wrap gap-3 justify-center">
+        <div class="flex flex-wrap gap-4 md:gap-3 justify-center">
           {hasPrimaryCta && (
-            <Button href={primaryCtaUrl} variant="primary">
+            <Button href={primaryCtaUrl} variant="primary" class="w-full md:w-auto">
               {primaryCtaLabel}
             </Button>
           )}
           {hasSecondaryCta && (
-            <Button href={secondaryCtaUrl} variant="secondary">
+            <Button href={secondaryCtaUrl} variant="secondary" class="w-full md:w-auto">
               {secondaryCtaLabel}
             </Button>
           )}
@@ -89,7 +89,7 @@ const titleHtml = titleSafe.replace(
 
   <!-- Иллюстрация: рамка, градиент, карточка (премиальный блок) + параллакс на десктопе -->
   <div class="w-full px-[var(--container-padding)]">
-    <div id="hero-media-wrapper" class="max-w-6xl mx-auto relative w-full aspect-[4/3] md:aspect-[2/1] bg-surface-muted rounded-2xl md:rounded-3xl overflow-hidden shadow-[var(--hero-media-shadow)] will-change-transform">
+    <div id="hero-media-wrapper" class="w-full md:max-w-6xl mx-auto relative aspect-[3/2.6] md:aspect-[2/1] bg-surface-muted rounded-2xl md:rounded-3xl overflow-hidden shadow-[var(--hero-media-shadow)] will-change-transform">
       {hasVideo ? (
         <video
           src={heroVideoSrc!}
@@ -97,7 +97,7 @@ const titleHtml = titleSafe.replace(
           muted
           loop
           playsinline
-          class="absolute inset-0 w-full h-full object-cover"
+          class="absolute inset-0 w-full h-full object-cover object-right md:object-center"
           aria-label="Видео о формате работы"
         />
       ) : (
@@ -106,7 +106,7 @@ const titleHtml = titleSafe.replace(
           alt=""
           width="1920"
           height="960"
-          class="absolute inset-0 w-full h-full object-cover"
+          class="absolute inset-0 w-full h-full object-cover object-right md:object-center"
           loading="eager"
           decoding="async"
         />
@@ -150,15 +150,15 @@ const titleHtml = titleSafe.replace(
       </div>
     </div>
 
-    <!-- Mobile: карточка под иллюстрацией (лёгкий нахлёст на рамку) -->
-    <div class="md:hidden -mt-6 pb-s3">
-      <div class="rounded-2xl border border-border p-card shadow-[var(--hero-card-mobile-shadow)] flex flex-col gap-3" style="background-color: rgb(248, 250, 255);">
+    <!-- Mobile: карточка под иллюстрацией с отступом 12px -->
+    <div class="md:hidden mt-3 pb-s3">
+      <div class="rounded-2xl border border-border p-5 shadow-[var(--hero-card-mobile-shadow)] flex flex-col gap-4" style="background-color: rgb(248, 250, 255); box-shadow: 0 2px 8px rgba(28, 25, 23, 0.06);">
         <p class="text-lg font-semibold text-text leading-tight">
           {heroCardName}
         </p>
         <div class="flex flex-wrap gap-2">
           {heroCardTags.map((tag) => (
-            <span class="inline-flex items-center rounded-full border border-white/50 bg-white/45 px-3 py-1.5 text-small font-medium text-text">
+            <span class="inline-flex items-center rounded-full border border-primary-200/50 bg-primary-50/90 px-3 py-1.5 text-small font-medium text-text">
               {tag}
             </span>
           ))}
@@ -180,10 +180,9 @@ const titleHtml = titleSafe.replace(
   (function () {
     const card = document.getElementById('hero-floating-card');
     const wrapper = document.getElementById('hero-media-wrapper');
-    const heroMedia = card?.closest('.max-w-6xl');
-    if (!card || !heroMedia) return;
+    if (!card || !wrapper) return;
 
-    // Анимация появления карточки
+    // Анимация появления карточки (наблюдаем обёртку иллюстрации)
     const observer = new IntersectionObserver(
       (entries) => {
         const entry = entries[0];
@@ -195,7 +194,7 @@ const titleHtml = titleSafe.replace(
       },
       { rootMargin: '0px 0px -10% 0px', threshold: 0 }
     );
-    observer.observe(heroMedia);
+    observer.observe(wrapper);
 
     // Плавное движение всего блока при скролле (только десктоп)
     if (!wrapper) return;

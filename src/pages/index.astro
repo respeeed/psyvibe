@@ -63,9 +63,10 @@ blogPosts.sort((a, b) => {
 
 const metaDesc = (home?.hero?.subtitle ?? 'Сайт психолога Елизаветы Шихалевой').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
+const pageTitle = (home as { seoTitle?: string | null })?.seoTitle?.trim() || 'Главная';
 ---
 
-<Layout title="Главная" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Hero hero={home?.hero ?? null} />
   <WhyTrust data={home?.whyTrust ?? null} />
   <Process data={home?.process ?? null} />

@@ -13,13 +13,14 @@ const formAction = import.meta.env.PUBLIC_FORM_ACTION as string | undefined;
 const formEnabled = Boolean(formAction?.trim());
 const metaDesc = (contacts?.body ?? 'Контакты психолога').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
+const pageTitle = (contacts as { seoTitle?: string | null })?.seoTitle?.trim() || (contacts?.title ?? 'Контакты');
 ---
 
-<Layout title={contacts?.title ?? 'Контакты'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-3xl">
-        <h1 class="text-h1 text-text">
+        <h1 class="text-h1 text-heading">
           {contacts?.title ?? 'Контакты'}
         </h1>
         {contacts?.body && (
@@ -30,7 +31,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
 
         <div class="mt-10 grid grid-cols-1 gap-10 lg:grid-cols-[1fr,1fr] lg:gap-16">
           <div>
-            <h2 class="text-h2 text-text">Контакты</h2>
+            <h2 class="text-h2 text-heading">Контакты</h2>
             <dl class="mt-4 space-y-3 text-body text-text-muted">
               {contacts?.phone && (
                 <div>
@@ -68,7 +69,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
           </div>
 
           <div>
-            <h2 class="text-h2 text-text">Написать</h2>
+            <h2 class="text-h2 text-heading">Написать</h2>
             {!formEnabled && (
               <p class="mt-2 text-body text-text-muted">
                 Форма будет доступна после настройки (укажите PUBLIC_FORM_ACTION для Formspree или другого сервиса).

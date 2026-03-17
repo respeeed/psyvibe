@@ -13,6 +13,7 @@
     --color-surface-active: #dce5fe;
     /* Text */
     --color-text: #1c1917;
+    --color-text-heading: #1a1d2e; /* заголовки на светлом фоне — с лёгким синим оттенком */
     --color-text-muted: #57534e;
     --color-text-inverse: #ffffff;
     --color-text-muted-inverse: #ffffff;
@@ -94,6 +95,24 @@
     --dark-mesh-violet: 99, 102, 241;
   }
 
+  /* Mobile-only: комфортные отступы и ритм (до 768px) */
+  @media (max-width: 767px) {
+    :root {
+      --container-padding: 1.5rem;
+      --section-padding-y: 3.5rem;
+      --hero-padding-top: 3rem;
+      --hero-padding-bottom: 2.5rem;
+      --hero-inner-gap: 2rem;
+      --title-to-content: 1.5rem;
+      --block-gap: 1.5rem;
+      --card-padding: 1.5rem;
+      --card-gap: 2rem;
+      --cta-block-padding-y: 3.5rem;
+      --cta-inner-gap: 1.5rem;
+      --faq-item-gap: 1rem;
+    }
+  }
+
   @media (min-width: 768px) {
     :root {
       --container-padding: var(--space-3);
@@ -123,7 +142,7 @@
     line-height: 1.2;
     font-weight: 700;
     letter-spacing: -0.02em;
-    color: var(--color-text);
+    color: var(--color-text-heading);
   }
 
   h2 {
@@ -131,14 +150,14 @@
     line-height: 1.28;
     font-weight: 600;
     letter-spacing: -0.01em;
-    color: var(--color-text);
+    color: var(--color-text-heading);
   }
 
   h3 {
     font-size: 1.25rem;
     line-height: 1.4;
     font-weight: 600;
-    color: var(--color-text);
+    color: var(--color-text-heading);
   }
 
   p {
@@ -263,7 +282,13 @@ section.bg-surface-dark {
   line-height: 1.18;
   font-weight: 700;
   letter-spacing: -0.03em;
-  color: var(--color-text);
+  color: var(--color-text-heading);
+}
+@media (max-width: 767px) {
+  .section-title {
+    font-size: 1.75rem;
+    line-height: 1.25;
+  }
 }
 /* В обратно-контрастных (тёмных) секциях — светлый заголовок */
 .bg-surface-dark .section-title {
@@ -308,6 +333,9 @@ section.bg-surface-dark {
 .py-section {
   padding-top: var(--section-padding-y);
   padding-bottom: var(--section-padding-y);
+}
+.section-pt-0 {
+  padding-top: 0 !important;
 }
 /* Hero */
 .pt-hero-top { padding-top: var(--hero-padding-top); }

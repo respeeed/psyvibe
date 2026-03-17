@@ -61,9 +61,9 @@ if (!hasContent && !hasPrimaryCta && !hasContacts) {
         </h2>
       )}
       {(body || items.length > 0) && (
-        <div class="flex flex-col gap-6 w-full max-w-content">
+        <div class="flex flex-col gap-6 w-full max-w-[50.4rem]">
           {body && (
-            <p class="text-body text-text">
+            <p class="text-body text-text leading-relaxed">
               {body}
             </p>
           )}
@@ -87,7 +87,7 @@ if (!hasContent && !hasPrimaryCta && !hasContacts) {
                         <span set:html={fallbackSvg} />
                       )}
                     </span>
-                    <span class="text-small text-text leading-snug">{item.text}</span>
+                    <span class="text-body text-text leading-snug">{item.text}</span>
                   </li>
                 );
               })}

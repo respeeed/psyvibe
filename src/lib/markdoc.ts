@@ -69,6 +69,21 @@ function renderKeystaticNodeToHtml(node: KeystaticNode): string {
 }
 
 /**
+ * Разрешает поле body из Keystatic (для singletons/collections с format.contentField и markdoc).
+ * Если body — функция (linked file), вызывает её и возвращает результат; иначе возвращает body как есть.
+ */
+export async function resolveContentBody(
+  body: unknown
+): Promise<string | null | undefined | Record<string, unknown>> {
+  if (body == null) return null;
+  if (typeof body === 'function') {
+    const result = await (body as () => Promise<unknown>)();
+    return result as string | Record<string, unknown>;
+  }
+  return body as string | Record<string, unknown>;
+}
+
+/**
  * Рендерит body статьи из Keystatic в HTML.
  * Поддерживает: 1) объект с полем node (document-структура); 2) строку Markdoc; 3) объект с content (строка).
  */

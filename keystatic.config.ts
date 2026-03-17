@@ -53,6 +53,10 @@ export default config({
       label: 'Главная',
       path: 'src/content/home',
       schema: {
+        seoTitle: fields.text({
+          label: 'Title (SEO)',
+          description: 'Заголовок для вкладки браузера и поисковиков. Если пусто — подставится «Главная».',
+        }),
         hero: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
@@ -286,6 +290,11 @@ export default config({
             title: fields.text({ label: 'Заголовок' }),
             columns: fields.array(
               fields.object({
+                icon: fields.image({
+                  label: 'Иллюстрация',
+                  directory: 'public/images',
+                  description: 'Иллюстрация над блоком (например, лампочка). Рекомендуется одинаковый стиль для всех колонок.',
+                }),
                 title: fields.text({ label: 'Название (тип клиента)' }),
                 subtitle: fields.text({
                   label: 'Подзаголовок',
@@ -399,6 +408,10 @@ export default config({
       path: 'src/content/about',
       format: { contentField: 'body' },
       schema: {
+        seoTitle: fields.text({
+          label: 'Title (SEO)',
+          description: 'Заголовок для вкладки браузера и поисковиков. Если пусто — используется заголовок страницы.',
+        }),
         title: fields.text({ label: 'Заголовок' }),
         image: fields.image({
           label: 'Фото',
@@ -414,6 +427,10 @@ export default config({
       label: 'Тарифы',
       path: 'src/content/pricing',
       schema: {
+        seoTitle: fields.text({
+          label: 'Title (SEO)',
+          description: 'Заголовок для вкладки браузера и поисковиков. Если пусто — используется заголовок страницы.',
+        }),
         title: fields.text({ label: 'Заголовок' }),
         intro: fields.text({
           label: 'Вводный текст',
@@ -440,6 +457,10 @@ export default config({
       label: 'Контакты',
       path: 'src/content/contacts',
       schema: {
+        seoTitle: fields.text({
+          label: 'Title (SEO)',
+          description: 'Заголовок для вкладки браузера и поисковиков. Если пусто — используется заголовок страницы.',
+        }),
         title: fields.text({ label: 'Заголовок' }),
         body: fields.text({
           label: 'Текст',
@@ -459,6 +480,10 @@ export default config({
       path: 'src/content/blog/*',
       format: { contentField: 'body' },
       schema: {
+        seoTitle: fields.text({
+          label: 'Title (SEO)',
+          description: 'Заголовок для вкладки браузера и поисковиков. Если пусто — используется заголовок статьи.',
+        }),
         title: fields.slug({
           name: { label: 'Заголовок' },
           slug: { label: 'URL (slug)' },

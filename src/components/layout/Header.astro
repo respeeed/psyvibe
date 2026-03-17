@@ -27,35 +27,37 @@ const siteTagline = 'Корпоративный психолог';
 
 <header id="site-header" class="header sticky top-0 z-50 bg-[var(--color-surface)] backdrop-blur-sm transition-[box-shadow,background-color] duration-200 shadow-[var(--header-shadow)]" role="banner">
   <Container class="py-4 md:py-5">
-    <div class="flex flex-wrap items-center justify-between gap-4 min-h-[2.75rem]">
-      <a href="/" class="flex items-center gap-3 min-w-0 shrink-0 group outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-lg -m-1 p-1 transition-colors duration-200">
-        <span class:list={['flex shrink-0 w-11 h-11 rounded-xl border border-border/60 flex items-center justify-center transition-transform duration-200 group-hover:scale-[1.02] group-hover:border-border group-active:scale-[0.98]', logoBgClass]}>
-          <img src="/logo.svg" alt="" width="28" height="28" class="w-7 h-7 object-contain pointer-events-none" />
+    <div class="flex flex-nowrap items-center justify-between gap-2 min-h-[2.75rem] md:flex-wrap md:gap-4 md:grid md:grid-cols-[1fr_auto_1fr] md:gap-0">
+      <a href="/" class="flex items-center gap-2 min-w-0 shrink group outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-lg -m-1 p-1 transition-colors duration-200 md:shrink-0 md:gap-3 md:justify-self-start">
+        <span class:list={['flex shrink-0 w-9 h-9 md:w-11 md:h-11 rounded-xl border border-border/60 flex items-center justify-center transition-transform duration-200 group-hover:scale-[1.02] group-hover:border-border group-active:scale-[0.98]', logoBgClass]}>
+          <img src="/logo.svg" alt="" width="28" height="28" class="w-5 h-5 md:w-7 md:h-7 object-contain pointer-events-none" />
         </span>
         <span class="flex flex-col min-w-0">
-          <span class="font-semibold text-text text-body tracking-tight group-hover:text-[var(--color-cta)] transition-colors duration-200 leading-tight truncate">
+          <span class="font-semibold text-text text-body md:text-body tracking-tight group-hover:text-[var(--color-cta)] transition-colors duration-200 leading-tight line-clamp-2 md:line-clamp-none md:truncate">
             {siteName}
           </span>
-          <span class="text-small text-text-muted font-normal mt-0.5 leading-tight truncate">
+          <span class="text-small text-text-muted font-normal mt-0.5 leading-tight truncate hidden sm:block">
             {siteTagline}
           </span>
         </span>
       </a>
 
-      <!-- Desktop: навигация + контакты + CTA -->
-      <div class="hidden md:flex flex-wrap items-center justify-end gap-x-6 lg:gap-x-8 gap-y-2 shrink-0">
-        {navLinks.length > 0 && (
-          <nav class="contents" aria-label="Основная навигация">
-            {navLinks.map((link) => (
-              <a
-                href={link.href}
-                class="text-body text-text-muted hover:text-[var(--color-cta)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm"
-              >
-                {link.label}
-              </a>
-            ))}
-          </nav>
-        )}
+      <!-- Desktop: навигация по центру -->
+      {navLinks.length > 0 && (
+        <nav class="hidden md:flex items-center justify-center gap-x-6 lg:gap-x-8 shrink-0" aria-label="Основная навигация">
+          {navLinks.map((link) => (
+            <a
+              href={link.href}
+              class="text-body font-medium text-text-muted hover:text-[var(--color-cta)] transition-colors focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 rounded-sm"
+            >
+              {link.label}
+            </a>
+          ))}
+        </nav>
+      )}
+
+      <!-- Desktop: контакты + CTA справа -->
+      <div class="hidden md:flex flex-wrap items-center justify-end gap-x-6 lg:gap-x-8 gap-y-2 shrink-0 md:col-start-3 md:justify-self-end">
         {phone && (
           <a
             href={`tel:${phone.replace(/\s/g, '')}`}
@@ -73,14 +75,14 @@ const siteTagline = 'Корпоративный психолог';
             Мессенджер ↗
           </a>
         )}
-        <Button href="#diagnostic" variant="tertiary" class="shrink-0 px-3 py-2 text-small">
+        <Button href="https://t.me/plur5" variant="tertiary" class="shrink-0 px-3 py-2 text-small" external>
           Записаться на диагностику
         </Button>
       </div>
 
       <!-- Mobile: кнопка меню -->
-      <div class="flex items-center gap-2 sm:gap-3 md:hidden shrink-0">
-        <Button href="#diagnostic" variant="tertiary" class="shrink-0 px-3 py-2 text-small">
+      <div class="flex items-center gap-1.5 sm:gap-2 md:hidden shrink-0">
+        <Button href="https://t.me/plur5" variant="tertiary" class="shrink-0 px-2.5 py-2 text-small min-h-9 md:min-h-[3rem]" external>
           Записаться
         </Button>
         <button
@@ -106,7 +108,7 @@ const siteTagline = 'Корпоративный психолог';
       {navLinks.length > 0 && (
         <nav class="flex flex-col gap-1" aria-label="Основная навигация">
           {navLinks.map((link) => (
-            <a href={link.href} class="py-2.5 text-body text-text-muted hover:text-[var(--color-cta)] transition-colors">
+            <a href={link.href} class="py-2.5 text-body font-medium text-text-muted hover:text-[var(--color-cta)] transition-colors">
               {link.label}
             </a>
           ))}
@@ -122,7 +124,7 @@ const siteTagline = 'Корпоративный психолог';
           Мессенджер ↗
         </a>
       )}
-      <Button href="#diagnostic" variant="tertiary" class="mt-2 w-full max-w-[200px] px-3 py-2 text-small">
+      <Button href="https://t.me/plur5" variant="tertiary" class="mt-2 w-full max-w-[200px] px-3 py-2 text-small" external>
         Записаться на диагностику
       </Button>
     </div>

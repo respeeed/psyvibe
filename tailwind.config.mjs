@@ -19,6 +19,7 @@ export default {
         'surface-subtle': 'var(--color-surface-subtle)',
         'surface-dark': 'var(--color-surface-dark)',
         text: 'var(--color-text)',
+        'text-heading': 'var(--color-text-heading)',
         'text-muted': 'var(--color-text-muted)',
         'text-inverse': 'var(--color-text-inverse)',
         'text-muted-inverse': 'var(--color-text-muted-inverse)',

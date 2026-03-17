@@ -9,14 +9,15 @@ const siteSettings = await reader.singletons.siteSettings.read();
 const pricing = await reader.singletons.pricing.read();
 const metaDesc = (pricing?.intro ?? 'Тарифы и форматы работы').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
+const pageTitle = (pricing as { seoTitle?: string | null })?.seoTitle?.trim() || (pricing?.title ?? 'Тарифы');
 ---
 
-<Layout title={pricing?.title ?? 'Тарифы'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-4xl">
         <div class="max-w-2xl">
-          <h1 class="text-h1 text-text">
+          <h1 class="text-h1 text-heading">
             {pricing?.title ?? 'Тарифы'}
           </h1>
           {pricing?.intro && (
@@ -35,7 +36,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
               <li
                 class="flex flex-col rounded-soft border border-border bg-surface p-6 transition-colors hover:border-accent/30"
               >
-                <h2 class="text-h2 text-text">
+                <h2 class="text-h2 text-heading">
                   {format.name}
                 </h2>
                 <p class="mt-2 text-body font-medium text-text">

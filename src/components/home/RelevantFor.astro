@@ -44,37 +44,37 @@ if (!hasContent) {
 
 <Section>
   <Container>
-    <div class="flex flex-col items-center gap-8 text-center">
+    <div class="flex flex-col items-center gap-6 md:gap-8 text-center">
       {title && (
-        <h2 class="section-title max-w-content text-text">
+        <h2 class="section-title max-w-content text-heading">
           {title}
         </h2>
       )}
 
       {iconItems.length > 0 && (
-        <ul class="w-full grid grid-cols-2 sm:grid-cols-3 md:grid-cols-5 gap-content" role="list">
+        <ul class="w-full grid grid-cols-1 sm:grid-cols-3 md:grid-cols-5 gap-content" role="list">
           {iconItems.map((item) => {
             const iconSrc = imagePath(item.icon);
             const bgClass = iconBgClasses[item.iconBackground ?? 'surface-muted'] ?? iconBgClasses['surface-muted'];
             return (
-              <li class="flex flex-col items-center gap-block">
-                <div class={`w-12 h-12 md:w-[4.5rem] md:h-[4.5rem] rounded-soft flex items-center justify-center shrink-0 overflow-hidden p-4 ${bgClass}`}>
+              <li class="flex flex-row items-center gap-4 sm:flex-col sm:gap-block">
+                <div class={`w-14 h-14 md:w-[4.5rem] md:h-[4.5rem] rounded-soft flex items-center justify-center shrink-0 overflow-hidden p-4 ${bgClass}`}>
                   {iconSrc ? (
                     <img
                       src={iconSrc}
                       alt=""
-                      width="48"
-                      height="48"
+                      width="56"
+                      height="56"
                       class="w-full h-full object-contain"
                       loading="lazy"
                     />
                   ) : (
-                    <svg class="w-5 h-5 md:w-6 md:h-6 [color:inherit]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
+                    <svg class="w-6 h-6 md:w-6 md:h-6 [color:inherit]" fill="none" stroke="currentColor" stroke-width="1.5" viewBox="0 0 24 24" aria-hidden="true">
                       <path stroke-linecap="round" stroke-linejoin="round" d="M3.75 3v11.25a2.25 2.25 0 0 0 2.25 2.25h14.5a2.25 2.25 0 0 0 2.25-2.25V3.75A2.25 2.25 0 0 0 20.25 1.5H5.25A2.25 2.25 0 0 0 3 3.75Zm6 9.75h.008v.008H9V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3-.375h.008v.008H12.375V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Zm3-.375h.008v.008H15.75V13.5Zm.375 0a.375.375 0 1 1-.75 0 .375.375 0 0 1 .75 0Z" />
                     </svg>
                   )}
                 </div>
-                <p class="text-body text-text-muted leading-snug max-w-[10rem]">
+                <p class="text-body text-text-muted leading-snug text-left flex-1 min-w-0 sm:text-center sm:flex-none sm:max-w-[10rem]">
                   {item.text}
                 </p>
               </li>
@@ -88,7 +88,7 @@ if (!hasContent) {
           {(secondaryTitle || tags.length > 0) && (
             <div class="flex flex-col items-center gap-4">
               {secondaryTitle && (
-                <h3 class="text-xl font-semibold text-text">
+                <h3 class="text-xl font-semibold text-heading">
                   {secondaryTitle}
                 </h3>
               )}
@@ -108,7 +108,7 @@ if (!hasContent) {
           {hasCta && (
             <a
               href={ctaUrl}
-              class="mt-10 inline-flex items-center justify-center gap-2 rounded-lg px-5 py-2.5 text-body font-medium bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)] transition-colors shadow-lg hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)]"
+              class="mt-10 inline-flex items-center justify-center gap-2 rounded-lg min-h-[3rem] py-3 px-6 text-base font-medium bg-[var(--color-cta)] text-white hover:bg-[var(--color-cta-hover)] active:bg-[var(--color-cta-active)] transition-colors shadow-lg hover:shadow-xl focus:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-cta)] focus-visible:ring-offset-2 focus-visible:ring-offset-[var(--color-surface)] md:min-h-0 md:py-2.5 md:px-5 md:text-body"
             >
               {ctaLabel}
             </a>

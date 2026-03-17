@@ -3,23 +3,25 @@ import Layout from '../components/layout/Layout.astro';
 import Section from '../components/ui/Section.astro';
 import Container from '../components/ui/Container.astro';
 import { reader } from '../lib/keystatic';
-import { renderMarkdocToHtml } from '../lib/markdoc';
+import { resolveContentBody, renderMarkdocToHtml } from '../lib/markdoc';
 import { imagePath } from '../lib/images';
 
 const siteSettings = await reader.singletons.siteSettings.read();
 const about = await reader.singletons.about.read();
 
 const imageSrc = imagePath(about?.image);
-const bodyHtml = renderMarkdocToHtml(about?.body ?? null);
+const bodyContent = await resolveContentBody(about?.body);
+const bodyHtml = renderMarkdocToHtml(bodyContent ?? null);
 const metaDesc = 'О психологе Елизавете Шихалевой';
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
+const pageTitle = (about as { seoTitle?: string | null })?.seoTitle?.trim() || (about?.title ?? 'Обо мне');
 ---
 
-<Layout title={about?.title ?? 'Обо мне'} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-3xl">
-        <h1 class="text-h1 text-text">
+        <h1 class="text-h1 text-heading">
           {about?.title ?? 'Обо мне'}
         </h1>
 
