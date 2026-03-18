@@ -6,5 +6,5 @@ additionalMeta: []
 yandexMetrikaEnabled: true
 yandexMetrikaCounterId: '108141118'
 yandexMetrikaClickmap: true
-yandexMetrikaWebvisor: false
+yandexMetrikaWebvisor: true
 yandexMetrikaAccurateTrackBounce: true
