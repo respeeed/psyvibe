@@ -63,7 +63,8 @@ const faviconType = faviconRaw?.toLowerCase().endsWith('.png')
     : 'image/svg+xml';
 
 const ymEnabled = Boolean(seo?.yandexMetrikaEnabled);
-const ymId = seo?.yandexMetrikaCounterId?.trim() || null;
+const ymIdRaw = seo?.yandexMetrikaCounterId?.trim() || null;
+const ymId = ymIdRaw ? Number(ymIdRaw) : null;
 const ymClickmap = seo?.yandexMetrikaClickmap ?? true;
 const ymWebvisor = seo?.yandexMetrikaWebvisor ?? false;
 const ymAccurateTrackBounce = seo?.yandexMetrikaAccurateTrackBounce ?? true;
@@ -120,8 +121,9 @@ const ymAccurateTrackBounce = seo?.yandexMetrikaAccurateTrackBounce ?? true;
             a.async=1;
             a.src=r;
             k.parentNode.insertBefore(a,k);
-          })(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-          ym({ymId},"init",{
+          })(window,document,"script","https://mc.yandex.ru/metrika/tag.js?id={ymId}","ym");
+          ym({ymId},'init',{
+            ssr:true,
             clickmap:{ymClickmap},
             trackLinks:true,
             accurateTrackBounce:{ymAccurateTrackBounce},
