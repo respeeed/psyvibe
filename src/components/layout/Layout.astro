@@ -121,11 +121,11 @@ const ymAccurateTrackBounce = seo?.yandexMetrikaAccurateTrackBounce ?? true;
             a.src=r;
             k.parentNode.insertBefore(a,k);
           })(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
-          ym(${ymId},"init",{
-            clickmap:${ymClickmap},
+          ym({ymId},"init",{
+            clickmap:{ymClickmap},
             trackLinks:true,
-            accurateTrackBounce:${ymAccurateTrackBounce},
-            webvisor:${ymWebvisor}
+            accurateTrackBounce:{ymAccurateTrackBounce},
+            webvisor:{ymWebvisor}
           });
         </script>
         <noscript>

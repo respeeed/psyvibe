@@ -34,8 +34,8 @@ export default defineConfig({
     optimizeDeps: {
       // Ensure CJS interop for editor deps in dev
       entries: ['keystatic.config.*', '.astro/keystatic-imports.js'],
-      include: ['lodash/debounce'],
-      needsInterop: ['lodash'],
+      include: ['lodash/debounce', 'direction'],
+      needsInterop: ['lodash', 'direction'],
     },
   },
   integrations: [
