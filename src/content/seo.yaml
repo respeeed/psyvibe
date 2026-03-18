@@ -2,8 +2,9 @@ ogType: website
 twitterCard: summary_large_image
 ogLocale: ru_RU
 robots: index,follow
-yandexMetrikaEnabled: false
+additionalMeta: []
+yandexMetrikaEnabled: true
+yandexMetrikaCounterId: '108141118'
 yandexMetrikaClickmap: true
 yandexMetrikaWebvisor: false
 yandexMetrikaAccurateTrackBounce: true
-
