@@ -53,6 +53,26 @@ const pageTitle = (contacts as { seoTitle?: string | null })?.seoTitle?.trim() |
                   </dd>
                 </div>
               )}
+              {contacts?.telegramUrl && (
+                <div>
+                  <dt class="font-medium text-text">Telegram для связи</dt>
+                  <dd>
+                    <a href={contacts.telegramUrl} target="_blank" rel="noopener noreferrer" class="hover:text-accent">
+                      {contacts.telegramUrl}
+                    </a>
+                  </dd>
+                </div>
+              )}
+              {contacts?.telegramChannelUrl && (
+                <div>
+                  <dt class="font-medium text-text">Telegram-канал</dt>
+                  <dd>
+                    <a href={contacts.telegramChannelUrl} target="_blank" rel="noopener noreferrer" class="hover:text-accent">
+                      {contacts.telegramChannelUrl}
+                    </a>
+                  </dd>
+                </div>
+              )}
               {contacts?.address && (
                 <div>
                   <dt class="font-medium text-text">Адрес</dt>
@@ -123,6 +143,18 @@ const pageTitle = (contacts as { seoTitle?: string | null })?.seoTitle?.trim() |
                   class="rounded-soft border border-border bg-surface px-4 py-2.5 text-body text-text transition-colors placeholder:text-text-muted focus:border-accent focus:outline-none focus:ring-1 focus:ring-accent resize-y min-h-[120px] disabled:opacity-60 disabled:cursor-not-allowed"
                   placeholder="Текст сообщения"
                 />
+              </label>
+              <label class="flex items-start gap-3">
+                <input
+                  type="checkbox"
+                  name="consent"
+                  required={formEnabled}
+                  disabled={!formEnabled}
+                  class="mt-1 h-4 w-4 rounded-soft border border-border bg-surface text-[var(--color-cta)] accent-[var(--color-cta)] focus:outline-none focus:ring-1 focus:ring-accent disabled:opacity-60 disabled:cursor-not-allowed"
+                />
+                <span class="text-small text-text-muted">
+                  Согласие на обработку персональных данных.
+                </span>
               </label>
               <p class="mt-2">
                 <Button type="submit" disabled={!formEnabled}>

@@ -185,6 +185,10 @@ export default config({
         benefits: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
+            subtitle: fields.text({
+              label: 'Подзаголовок',
+              description: 'Первое смысловое предложение, которое выделяется отдельно.',
+            }),
             body: fields.text({ label: 'Текст', multiline: true }),
             listItems: fields.array(fields.text({ label: 'Пункт' }), {
               label: 'Список',
@@ -502,6 +506,14 @@ export default config({
         }),
         phone: fields.text({ label: 'Телефон' }),
         email: fields.text({ label: 'Email' }),
+        telegramUrl: fields.text({
+          label: 'Telegram для связи',
+          description: 'Ссылка на профиль/бот (например: https://t.me/plur5)',
+        }),
+        telegramChannelUrl: fields.text({
+          label: 'Telegram-канал',
+          description: 'Ссылка на канал (например: https://t.me/psy_remote)',
+        }),
         address: fields.text({ label: 'Адрес' }),
         workingHours: fields.text({ label: 'Часы работы' }),
       },
@@ -537,6 +549,10 @@ export default config({
         body: fields.markdoc({
           label: 'Текст статьи',
           options: { image: { directory: 'public/images' } },
+        }),
+        featured: fields.checkbox({
+          label: 'Показывать на главной',
+          defaultValue: false,
         }),
       },
     }),

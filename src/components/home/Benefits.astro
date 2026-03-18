@@ -5,6 +5,7 @@ import { imagePath, videoPath } from '../../lib/images';
 
 interface BenefitsData {
   title?: string | null;
+  subtitle?: string | null;
   body?: string | null;
   listItems?: string[] | null;
   image?: string | null;
@@ -18,6 +19,7 @@ interface Props {
 const { data } = Astro.props;
 
 const title = data?.title ?? null;
+const subtitleRaw = data?.subtitle ?? null;
 const body = data?.body ?? null;
 const listItems = data?.listItems ?? [];
 const imageSrc = imagePath(data?.image);
@@ -27,6 +29,32 @@ const hasMedia = imageSrc ?? videoSrc;
 const hasContent = title || body || listItems.length > 0 || hasMedia;
 if (!hasContent) {
   return null;
+}
+
+function normalizeText(input: string | null | undefined) {
+  // В контенте иногда используется "\L" как мягкий перенос.
+  return (input ?? '').replace(/\\L/g, '\n');
+}
+
+const bodyText = normalizeText(body);
+const subtitleText = subtitleRaw ? normalizeText(subtitleRaw).trim() : null;
+
+let bodyLead: string | null = null;
+let bodyRemainder: string | null = null;
+
+if (subtitleText) {
+  bodyLead = subtitleText;
+  if (bodyText.startsWith(subtitleText)) {
+    bodyRemainder = bodyText.slice(subtitleText.length).trimStart();
+  } else {
+    bodyRemainder = bodyText.trim() || null;
+  }
+} else {
+  const firstPeriodIndex = bodyText.indexOf('.');
+  bodyLead =
+    firstPeriodIndex >= 0 ? bodyText.slice(0, firstPeriodIndex + 1).trim() : null;
+  bodyRemainder =
+    firstPeriodIndex >= 0 ? bodyText.slice(firstPeriodIndex + 1).trim() : null;
 }
 ---
 
@@ -42,9 +70,18 @@ if (!hasContent) {
         {(body || listItems.length > 0) && (
           <div class="mt-title-content flex flex-col gap-block">
             {body && (
-              <p class="text-body text-text max-w-content">
-                {body}
-              </p>
+              <div class="flex flex-col gap-block">
+                {bodyLead && (
+                  <p class="text-body text-text font-semibold max-w-content">
+                    {bodyLead}
+                  </p>
+                )}
+                {bodyRemainder && (
+                  <p class="text-body text-text-muted max-w-content whitespace-pre-line">
+                    {bodyRemainder}
+                  </p>
+                )}
+              </div>
             )}
             {listItems.length > 0 && (
               <ul class="list-disc list-inside space-y-2 text-body text-text max-w-content">
