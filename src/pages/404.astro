@@ -6,11 +6,12 @@ import Button from '../components/ui/Button.astro';
 import { reader } from '../lib/keystatic';
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const metaDesc = 'Запрашиваемая страница не существует или была перемещена.';
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
 ---
 
-<Layout title="Страница не найдена" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title="Страница не найдена" siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-xl text-center">

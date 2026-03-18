@@ -46,6 +46,7 @@ function postTitle(p: { title?: unknown; slug?: string }): string {
 }
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 let slugs = await reader.collections.blog.list();
 let rawPosts = await Promise.all(
   slugs.map(async (slug) => {
@@ -66,7 +67,7 @@ const metaDesc = 'Статьи о психологии и саморазвити
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
 ---
 
-<Layout title="Блог" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title="Блог" siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-4xl">

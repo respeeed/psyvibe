@@ -6,11 +6,12 @@ import Button from '../components/ui/Button.astro';
 import { reader } from '../lib/keystatic';
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const metaDesc = 'Ваше сообщение отправлено. Мы свяжемся с вами в ближайшее время.';
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
 ---
 
-<Layout title="Спасибо" siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title="Спасибо" siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-xl text-center">

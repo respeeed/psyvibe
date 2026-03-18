@@ -13,6 +13,7 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const post = await reader.collections.blog.read(slug!, { resolveLinkedFiles: true });
 if (!post) {
   return Astro.redirect('/404');
@@ -27,7 +28,7 @@ const postTitleStr = typeof post.title === 'string' ? post.title : (post.title &
 const pageTitle = (post as { seoTitle?: string | null })?.seoTitle?.trim() || postTitleStr;
 ---
 
-<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl} ogImage={imageSrc ?? undefined}>
+<Layout title={pageTitle} siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <nav class="mx-auto max-w-3xl mb-6" aria-label="Навигация">

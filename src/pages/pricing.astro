@@ -6,13 +6,14 @@ import Button from '../components/ui/Button.astro';
 import { reader } from '../lib/keystatic';
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const pricing = await reader.singletons.pricing.read();
 const metaDesc = (pricing?.intro ?? 'Тарифы и форматы работы').replace(/\s+/g, ' ').trim().slice(0, 155);
 const canonicalUrl = Astro.canonicalURL?.href ?? null;
 const pageTitle = (pricing as { seoTitle?: string | null })?.seoTitle?.trim() || (pricing?.title ?? 'Тарифы');
 ---
 
-<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-4xl">

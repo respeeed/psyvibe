@@ -79,6 +79,134 @@ export default config({
         }),
       },
     }),
+    seo: singleton({
+      label: 'SEO',
+      path: 'src/content/seo',
+      schema: {
+        favicon: fields.image({
+          label: 'Favicon',
+          description: 'Иконка сайта для вкладки браузера (обычно `favicon.svg` или `favicon.png`).',
+          directory: 'public',
+        }),
+        ogImage: fields.image({
+          label: 'OGimage',
+          description: 'Картинка для превью в соцсетях (Open Graph). Рекомендуемый размер: `1200x630`.',
+          directory: 'public/images',
+        }),
+        ogType: fields.select({
+          label: 'Тип Open Graph',
+          description: 'Как поисковики/соцсети интерпретируют страницу.',
+          options: [
+            { label: 'website', value: 'website' },
+            { label: 'article', value: 'article' },
+          ],
+          defaultValue: 'website',
+        }),
+        twitterCard: fields.select({
+          label: 'Twitter card',
+          description: 'Как показывать превью в Twitter/X.',
+          options: [
+            { label: 'summary', value: 'summary' },
+            { label: 'summary_large_image', value: 'summary_large_image' },
+          ],
+          defaultValue: 'summary_large_image',
+        }),
+        ogLocale: fields.text({
+          label: 'OG locale',
+          description: 'Локаль для Open Graph (например: `ru_RU`).',
+          defaultValue: 'ru_RU',
+        }),
+
+        defaultDescription: fields.text({
+          label: 'Описание сайта (meta description)',
+          description: 'Используется как описание по умолчанию, если страница не передала своё.',
+          multiline: true,
+        }),
+        keywords: fields.text({
+          label: 'Ключевые слова (keywords)',
+          description: 'Список ключевых слов через запятую. Опционально.',
+          multiline: true,
+        }),
+        robots: fields.select({
+          label: 'Robots',
+          description: 'Как поисковики должны индексировать сайт.',
+          options: [
+            { label: 'index,follow', value: 'index,follow' },
+            { label: 'noindex,follow', value: 'noindex,follow' },
+            { label: 'index,nofollow', value: 'index,nofollow' },
+            { label: 'noindex,nofollow', value: 'noindex,nofollow' },
+          ],
+          defaultValue: 'index,follow',
+        }),
+
+        googleVerification: fields.text({
+          label: 'Google verification',
+          description: 'Код из Google Search Console (например строка из настроек подтверждения).',
+        }),
+        yandexVerification: fields.text({
+          label: 'Yandex verification',
+          description: 'Код из Яндекс.Вебмастера (для подтверждения прав).',
+        }),
+        bingVerification: fields.text({
+          label: 'Bing verification',
+          description: 'Код из Bing Webmaster Tools.',
+        }),
+
+        additionalMeta: fields.array(
+          fields.object({
+            kind: fields.select({
+              label: 'Тип meta-тега',
+              options: [
+                { label: 'name', value: 'name' },
+                { label: 'property', value: 'property' },
+                { label: 'http-equiv', value: 'http-equiv' },
+              ],
+              defaultValue: 'name',
+            }),
+            key: fields.text({
+              label: 'Ключ',
+              description: 'Например: `description`, `og:locale`, `X-UA-Compatible`.',
+            }),
+            content: fields.text({
+              label: 'Content',
+              multiline: true,
+            }),
+          }),
+          {
+            label: 'Дополнительные SEO meta-теги',
+            description: 'Добавляйте мета-теги без вставки HTML.',
+            itemLabel: (item: unknown) => {
+              const v = itemVal(item) as { kind?: string; key?: string; content?: string } | undefined;
+              return (v?.kind && v?.key ? `${v.kind}:${v.key}` : 'meta') || 'meta';
+            },
+          }
+        ),
+
+        yandexMetrikaEnabled: fields.checkbox({
+          label: 'Включить Яндекс.Метрику',
+          defaultValue: false,
+        }),
+        yandexMetrikaCounterId: fields.text({
+          label: 'ID счетчика Яндекс.Метрики',
+          description: 'Числовой ID, который начинается после подключения счетчика.',
+        }),
+        yandexMetrikaClickmap: fields.checkbox({
+          label: 'Clickmap (карта кликов)',
+          description: 'Собирает статистику кликов по странице.',
+          defaultValue: true,
+        }),
+        yandexMetrikaWebvisor: fields.checkbox({
+          label: 'Webvisor (вебвизор)',
+          description: 'Запись пользовательских сессий (session replay).',
+          defaultValue: false,
+        }),
+        yandexMetrikaAccurateTrackBounce: fields.checkbox({
+          label: 'Точный подсчёт отказов',
+          description: 'Улучшает корректность bounce-rate.',
+          defaultValue: true,
+        }),
+      },
+    }),
     home: singleton({
       label: 'Главная',
       path: 'src/content/home',

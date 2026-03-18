@@ -7,6 +7,7 @@ import { resolveContentBody, renderMarkdocToHtml } from '../lib/markdoc';
 import { imagePath } from '../lib/images';
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const about = await reader.singletons.about.read();
 
 const imageSrc = imagePath(about?.image);
@@ -17,7 +18,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
 const pageTitle = (about as { seoTitle?: string | null })?.seoTitle?.trim() || (about?.title ?? 'Обо мне');
 ---
 
-<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Section>
     <Container>
       <div class="mx-auto max-w-3xl">

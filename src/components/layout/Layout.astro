@@ -2,40 +2,143 @@
 import Header from './Header.astro';
 import Footer from './Footer.astro';
 import '../../styles/global.css';
+import { imagePath } from '../../lib/images';
 
 interface Props {
   title: string;
   description?: string | null;
   canonicalUrl?: string | null;
+  seo?: {
+    favicon?: string | null;
+    ogImage?: string | null;
+    ogType?: string | null;
+    twitterCard?: string | null;
+    ogLocale?: string | null;
+    defaultDescription?: string | null;
+    keywords?: string | null;
+    robots?: string | null;
+    googleVerification?: string | null;
+    yandexVerification?: string | null;
+    bingVerification?: string | null;
+    additionalMeta?: Array<{
+      kind?: string | null;
+      key?: string | null;
+      content?: string | null;
+    }> | null;
+    yandexMetrikaEnabled?: boolean | null;
+    yandexMetrikaCounterId?: string | null;
+    yandexMetrikaClickmap?: boolean | null;
+    yandexMetrikaWebvisor?: boolean | null;
+    yandexMetrikaAccurateTrackBounce?: boolean | null;
+  } | null;
   /** URL или путь для og:image (например /images/og-default.png). Если путь — дополняется через site. */
   ogImage?: string | null;
   siteSettings?: Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>>;
 }
 
-const { title, description, canonicalUrl, ogImage, siteSettings } = Astro.props;
+const { title, description, canonicalUrl, ogImage, siteSettings, seo } = Astro.props;
 
 const site = Astro.site?.toString() ?? '';
 const canonical = canonicalUrl?.trim() || null;
-const desc = description?.trim() || null;
-const ogImagePath = ogImage?.trim() || '/images/og-default.png';
-const ogImageUrl = ogImagePath.startsWith('http') ? ogImagePath : `${site}${ogImagePath.startsWith('/') ? '' : '/'}${ogImagePath}`;
+const desc = description?.trim() || seo?.defaultDescription?.trim() || null;
+const seoOgImage = seo?.ogImage?.trim() || null;
+const finalOgImagePath = seoOgImage ? imagePath(seoOgImage) : ogImage?.trim() || '/images/og-default.png';
+const ogImageUrl = finalOgImagePath.startsWith('http')
+  ? finalOgImagePath
+  : `${site}${finalOgImagePath.startsWith('/') ? '' : '/'}${finalOgImagePath}`;
 const ogUrl = canonical ?? (site ? `${site}${Astro.url.pathname}` : null);
+
+const robots = seo?.robots?.trim() || null;
+const keywords = seo?.keywords?.trim() || null;
+const ogType = seo?.ogType?.trim() || 'website';
+const twitterCard = seo?.twitterCard?.trim() || 'summary_large_image';
+const ogLocale = seo?.ogLocale?.trim() || null;
+
+const faviconRaw = seo?.favicon?.trim() || null;
+const faviconUrl = faviconRaw ? (faviconRaw.startsWith('/') ? faviconRaw : `/${faviconRaw}`) : '/favicon.svg';
+const faviconType = faviconRaw?.toLowerCase().endsWith('.png')
+  ? 'image/png'
+  : faviconRaw?.toLowerCase().endsWith('.ico')
+    ? 'image/x-icon'
+    : 'image/svg+xml';
+
+const ymEnabled = Boolean(seo?.yandexMetrikaEnabled);
+const ymId = seo?.yandexMetrikaCounterId?.trim() || null;
+const ymClickmap = seo?.yandexMetrikaClickmap ?? true;
+const ymWebvisor = seo?.yandexMetrikaWebvisor ?? false;
+const ymAccurateTrackBounce = seo?.yandexMetrikaAccurateTrackBounce ?? true;
 ---
 
 <html lang="ru">
   <head>
     <meta charset="utf-8" />
-    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="icon" type={faviconType} href={faviconUrl} />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="generator" content={Astro.generator} />
     {desc && <meta name="description" content={desc} />}
+    {keywords && <meta name="keywords" content={keywords} />}
+    {robots && <meta name="robots" content={robots} />}
+    {seo?.googleVerification && (
+      <meta name="google-site-verification" content={seo.googleVerification} />
+    )}
+    {seo?.yandexVerification && (
+      <meta name="yandex-verification" content={seo.yandexVerification} />
+    )}
+    {seo?.bingVerification && (
+      <meta name="msvalidate.01" content={seo.bingVerification} />
+    )}
+    {seo?.additionalMeta?.map((m, idx) => {
+      if (!m?.kind || !m.key || !m.content) return null;
+      if (m.kind === 'name') return <meta name={m.key} content={m.content} key={idx} />;
+      if (m.kind === 'property') return <meta property={m.key} content={m.content} key={idx} />;
+      if (m.kind === 'http-equiv')
+        return <meta http-equiv={m.key} content={m.content} key={idx} />;
+      return null;
+    })}
     {canonical && <link rel="canonical" href={canonical} />}
     <title>{title} | Psy-vibe</title>
     {ogUrl && <meta property="og:url" content={ogUrl} />}
     <meta property="og:title" content={`${title} | Psy-vibe`} />
     {desc && <meta property="og:description" content={desc} />}
-    <meta property="og:type" content="website" />
+    {ogLocale && <meta property="og:locale" content={ogLocale} />}
+    <meta property="og:type" content={ogType} />
     <meta property="og:image" content={ogImageUrl} />
+
+    <meta name="twitter:card" content={twitterCard} />
+    {desc && <meta name="twitter:description" content={desc} />}
+    <meta name="twitter:title" content={`${title} | Psy-vibe`} />
+    <meta name="twitter:image" content={ogImageUrl} />
+
+    {ymEnabled && ymId && (
+      <>
+        <script type="text/javascript">
+          (function(m,e,t,r,i,a){
+            m[i]=m[i]||function(){(m[i].a=m[i].a||[]).push(arguments)};
+            m[i].l=1*new Date();
+            a=e.createElement(t);
+            var k=e.getElementsByTagName(t)[0];
+            a.async=1;
+            a.src=r;
+            k.parentNode.insertBefore(a,k);
+          })(window,document,"script","https://mc.yandex.ru/metrika/tag.js","ym");
+          ym(${ymId},"init",{
+            clickmap:${ymClickmap},
+            trackLinks:true,
+            accurateTrackBounce:${ymAccurateTrackBounce},
+            webvisor:${ymWebvisor}
+          });
+        </script>
+        <noscript>
+          <div>
+            <img
+              src={`https://mc.yandex.ru/watch/${ymId}`}
+              style="position:absolute; left:-9999px;"
+              alt=""
+            />
+          </div>
+        </noscript>
+      </>
+    )}
     <link rel="preconnect" href="https://fonts.googleapis.com" />
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />

@@ -62,6 +62,7 @@ const BLOG_DIR = path.join(__dirname, '../content/blog');
 }
 
 const siteSettings = await reader.singletons.siteSettings.read();
+const seo = await reader.singletons.seo.read();
 const home = await reader.singletons.home.read();
 
 let blogSlugs = await reader.collections.blog.list();
@@ -102,7 +103,7 @@ const canonicalUrl = Astro.canonicalURL?.href ?? null;
 const pageTitle = (home as { seoTitle?: string | null })?.seoTitle?.trim() || 'Главная';
 ---
 
-<Layout title={pageTitle} siteSettings={siteSettings} description={metaDesc} canonicalUrl={canonicalUrl}>
+<Layout title={pageTitle} siteSettings={siteSettings} seo={seo} description={metaDesc} canonicalUrl={canonicalUrl}>
   <Hero hero={home?.hero ?? null} />
   <WhyTrust data={home?.whyTrust ?? null} />
   <Process data={home?.process ?? null} />
