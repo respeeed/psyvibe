@@ -9,3 +9,9 @@ navLinks:
   - label: Контакты
     href: /contacts
 logoBg: white
+tagline: Корпоративный психолог
+headerMobileCtaLabel: Записаться
+headerDiagnosticCtaLabel: Записаться на диагностику
+headerDiagnosticCtaUrl: https://t.me/plur5
+footerDiagnosticCtaLabel: Записаться на диагностику
+footerDiagnosticCtaUrl: '#diagnostic'

@@ -14,6 +14,10 @@ interface HeroData {
   workingHours?: string | null;
   image?: string | null;
   video?: string | null;
+  highlightPhrase?: string | null;
+  heroCardName?: string | null;
+  heroCardTags?: string[] | null;
+  heroCardQuote?: string | null;
   stats?: Array<{ value?: string | null; label?: string | null }> | null;
 }
 
@@ -40,20 +44,30 @@ const hasPrimaryCta = primaryCtaLabel && primaryCtaUrl;
 const hasSecondaryCta = secondaryCtaLabel && secondaryCtaUrl;
 const hasCtas = hasPrimaryCta || hasSecondaryCta;
 
-// Плейсхолдер только для layout нижней карточки (schema не меняем)
-const heroCardName = 'Елизавета Шихалева';
-const heroCardTags = ['Корпоративный психолог', 'КПТ', 'Стресс и выгорание'];
-const heroCardQuote = 'Когда команда в ресурсе — бизнес растёт. Помогаю создавать условия, в которых людям хорошо работать.';
+const highlightPhrase = hero?.highlightPhrase ?? 'Лучше цифры.';
+const heroCardName = hero?.heroCardName ?? 'Елизавета Шихалева';
+const heroCardTags =
+  hero?.heroCardTags && hero.heroCardTags.length > 0
+    ? hero.heroCardTags
+    : ['Корпоративный психолог', 'КПТ', 'Стресс и выгорание'];
+const heroCardQuote =
+  hero?.heroCardQuote ??
+  'Когда команда в ресурсе — бизнес растёт. Помогаю создавать условия, в которых людям хорошо работать.';
 
-const highlightPhrase = 'Лучше цифры.';
 const titleSafe = (title ?? '')
   .replace(/&/g, '&amp;')
   .replace(/</g, '&lt;')
   .replace(/>/g, '&gt;');
-const titleHtml = titleSafe.replace(
-  new RegExp(highlightPhrase.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'gi'),
-  `<span style="color: var(--color-accent-brand)">${highlightPhrase}</span>`
-);
+const highlightPhraseTrim = highlightPhrase?.trim?.() ?? '';
+const titleHtml = highlightPhraseTrim
+  ? titleSafe.replace(
+      new RegExp(
+        highlightPhraseTrim.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'),
+        'gi'
+      ),
+      `<span style="color: var(--color-accent-brand)">${highlightPhraseTrim}</span>`
+    )
+  : titleSafe;
 ---
 
 <Section class="hero-section pt-hero-top pb-hero-bottom">

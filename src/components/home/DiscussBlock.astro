@@ -17,6 +17,7 @@ interface DiscussBlockData {
   ctaLabel?: string | null;
   ctaUrl?: string | null;
   contactEmail?: string | null;
+  responseNote?: string | null;
 }
 
 type SiteSettings = Awaited<ReturnType<typeof import('../../lib/keystatic').reader.singletons.siteSettings.read>> | null | undefined;
@@ -35,6 +36,9 @@ const ctaLabel = data?.ctaLabel ?? null;
 const ctaUrl = data?.ctaUrl ?? null;
 const contactEmail = data?.contactEmail ?? null;
 const messengerUrl = siteSettings?.messengerUrl ?? null;
+const responseNote =
+  data?.responseNote ??
+  'Ответ обычно в течение 1 рабочего дня.';
 
 const iconBgClasses: Record<string, string> = {
   surface: 'bg-surface text-text-muted',
@@ -118,7 +122,7 @@ if (!hasContent && !hasPrimaryCta && !hasContacts) {
             </p>
           )}
           <p class="text-small text-text-muted text-center">
-            Ответ обычно в течение 1 рабочего дня.
+            {responseNote}
           </p>
         </div>
       </div>

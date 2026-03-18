@@ -9,7 +9,13 @@ hero:
   secondaryCtaLabel: Получить консультацию
   secondaryCtaUrl: /pricing
   image: hero/image.jpg
-  heroCardTags: []
+  highlightPhrase: Лучше цифры.
+  heroCardName: Елизавета Шихалева
+  heroCardTags:
+    - Корпоративный психолог
+    - КПТ
+    - Стресс и выгорание
+  heroCardQuote: Когда команда в ресурсе — бизнес растёт. Помогаю создавать условия, в которых людям хорошо работать.
   stats:
     - value: 10 лет
       label: опыт в компаниях
@@ -131,6 +137,7 @@ discuss:
       iconBackground: surface-muted
   ctaLabel: Записаться на консультацию
   ctaUrl: '#diagnostic'
+  responseNote: Ответ обычно в течение 1 рабочего дня.
 results:
   title: Результаты работы с командами
   columns:

@@ -12,6 +12,10 @@ const navLinks = siteSettings?.navLinks ?? [];
 const phone = siteSettings?.phone ?? '';
 const messengerUrl = siteSettings?.messengerUrl ?? null;
 const copyright = siteSettings?.copyright ?? '';
+const footerDiagnosticCtaLabel =
+  siteSettings?.footerDiagnosticCtaLabel ?? 'Записаться на диагностику';
+const footerDiagnosticCtaUrl =
+  siteSettings?.footerDiagnosticCtaUrl ?? '#diagnostic';
 
 const hasContacts = phone || messengerUrl;
 ---
@@ -63,8 +67,8 @@ const hasContacts = phone || messengerUrl;
         )}
       </div>
       <div class="mt-6 md:mt-0">
-        <Button href="#diagnostic" variant="primary">
-          Записаться на диагностику
+        <Button href={footerDiagnosticCtaUrl} variant="primary">
+          {footerDiagnosticCtaLabel}
         </Button>
       </div>
     </div>

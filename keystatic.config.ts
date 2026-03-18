@@ -36,12 +36,37 @@ export default config({
           }),
           { label: 'Пункты меню', itemLabel: (item: unknown) => (itemVal(item) as { label?: string })?.label || 'Пункт меню' }
         ),
+        tagline: fields.text({
+          label: 'Подзаголовок в шапке',
+          description: 'Тонкая строка под названием',
+          defaultValue: 'Корпоративный психолог',
+        }),
         phone: fields.text({ label: 'Телефон' }),
         messengerUrl: fields.text({
           label: 'Ссылка на мессенджер',
           description: 'Опционально',
         }),
         copyright: fields.text({ label: 'Копирайт в подвале' }),
+        headerDiagnosticCtaLabel: fields.text({
+          label: 'Кнопка “диагностика” в шапке (текст)',
+          defaultValue: 'Записаться на диагностику',
+        }),
+        headerMobileCtaLabel: fields.text({
+          label: 'Кнопка в шапке на мобиле (текст)',
+          defaultValue: 'Записаться',
+        }),
+        headerDiagnosticCtaUrl: fields.text({
+          label: 'Кнопка “диагностика” в шапке (URL)',
+          defaultValue: 'https://t.me/plur5',
+        }),
+        footerDiagnosticCtaLabel: fields.text({
+          label: 'Кнопка “диагностика” в подвале (текст)',
+          defaultValue: 'Записаться на диагностику',
+        }),
+        footerDiagnosticCtaUrl: fields.text({
+          label: 'Кнопка “диагностика” в подвале (URL)',
+          defaultValue: '#diagnostic',
+        }),
         logoBg: fields.select({
           label: 'Фон лого в шапке',
           options: [
@@ -76,20 +101,29 @@ export default config({
               label: 'Видео (MP4)',
               description: 'Путь к файлу от public, например: videos/иллюстрация.mp4. Загрузите MP4 в public/videos/',
             }),
-            stats: fields.array(
-              fields.object({
-                value: fields.text({ label: 'Значение' }),
-                label: fields.text({ label: 'Подпись' }),
-              }),
-              {
-                label: 'Цифры',
-                validation: { length: { min: 3, max: 3 } },
-                itemLabel: (item: unknown) => {
-                  const v = itemVal(item) as { value?: string; label?: string };
-                  return [v?.value, v?.label].filter(Boolean).join(' — ') || 'Статистика';
-                },
-              }
-            ),
+            highlightPhrase: fields.text({
+              label: 'Подсвечиваемая фраза в заголовке',
+              description: 'Совпадает с текстом заголовка (например “Лучше цифры.”).',
+              defaultValue: 'Лучше цифры.',
+            }),
+            heroCardName: fields.text({
+              label: 'Имя в карточке под иллюстрацией',
+              defaultValue: 'Елизавета Шихалева',
+            }),
+            heroCardTags: fields.array(fields.text({ label: 'Тег' }), {
+              label: 'Теги в карточке',
+              itemLabel: (item: unknown) =>
+                (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Тег',
+              validation: { length: { max: 6 } },
+            }),
+            heroCardQuote: fields.text({
+              label: 'Цитата в карточке под иллюстрацией',
+              multiline: true,
+              defaultValue:
+                'Когда команда в ресурсе — бизнес растёт. Помогаю создавать условия, в которых людям хорошо работать.',
+            }),
+            // Не показываем в админке, т.к. текущая верстка их не использует.
+            stats: fields.ignored(),
           },
           { label: 'Hero (баннер главной)', description: 'Заголовок, подзаголовок, кнопки, фото/видео' }
         ),
@@ -287,6 +321,11 @@ export default config({
               label: 'Email для кнопки «Написать на почту»',
               description: 'Опционально',
             }),
+            responseNote: fields.text({
+              label: 'Текст ответа (под кнопками)',
+              multiline: false,
+              defaultValue: 'Ответ обычно в течение 1 рабочего дня.',
+            }),
           },
           { label: 'Обсудим задачи', description: 'Блок «Обсудим задачи вашей команды» с кнопками связи' }
         ),
@@ -367,18 +406,8 @@ export default config({
           },
           { label: 'Особенно актуально', description: 'Блок «Особенно актуально, если команда» + теги и CTA' }
         ),
-        clients: fields.object(
-          {
-            title: fields.text({ label: 'Заголовок' }),
-            clientNames: fields.array(fields.text({ label: 'Название' }), {
-              label: 'Клиенты',
-              itemLabel: (item: unknown) => (typeof itemVal(item) === 'string' ? itemVal(item) : '') || 'Клиент',
-            }),
-            ctaLabel: fields.text({ label: 'Текст кнопки' }),
-            ctaUrl: fields.text({ label: 'URL кнопки' }),
-          },
-          { label: 'Нас выбирают', description: 'Блок «Нас выбирают» (клиенты)' }
-        ),
+        // Не показываем в админке, т.к. текущая верстка этот блок не рендерит.
+        clients: fields.ignored(),
         faq: fields.object(
           {
             title: fields.text({ label: 'Заголовок' }),
