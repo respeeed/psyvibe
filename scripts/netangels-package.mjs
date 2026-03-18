@@ -63,6 +63,14 @@ async function main() {
     force: true,
   });
 
+  // Keystatic читает с диска `src/content/*` (через createReader(process.cwd(), ...)).
+  // Поэтому кладём контент в архив, чтобы на NetAngels новые SEO/тексты применялись
+  // после простого "распаковать архив" без дополнительных шагов.
+  await fs.cp(path.join(projectRoot, 'src', 'content'), path.join(appDir, 'src', 'content'), {
+    recursive: true,
+    force: true,
+  });
+
   // На mac часто появляются .DS_Store — их убираем, чтобы не раздувать архив.
   await removeMacArtifacts(stagingDir);
 
