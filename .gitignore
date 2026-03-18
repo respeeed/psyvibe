@@ -1,5 +1,8 @@
 # build output
 dist/
+
+# NetAngels deploy artifacts (локально создаём архивы и закачиваем вручную)
+deploy/
 # generated types
 .astro/
 
