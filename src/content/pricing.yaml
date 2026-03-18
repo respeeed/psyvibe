@@ -31,4 +31,5 @@ formats:
     features: []
   - name: Executive-сессии для руководителей
     price: 5000 ₽ / 60 мин
+    description: Коучинг + консультирование
     features: []
