@@ -13,7 +13,8 @@ export default defineConfig({
   adapter: vercel({
     // Keystatic image fields проверяют наличие файлов на диске в runtime.
     // На Vercel эти файлы должны попасть внутрь bundle serverless функций.
-    includeFiles: ['public/images/**', 'src/content/**'],
+    // Включаем именно директории (globs типа `**` тут не поддерживаются).
+    includeFiles: ['public/images', 'src/content'],
   }),
   vite: {
     plugins: [
