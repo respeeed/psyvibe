@@ -37,7 +37,9 @@ const workingHours = hero?.workingHours ?? null;
 const stats = hero?.stats?.filter((s) => s.value ?? s.label) ?? [];
 
 const heroVideoSrc = videoPath(hero?.video);
-const heroImageSrc = imagePath(hero?.image) ?? '/images/hero-girl.png';
+// Страховочный fallback, чтобы главная не оставалась без иллюстрации,
+// даже если Keystatic image-поле на Vercel не успело корректно резолвиться.
+const heroImageSrc = imagePath(hero?.image) ?? '/images/hero/image.jpg';
 const hasVideo = heroVideoSrc != null;
 
 const hasPrimaryCta = primaryCtaLabel && primaryCtaUrl;
