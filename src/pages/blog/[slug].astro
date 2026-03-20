@@ -6,6 +6,8 @@ import { reader } from '../../lib/keystatic';
 import { resolveContentBody, renderMarkdocToHtml } from '../../lib/markdoc';
 import { blogImagePath } from '../../lib/images';
 
+export const prerender = true;
+
 export async function getStaticPaths() {
   const slugs = await reader.collections.blog.list();
   return slugs.map((slug) => ({ params: { slug } }));

@@ -1,6 +1,6 @@
 // @ts-check
 import { defineConfig } from 'astro/config';
-import node from '@astrojs/node';
+import vercel from '@astrojs/vercel';
 import tailwind from '@astrojs/tailwind';
 import react from '@astrojs/react';
 import markdoc from '@astrojs/markdoc';
@@ -10,7 +10,7 @@ import keystatic from '@keystatic/astro';
 export default defineConfig({
   site: 'https://psy-vibe.ru',
   output: 'server',
-  adapter: node({ mode: 'standalone' }),
+  adapter: vercel(),
   vite: {
     plugins: [
       {
